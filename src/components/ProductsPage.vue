@@ -4,7 +4,6 @@
     <div class="btn_container">
         <div for="searchInput" class="serch_block">
             <input type="text" id="searchInput"
-                v-model="searchProduct"
                 placeholder="Enter the product CODE or name">
             <button @click="search">
             <img src="https://cdn-icons-png.flaticon.com/512/483/483356.png" alt="Search">
@@ -21,30 +20,24 @@
         </div>
     </div>
 
-    <!-- <button @click="fetchProducts"> Завантажити продукти</button> -->
+    <button @click="fetchProducts"> Завантажити продукти</button>
 
-    <div class="card-container">
-        <div class="card"
-        v-for="(product, index) in products"
-        :key="index">
-            <div class="card-img-block">
-                <img class="card-img-top" :src="'data:image/jpeg;base64,' + product.imageData" :alt="product.name" />                
-            </div>
-            <div class="card-body">
-                <h5 class="card-title">{{ product.name }}</h5>
-                <p class="card-text"> <strong> Code:</strong> {{ product.id }}</p>
-                <p class="card-text"> <strong>Price:</strong> {{ product.price }}</p>
-                <p class="card-text discount"> <strong>Discount:</strong> {{ product.discountPercent }}</p>      
-            </div>
-        </div>          
+    <div class="products-grid" id="productsList">
+      <div v-if="!isProductsLoading">
+        <ProductItem
+        :products="products"
+        :selectedSort="selectedSort"
+        >
+    </ProductItem>
+      </div>
+      <div v-else class="temporary">Loading</div>
     </div>
+
 <!-- Результати пошуку -->
-    <div>
-        <div class="products-grid" id="productsList"></div>
-        <div v-for="product in filteredProducts" :key="product.id">
-            {{ product.name }}
-        </div>
-    </div>            
+
+            <!-- <div v-for="product in filteredProducts" :key="product.id">
+                {{ product.name }}
+            </div>           -->
 </template>
 
 <script>
@@ -57,69 +50,70 @@ export default {
         ProductItem,
         MySelect
     },
-    props: {
-        products: {
-            type: Array,
-            required: true,
-        }
-    },
+    // props: {
+    //     products: {
+    //         type: Array,
+    //         required: true,
+    //     }
+    // },
     data(){
         return {
             // currentPage: 1,
             // itemsPerPage: 14,
-            // products:[],
-            // isProductsLoading: false,
-            searchProduct: '',
+            products:[],
+            isProductsLoading: false,
             selectedSort: '',
             sortOptions: [
                 {value: 'name', name: 'name'},
                 {value: 'price', name: 'price'},
                 {value: 'id', name: 'code'},
-                {value: 'discaunt', name: 'discaunt'},
-            ],
-            filteredProducts: [],            
+                {value: 'discount', name: 'discount'},
+            ],      
         }
     },
 
     methods:{
-    //     async fetchProducts() {
-    //     try {
-    //       this.isProductsLoading = true;
-    //     //   await new Promise(resolve => setTimeout(resolve, 1000));
-    //       const response = await axios.get('http://localhost:8081/products?_limit=10');
-    //       // , {
-    //       //   params: {
-    //       //     page: this.currentPage,
-    //       //     perPage: this.itemsPerPage,
-    //       //   },         
-    //       // });
+        onProductsLoaded(products) {
+            this.products = products;
+            this.isProductsLoading = false;
+        },
 
-    //       // this.products = this.products.concat(response.data);
-    //       this.products = response.data;
-    //       this.isProductsLoading = false;
-    //       this.$emit('products-loaded', this.products);
+        async fetchProducts() {
+            try {
+            this.isProductsLoading = true;
+            //   await new Promise(resolve => setTimeout(resolve, 1000));
+            const response = await axios.get('http://localhost:8081/products?_limit=10');
+            // , {
+            //   params: {
+            //     page: this.currentPage,
+            //     perPage: this.itemsPerPage,
+            //   },         
+            // });
 
-    //       console.log(response)
-    //     } catch (e) {
-    //       alert('Error Fetching')
-    //     }
-    //   }
-        search() {
-            this.filteredProducts = this.products.filter(product =>
-                product.name.includes(this.searchProduct)
-            );
-            this.$emit('filtered-products', this.filteredProducts);
-            console.log("Filtered products:", this.filteredProducts);
+            // this.products = this.products.concat(response.data);
+            this.products = response.data;
+
+            console.log(response)
+            } catch (e) {
+            alert('Error Fetching')
+            } finally {
+            this.isProductsLoading = false;          
+            }
         },
     },
+
+    // updateFilteredProducts(filteredProducts) {
+    //   this.products = filteredProducts;
+    // },
     // mounted() {
     //   this.fetchProducts();
     // },
-    // computed: {
-    //     sortedProducts() {
-    //         return [...this.products].sort((product1, product2) => {
-    //         const value1 = product1[this.products];
-    //         const value2 = product2[this.products];
+
+    // watch: {
+    //     selectedSort(newValue) {
+    //         this.products.sort((product1, product2) => {
+    //         const value1 = product1[newValue];
+    //         const value2 = product2[newValue];
 
     //         if (typeof value1 === 'number' && typeof value2 === 'number') {
     //             return value1 - value2;
@@ -127,32 +121,8 @@ export default {
     //             return value1.localeCompare(value2);
     //         }
     //         });
-    //     }
-    // },
-    watch: {
-        // selectedSort(newValue) {
-        //     this.products.sort((product1, product2) => {
-        //         return product1[newValue]?. localeCompare(product2[newValue]);
-        //     });
-        // },
-        selectedSort(newValue) {
-            this.products.sort((product1, product2) => {
-            const value1 = product1[newValue];
-            const value2 = product2[newValue];
-
-            if (typeof value1 === 'number' && typeof value2 === 'number') {
-                return value1 - value2;
-            } else if (typeof value1 === 'string' && typeof value2 === 'string') {
-                return value1.localeCompare(value2);
-            }
-            });
-        },
-    },
-
-    // created() {
-    //     this.fetchProducts(); 
-    // },
-
+    //     },
+    // },    
 }
 </script>
 
@@ -255,41 +225,9 @@ export default {
             font-size: 12px;
         }
     }
-/* Стилі для картки: */
-    .card-container{
-        display: flex;
-        flex-wrap: wrap;
-        margin-top: 15px;
-        margin-bottom: 15px;
-        gap: 2px;
-    }
-    .card {
-        width: 200px;
-        padding: 10px;
-        border: 1px solid rgb(233,233,233);
-        border-radius: 0;
-    }
-    .card-img-block{
-        height: 250px;
-        cursor: pointer;        
-    }
-    .card-img-top {
-        object-fit: contain;
-        max-height: 250px;
-    }
-    .card-body{
-        padding: 16px 5px 10px;
-    }
-    h5 {
-        text-align: center;
-        font-size: 16px;
-        font-weight: 700;
-        cursor: pointer;    
-    }
-    p {
-        font-size: 14px;
-    }
-    p:not(:last-child){
-        margin-bottom: 5px;            
-    }
+
+    .temporary{
+        font-weight: 500;
+        color: red;
+        }
 </style>
