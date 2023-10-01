@@ -4,6 +4,7 @@
     <div class="btn_container">
         <div for="searchInput" class="serch_block">
             <input type="text" id="searchInput"
+                v-model="searchQuery"
                 placeholder="Enter the product CODE or name">
             <button @click="search">
             <img src="https://cdn-icons-png.flaticon.com/512/483/483356.png" alt="Search">
@@ -27,6 +28,7 @@
         <ProductItem
         :products="products"
         :selectedSort="selectedSort"
+        :searchQuery="searchQuery"
         >
     </ProductItem>
       </div>
@@ -50,12 +52,7 @@ export default {
         ProductItem,
         MySelect
     },
-    // props: {
-    //     products: {
-    //         type: Array,
-    //         required: true,
-    //     }
-    // },
+
     data(){
         return {
             // currentPage: 1,
@@ -63,6 +60,7 @@ export default {
             products:[],
             isProductsLoading: false,
             selectedSort: '',
+            searchQuery: '',
             sortOptions: [
                 {value: 'name', name: 'name'},
                 {value: 'price', name: 'price'},
@@ -96,9 +94,8 @@ export default {
             console.log(response)
             } catch (e) {
             alert('Error Fetching')
-            } finally {
-            this.isProductsLoading = false;          
             }
+            finally { this.isProductsLoading = false; }
         },
     },
 
@@ -108,21 +105,6 @@ export default {
     // mounted() {
     //   this.fetchProducts();
     // },
-
-    // watch: {
-    //     selectedSort(newValue) {
-    //         this.products.sort((product1, product2) => {
-    //         const value1 = product1[newValue];
-    //         const value2 = product2[newValue];
-
-    //         if (typeof value1 === 'number' && typeof value2 === 'number') {
-    //             return value1 - value2;
-    //         } else if (typeof value1 === 'string' && typeof value2 === 'string') {
-    //             return value1.localeCompare(value2);
-    //         }
-    //         });
-    //     },
-    // },    
 }
 </script>
 

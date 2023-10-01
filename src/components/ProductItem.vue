@@ -1,7 +1,7 @@
 <template>
     <div class="card-container">
         <div class="card"
-        v-for="(product, index) in sortedProducts"
+        v-for="(product, index) in sortedAndSearchedProducts"
         :key="index">
             <div class="card-img-block">
                 <img class="card-img-top" :src="'data:image/jpeg;base64,' + product.imageData" :alt="product.name" />                
@@ -23,7 +23,8 @@ export default {
         type: Array,
         required: true,
         },
-        selectedSort: String,        
+        selectedSort: String,
+        searchQuery: [String, Number]  
     },
     computed: {
         sortedProducts() {
@@ -37,7 +38,17 @@ export default {
                     return value1.localeCompare(value2);
                 }
             });
-        }
+        },
+        sortedAndSearchedProducts() {
+            return this.sortedProducts.filter(product => {
+                const nameMatches = product.name.toLowerCase().includes(this.searchQuery.toLowerCase());
+                const codeMatches = product.id.toString().includes(this.searchQuery.toString());
+                return nameMatches || codeMatches;
+            });
+        },
+        // sortedAndSearchedProducts() {
+        // return this.sortedProducts.filter(product => product.name.toLowerCase().includes(this.searchQuery.toLowerCase()))
+        // }
     },
 }
 </script>
