@@ -40,15 +40,15 @@ export default {
             });
         },
         sortedAndSearchedProducts() {
-            return this.sortedProducts.filter(product => {
+            const results = this.sortedProducts.filter(product => {
                 const nameMatches = product.name.toLowerCase().includes(this.searchQuery.toLowerCase());
                 const codeMatches = product.id.toString().includes(this.searchQuery.toString());
                 return nameMatches || codeMatches;
             });
+            this.$emit('search-results', results);
+
+            return results;    
         },
-        // sortedAndSearchedProducts() {
-        // return this.sortedProducts.filter(product => product.name.toLowerCase().includes(this.searchQuery.toLowerCase()))
-        // }
     },
 }
 </script>

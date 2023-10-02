@@ -20,26 +20,24 @@
             </my-select>
         </div>
     </div>
-
-    <button @click="fetchProducts"> Завантажити продукти</button>
+<!-- 
+    <button @click="fetchProducts"> Завантажити продукти</button> -->
 
     <div class="products-grid" id="productsList">
       <div v-if="!isProductsLoading">
         <ProductItem
-        :products="products"
-        :selectedSort="selectedSort"
-        :searchQuery="searchQuery"
+            :products="products"
+            :selectedSort="selectedSort"
+            :searchQuery="searchQuery"
+            @search-results="handleSearchResults"
         >
     </ProductItem>
       </div>
       <div v-else class="temporary">Loading</div>
+        <div class="empty-list" v-if="isProductsLoading === false && searchResults.length === 0">
+            Nothing was found for your search query
+        </div>      
     </div>
-
-<!-- Результати пошуку -->
-
-            <!-- <div v-for="product in filteredProducts" :key="product.id">
-                {{ product.name }}
-            </div>           -->
 </template>
 
 <script>
@@ -61,6 +59,7 @@ export default {
             isProductsLoading: false,
             selectedSort: '',
             searchQuery: '',
+            searchResults: [],
             sortOptions: [
                 {value: 'name', name: 'name'},
                 {value: 'price', name: 'price'},
@@ -97,14 +96,16 @@ export default {
             }
             finally { this.isProductsLoading = false; }
         },
+
+        handleSearchResults(results) {
+            this.searchResults = results;
+        },
+
     },
 
-    // updateFilteredProducts(filteredProducts) {
-    //   this.products = filteredProducts;
-    // },
-    // mounted() {
-    //   this.fetchProducts();
-    // },
+    mounted() {
+      this.fetchProducts();
+    },
 }
 </script>
 
@@ -207,7 +208,15 @@ export default {
             font-size: 12px;
         }
     }
-
+    .empty-list {
+        text-align: center;
+        font-weight: bold;
+        color: black;
+        padding: 10px;
+        border: 1px solid red;
+        background-color: #f0f8f0;
+        margin-top: 10px;
+    }
     .temporary{
         font-weight: 500;
         color: red;
