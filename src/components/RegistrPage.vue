@@ -5,34 +5,90 @@
 
         <div class="form-group">
             <label for="input_name">name:</label>
-            <input type="text" class="form-control" id="input_name" placeholder="Enter your name"   required>
+            <input
+                v-model="name"
+                type="text" class="form-control" id="input_name" placeholder="Enter your name"
+                required>
             <label for="input_surname">surname:</label>
-            <input type="text" class="form-control" id="input_surname" placeholder="Enter your surname">
+            <input
+                v-model="surname"
+                type="text" class="form-control" id="input_surname" placeholder="Enter your surname">
             <label for="input_phone">phone:</label>
-            <input type="text" class="form-control" id="input_phone" required aria-describedby="phonHelp" placeholder="Your phone number">
-            <div id="phonHelp" class="form-text"> phone number in the format +380XXXXXXXXX
+            <input
+                v-model="phone"
+                type="text" class="form-control" id="input_phone"  aria-describedby="phonHelp" placeholder="Your phone number"
+                required >
+            <div class="form-text" id="phonHelp"> phone number in the format +380XXXXXXXXX
             </div>
             <label for="email">email:</label>
-            <input type="email" class="form-control" id="regEmail" placeholder="Enter your email address" required>
+            <input
+                v-model="email"
+                type="email" class="form-control" id="regEmail" placeholder="Enter your email address" required>
             <label for="password">password:</label>
-            <input type="password" class="form-control" id="regPassword" placeholder="Create a password" required>
+            <input
+                v-model="password"
+                type="password" class="form-control" id="regPassword" placeholder="Create a password"
+                required>
         </div>
-            <button type="submit" class="btn btn-success submit">Register</button>
+            <button
+                @click="register"
+                type="submit" class="btn btn-success submit">
+                Register</button>
 
-            <div class="registration-success" id="registrationSuccess">You have successfully registered. Please log in to your account.
+            <div class="registration-success" id="registrationSuccess"
+                v-if="registrationSuccess">
+                You have successfully registered. Please log in to your account.
             </div>
     </div>
 </template>
 
 <script>
-
     import showMixin from "@/mixins/showMixin";
     import LoginPage from "@/components/LoginPage";
+    import axios from 'axios';
 
     export default{
         name: 'registr-page',
         LoginPage,
-        mixins: [showMixin],        
+        mixins: [showMixin], 
+        data() {
+            return {
+                name: '',
+                surname: '',
+                phone: '',
+                email: '',
+                password: '',
+                registrationSuccess: false,
+            };
+        },
+        methods: {
+            register() {
+                const user = {
+                    name: this.name,
+                    surname: this.surname,
+                    phone: this.phone,
+                    email: this.email,
+                    password: this.password,
+                };
+                axios
+                    .post('http://localhost:8081/users', user)
+                    .then((response) => {
+            console.log('Registration successful:', response.data);
+                    this.registrationSuccess = true;
+                    this.clearForm();
+                    })
+                    .catch((error) => {
+            console.error('Registration error:', error);
+                    });
+            },
+            clearForm() {
+                this.name = '';
+                this.surname = '';
+                this.phone = '';
+                this.email = '';
+                this.password = '';
+            },
+        },    
     }
 </script>
 

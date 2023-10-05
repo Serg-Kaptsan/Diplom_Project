@@ -20,21 +20,17 @@
             </my-select>
         </div>
     </div>
-<!-- 
-    <button @click="fetchProducts"> Завантажити продукти</button> -->
 
-    <div class="products-grid" id="productsList">
-      <div v-if="!isProductsLoading">
-        <ProductItem
-            :products="products"
-            :selectedSort="selectedSort"
-            :searchQuery="searchQuery"
-            @search-results="handleSearchResults"
-        >
-    </ProductItem>
+    <!-- <button @click="fetchProducts"> Завантажити продукти</button> -->
+
+    <div class="products-grid" id="productsList" style="display: flex;">
+      <div v-if="!isProductsLoading" class="card-container" >
+        <div v-for="(product, index) in filteredAndSortedProducts" :key="index">
+        <product-item :product="product"> </product-item>
+        </div>
       </div>
       <div v-else class="temporary">Loading</div>
-        <div class="empty-list" v-if="isProductsLoading === false && searchResults.length === 0">
+        <div class="empty-list" v-if="!isProductsLoading && filteredAndSortedProducts.length === 0">
             Nothing was found for your search query
         </div>      
     </div>
@@ -44,6 +40,7 @@
 import axios from 'axios';
 import ProductItem from "@/components/ProductItem";
 import MySelect from '@/components/UI/MySelect';
+// import { computed } from 'vue';
 
 export default {
     components: {
@@ -54,7 +51,7 @@ export default {
     data(){
         return {
             // currentPage: 1,
-            // itemsPerPage: 14,
+            // itemsPerPage: 7,
             products:[],
             isProductsLoading: false,
             selectedSort: '',
@@ -68,40 +65,53 @@ export default {
             ],      
         }
     },
-
-    methods:{
-        onProductsLoaded(products) {
-            this.products = products;
-            this.isProductsLoading = false;
-        },
-
-        async fetchProducts() {
-            try {
-            this.isProductsLoading = true;
-            //   await new Promise(resolve => setTimeout(resolve, 1000));
-            const response = await axios.get('http://localhost:8081/products?_limit=10');
-            // , {
-            //   params: {
-            //     page: this.currentPage,
-            //     perPage: this.itemsPerPage,
-            //   },         
-            // });
-
-            // this.products = this.products.concat(response.data);
-            this.products = response.data;
-
-            console.log(response)
-            } catch (e) {
-            alert('Error Fetching')
+    computed: {
+        filteredAndSortedProducts() {
+            if (!Array.isArray(this.products) || this.products.length === 0) {
+                return [];
             }
-            finally { this.isProductsLoading = false; }
+            const filteredProducts = this.products.filter(product => {
+                const nameMatches = product.name.toLowerCase().includes(this.searchQuery.toLowerCase());
+                const codeMatches = product.id.toString().includes(this.searchQuery.toString());
+                return nameMatches || codeMatches;
+            });
+
+            return [...filteredProducts].sort((product1, product2) => {
+                const value1 = product1[this.selectedSort];
+                const value2 = product2[this.selectedSort];
+
+                if (typeof value1 === 'number' && typeof value2 === 'number') {
+                return value1 - value2;
+                } else if (typeof value1 === 'string' && typeof value2 === 'string') {
+                return value1.localeCompare(value2);
+                }
+            });
         },
 
         handleSearchResults(results) {
             this.searchResults = results;
-        },
-
+        },  
     },
+    methods:{
+        async fetchProducts() {
+            try {
+                this.isProductsLoading = true;
+                const response = await axios.get('http://localhost:8081/products?page=1&pageSize=7');
+                this.products = response.data.content;
+            console.log(response);
+            } catch (e) {
+            console.error('Error Fetching:', e);
+                this.hasErrorFetching = true;
+            } finally {
+                this.isProductsLoading = false; 
+            }
+        },      
+    },
+
+        // onProductsLoaded(products) {
+        //     this.products = products;
+        //     this.isProductsLoading = false;
+        // },  
 
     mounted() {
       this.fetchProducts();
@@ -207,6 +217,13 @@ export default {
             padding: 5px 5px;
             font-size: 12px;
         }
+    }
+    .card-container{
+        display: flex;
+        flex-wrap: wrap;
+        margin-top: 15px;
+        margin-bottom: 15px;
+        gap: 2px;
     }
     .empty-list {
         text-align: center;

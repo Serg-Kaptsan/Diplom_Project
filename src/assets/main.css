@@ -1,6 +1,6 @@
 @import './base.css';
 
-body{
+html, body{
   height: 100vh;
 }
 #app{
