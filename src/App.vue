@@ -3,7 +3,7 @@
     <main>
       <div class="app_container">
 
-      <ProductsPage></ProductsPage>
+      <router-view></router-view>
         
         <my-dialog v-model:show="dialogVisible">
           <login-page v-model:show="isLoginPageVisible" />

@@ -32,15 +32,29 @@
       <div v-else class="temporary">Loading</div>
         <div class="empty-list" v-if="!isProductsLoading && filteredAndSortedProducts.length === 0">
             Nothing was found for your search query
-        </div>      
+        </div>
     </div>
+    <div ref="observer" class="observer"></div>
+    <!-- <div class="page__wrapper">
+        <div 
+            v-for="pageNumber in totalPages" 
+            :key="pageNumber"
+            class="page"
+            :class="{
+                'current-page': currentPage === pageNumber
+            }"
+            :style="currentPage === pageNumber ? { 'background': 'blue' } : {}"
+            @click="changePage(pageNumber)"
+        >
+            {{ pageNumber }}
+        </div>
+    </div>          -->
 </template>
 
 <script>
 import axios from 'axios';
 import ProductItem from "@/components/ProductItem";
 import MySelect from '@/components/UI/MySelect';
-// import { computed } from 'vue';
 
 export default {
     components: {
@@ -50,8 +64,9 @@ export default {
 
     data(){
         return {
-            // currentPage: 1,
-            // itemsPerPage: 7,
+            currentPage: 0,
+            itemsPerPage: 7,
+            totalPages: 0,
             products:[],
             isProductsLoading: false,
             selectedSort: '',
@@ -64,6 +79,53 @@ export default {
                 {value: 'discount', name: 'discount'},
             ],      
         }
+    },
+
+    methods:{
+        // changePage(pageNumber){
+        //     this.currentPage = pageNumber
+        // },
+        async fetchProducts() {
+            try {
+                this.isProductsLoading = true;
+                const response = await axios.get('http://localhost:8081/products', {
+                    params: {
+                        page: this.currentPage,
+                        pageSize: this.itemsPerPage
+                    }                    
+                });
+                this.totalPages = Math.ceil(response.data.totalElements / this.itemsPerPage)
+                this.products = response.data.content;
+            console.log(response);
+            } catch (e) {
+            console.error('Error Fetching:', e);
+                this.hasErrorFetching = true;
+            } finally {
+                this.isProductsLoading = false; 
+            }
+        },
+        async loadMorePages() {
+            try {
+                this.currentPage += 1;
+                const response = await axios.get('http://localhost:8081/products', {
+                    params: {
+                        page: this.currentPage,
+                        pageSize: this.itemsPerPage
+                    }                    
+                });
+                this.totalPages = Math.ceil(response.data.totalElements / this.itemsPerPage)
+                this.products.push(...response.data.content);
+            console.log(response);
+            } catch (e) {
+            console.error('Error Fetching:', e);
+                this.hasErrorFetching = true;
+            }
+        },        
+    },
+    watch: {
+        // currentPage() {
+        //     this.fetchProducts()
+        // }
     },
     computed: {
         filteredAndSortedProducts() {
@@ -92,29 +154,24 @@ export default {
             this.searchResults = results;
         },  
     },
-    methods:{
-        async fetchProducts() {
-            try {
-                this.isProductsLoading = true;
-                const response = await axios.get('http://localhost:8081/products?page=1&pageSize=7');
-                this.products = response.data.content;
-            console.log(response);
-            } catch (e) {
-            console.error('Error Fetching:', e);
-                this.hasErrorFetching = true;
-            } finally {
-                this.isProductsLoading = false; 
-            }
-        },      
-    },
-
-        // onProductsLoaded(products) {
-        //     this.products = products;
-        //     this.isProductsLoading = false;
-        // },  
 
     mounted() {
-      this.fetchProducts();
+        this.fetchProducts();
+        console.log(this.$refs.observer);
+        const options = {
+            root: null,
+            rootMargin: "0px",
+            threshold: 0.5,
+        };
+        const callback = (entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && entry.intersectionRatio > 0) {
+                    this.loadMorePages();
+                }
+            });
+        };
+        const observer = new IntersectionObserver(callback, options);
+        observer.observe(this.$refs.observer);
     },
 }
 </script>
@@ -226,6 +283,7 @@ export default {
         gap: 2px;
     }
     .empty-list {
+        width: 100%;
         text-align: center;
         font-weight: bold;
         color: black;
@@ -233,6 +291,10 @@ export default {
         border: 1px solid red;
         background-color: #f0f8f0;
         margin-top: 10px;
+    }
+    .observer{
+        height: 15px;
+        background: green;
     }
     .temporary{
         font-weight: 500;

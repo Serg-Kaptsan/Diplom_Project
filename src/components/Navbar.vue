@@ -1,10 +1,10 @@
 <template>
     <div class="navbar">
-      <div @click="$router.push('/')">HOME</div>
+      <div class="home" @click="$router.push('/')"> HOME </div>
       <div class="navbar__btns">
         <button @click="$router.push('/composition')"> CART </button> 
         <font-awesome-icon icon="cart-shopping" />       
-        <button @click="$router.push('/posts')">CONTACT US</button>
+        <button @click="$router.push('/about')">CONTACT US</button>
         <button
           @click="showDialog">
           LOG IN
@@ -40,6 +40,9 @@
     }
     .navbar__btns {
       margin-left: auto;
+    }
+    .home{
+      cursor: pointer;
     }
     button{
       background: transparent;

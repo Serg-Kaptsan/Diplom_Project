@@ -9,6 +9,10 @@
                 <p class="card-text"> <strong>Price:</strong> {{ product.price }}</p>
                 <p class="card-text discount"> <strong>Discount:</strong> {{ product.discountPercent }}</p>      
             </div>
+            <my-button
+                @click="$router.push(`/product/${product.id}`)"
+            >
+                Open product-card</my-button>
         </div>          
 </template>
 
@@ -19,37 +23,11 @@ export default {
         type: Object,
         required: true,
         },
-        // selectedSort: String,
-        // searchQuery: [String, Number]  
     },
-    // computed: {
-    //     sortedProducts() {
-    //         return [...this.products].sort((product1, product2) => {
-    //             const value1 = product1[this.selectedSort];
-    //             const value2 = product2[this.selectedSort];
-
-    //             if (typeof value1 === 'number' && typeof value2 === 'number') {
-    //                 return value1 - value2;
-    //             } else if (typeof value1 === 'string' && typeof value2 === 'string') {
-    //                 return value1.localeCompare(value2);
-    //             }
-    //         });
-    //     },
-    //     sortedAndSearchedProducts() {
-    //         const results = this.sortedProducts.filter(product => {
-    //             const nameMatches = product.name.toLowerCase().includes(this.searchQuery.toLowerCase());
-    //             const codeMatches = product.id.toString().includes(this.searchQuery.toString());
-    //             return nameMatches || codeMatches;
-    //         });
-    //         this.$emit('search-results', results);
-
-    //         return results;    
-    //     },
-    // },
 }
 </script>
 
-<style scoped>
+<style scoped >
     .card {
         width: 200px;
         height: 100%;
