@@ -4,6 +4,7 @@
     <div class="btn_container">
         <div for="searchInput" class="serch_block">
             <input type="text" id="searchInput"
+                v-focus
                 v-model="searchQuery"
                 placeholder="Enter the product CODE or name">
             <button @click="search">
@@ -30,11 +31,13 @@
         </div>
       </div>
       <div v-else class="temporary">Loading</div>
+
         <div class="empty-list" v-if="!isProductsLoading && filteredAndSortedProducts.length === 0">
             Nothing was found for your search query
         </div>
     </div>
-    <div ref="observer" class="observer"></div>
+    <div v-intersection="loadMorePages" class="observer"></div>
+
     <!-- <div class="page__wrapper">
         <div 
             v-for="pageNumber in totalPages" 
@@ -59,7 +62,7 @@ import MySelect from '@/components/UI/MySelect';
 export default {
     components: {
         ProductItem,
-        MySelect
+        MySelect,
     },
 
     data(){
@@ -123,9 +126,6 @@ export default {
         },        
     },
     watch: {
-        // currentPage() {
-        //     this.fetchProducts()
-        // }
     },
     computed: {
         filteredAndSortedProducts() {
@@ -158,20 +158,6 @@ export default {
     mounted() {
         this.fetchProducts();
         console.log(this.$refs.observer);
-        const options = {
-            root: null,
-            rootMargin: "0px",
-            threshold: 0.5,
-        };
-        const callback = (entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting && entry.intersectionRatio > 0) {
-                    this.loadMorePages();
-                }
-            });
-        };
-        const observer = new IntersectionObserver(callback, options);
-        observer.observe(this.$refs.observer);
     },
 }
 </script>

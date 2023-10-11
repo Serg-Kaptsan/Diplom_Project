@@ -6,6 +6,7 @@
         <div class="form-group">
             <label for="input_name">name:</label>
             <input
+                v-focus
                 v-model="name"
                 type="text" class="form-control" id="input_name" placeholder="Enter your name"
                 required>

@@ -1,5 +1,4 @@
 import ProductsPage from "@/components/ProductsPage";
-import MyDialog from "@/components/UI/MyDialog";
 import ProductIdPage from "@/views/ProductIdPage";
 import { createRouter, createWebHistory } from 'vue-router'
 
@@ -20,7 +19,8 @@ const routes = [
   {
     path: '/product/:id',
     name: 'product',
-    component: ProductIdPage
+    props: true, 
+    component: ProductIdPage,
   },
 
 ]

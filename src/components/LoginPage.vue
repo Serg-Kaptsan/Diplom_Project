@@ -3,7 +3,9 @@
         <h4>Enter</h4>
         <div class="form-group">
             <label for="input_email">email:</label>
-            <input type="email" class="form-control" id="input_email" placeholder="Enter your email address">
+            <input type="email" class="form-control" id="input_email"
+                v-focus
+                placeholder="Enter your email address">
             <label for="input_password">password:</label>
             <input type="password" class="form-control" id="input_password" placeholder="Enter password">
         </div>

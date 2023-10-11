@@ -1,23 +1,31 @@
 <template>
         <div class="card">
             <div class="card-img-block">
-                <img class="card-img-top" :src="'data:image/jpeg;base64,' + product.imageData" :alt="product.name" />                
+                <img class="card-img-top" 
+                :src="'data:image/jpeg;base64,' + product.imageData" :alt="product.name" 
+                @click="$router.push(`/product/${product.id}`)"
+                />                
             </div>
             <div class="card-body">
-                <h5 class="card-title"> {{ product.name }} </h5>
+                <h5 class="card-title"
+                    @click="$router.push(`/product/${product.id}`)"
+                    >
+                    {{ product.name }}
+                </h5>
                 <p class="card-text"> <strong> Code:</strong> {{ product.id }}</p>
-                <p class="card-text"> <strong>Price:</strong> {{ product.price }}</p>
-                <p class="card-text discount"> <strong>Discount:</strong> {{ product.discountPercent }}</p>      
+                <p class="card-text"> <strong> Price:</strong> {{ product.price }}</p>
+                <p class="card-text discount"> <strong> Discount:</strong> {{ product.discountPercent }}</p>      
             </div>
-            <my-button
-                @click="$router.push(`/product/${product.id}`)"
-            >
-                Open product-card</my-button>
         </div>          
 </template>
 
 <script>
+// import ProductIdPage from '@/views/ProductIdPage';
+
 export default {
+    // components:{
+    //     ProductIdPage,
+    // },
     props: {
         product: {
         type: Object,
