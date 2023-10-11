@@ -3,12 +3,12 @@
             <div class="card-img-block">
                 <img class="card-img-top" 
                 :src="'data:image/jpeg;base64,' + product.imageData" :alt="product.name" 
-                @click="$router.push(`/product/${product.id}`)"
+                @click="viewProduct"
                 />                
             </div>
             <div class="card-body">
                 <h5 class="card-title"
-                    @click="$router.push(`/product/${product.id}`)"
+                @click="viewProduct"
                     >
                     {{ product.name }}
                 </h5>
@@ -20,18 +20,21 @@
 </template>
 
 <script>
-// import ProductIdPage from '@/views/ProductIdPage';
 
 export default {
-    // components:{
-    //     ProductIdPage,
-    // },
+
     props: {
         product: {
         type: Object,
         required: true,
         },
     },
+
+    methods: {
+    viewProduct() {
+      this.$router.push({ name: 'product', params: { id: this.product.id } });
+    },
+  },
 }
 </script>
 

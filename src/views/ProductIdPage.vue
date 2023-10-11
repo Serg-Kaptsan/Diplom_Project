@@ -1,58 +1,86 @@
 <template>
-    <h1>Card of product CODE = {{ $route.params.id }} </h1>
-        <!-- <div class="card">
+    <!-- <h2>Card of product CODE = {{ $route.params.id }} </h2> -->
+        <div class="card-item" v-if="product">
             <div class="card-img-block">
-                <img class="card-img-top" :src="'data:image/jpeg;base64,' + product.imageData" :alt="product.name"/>                
+                <img class="card-img-top" 
+                :src="'data:image/jpeg;base64,' + product.imageData" :alt="product.name"/>                
             </div>
             <div class="card-body">
                 <h5 class="card-title"> {{ product.name }} </h5>
                 <p class="card-text"> <strong> Code:</strong> {{ product.id }}</p>
-                <p class="card-text"> <strong>Price:</strong> {{ product.price }}</p>
-                <p class="card-text discount"> <strong>Discount:</strong> {{ product.discountPercent }}</p>      
+                <p class="card-text"> <strong> Product Description:</strong>
+                    <br> <span> {{ product.description }} </span>
+                </p>
+                <p class="card-text"> <strong> Price:</strong> {{ product.price }} </p>
+                <p class="card-text discount"> <strong> Discount:</strong> {{ product.discountPercent }} </p>
+                <p class="card-text"> <strong> Quantity in stock:</strong> {{ product.quantity }} </p>    
             </div>
-        </div>           -->
+        </div> 
 </template>
 
 <script>
-export default {
+import axios from 'axios';
 
+export default {
+    data() {
+        return {
+            product: null,
+        };
+    },
+    created() {
+        const productId = this.$route.params.id;
+        axios.get(`http://localhost:8081/product/${productId}`)
+            .then(response => {
+                this.product = response.data;
+            })
+            .catch(error => {
+            console.error('Error fetching product:', error);
+        });
+    },
 };
 </script>
 
 <style scoped>
     h1{
-        margin-top: 50px;
+        margin-top: 40px;
         margin-left: 20px;
     }
-     .card {
-        width: 200px;
+     .card-item {
+        width: 1200px;
         height: 100%;
-        padding: 10px;
-        border: 1px solid rgb(233,233,233);
-        border-radius: 0;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        margin: auto;
+        margin-top: 50px;
+        padding: 25px;
+        border: 1px solid rgb(120, 116, 116);
+        border-radius: 5px;
+        background-color: white;
     }
     .card-img-block{
-        height: 250px;
-        cursor: pointer;        
+        width: 600px;
+        height: 100%;
+        margin-right: 25px;
+        cursor: pointer;
     }
     .card-img-top {
         object-fit: contain;
-        max-height: 250px;
+        width: 100%;
+        vertical-align: middle;
     }
     .card-body{
-        padding: 16px 5px 10px;
+        padding: 30px;
     }
     h5 {
         text-align: center;
-        font-size: 16px;
-        font-weight: 700;
-        cursor: pointer;    
+        font-size: 24px;
+        font-weight: 700;  
     }
     p {
-        font-size: 14px;
+        font-size: 20px;
     }
-    p:not(:last-child){
-        margin-bottom: 5px;            
+    span {
+        font-size: 16px;
     }
-
 </style>
