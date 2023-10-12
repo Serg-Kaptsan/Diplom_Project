@@ -9,6 +9,11 @@ html, body{
   max-width: 1460px;
   margin: 0 auto;
   height: 100vh;
+  background-image: url('/public/background.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }
 
 main{

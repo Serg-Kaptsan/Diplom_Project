@@ -12,13 +12,7 @@
         <button class="btn enter_button"> <strong>Log in</strong> </button>
         
         <button class="reg_button"  @click="openRegistration"> <strong>Sign up</strong> </button>
-    </div>
-    <!-- <div>
-
-    <registr-page v-if="registrVisible" @close="registrVisible = false"></registr-page>
-
-    </div> -->
- 
+    </div> 
 </template>
 
 <script>

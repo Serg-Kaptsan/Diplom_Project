@@ -2,9 +2,13 @@
     <div class="navbar">
       <div class="home" @click="$router.push('/')"> HOME </div>
       <div class="navbar__btns">
-        <button @click="$router.push('/composition')"> CART </button> 
-        <font-awesome-icon icon="cart-shopping" />       
-        <button @click="$router.push('/about')">CONTACT US</button>
+        <button 
+          @click="$router.push('/composition')">
+          CART
+        </button>
+        <button 
+          @click="$router.push('/about')"> CONTACT US
+        </button>
         <button
           @click="showDialog">
           LOG IN
@@ -49,6 +53,7 @@
       border: none;
       margin-left: 20px;      
     }
+
     @media only screen and (max-width: 576px) {
       .navbar{
         font-size: 14px;    
@@ -57,4 +62,5 @@
         margin-left: 10px;
       }
     }
+
   </style>

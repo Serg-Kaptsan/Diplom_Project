@@ -31,16 +31,13 @@ export default {
 
   .dialog__content {
     position: relative;
-    margin: auto;
+    margin: 100px auto auto;
     background: white;
     border-radius: 12px;
     min-height: 200px;
     min-width: 350px;
     padding: 20px;
   }
-  /* .registr-form{
-    position: relative;
-  } */
   .close-form{
     position: absolute;
     top: 0;
@@ -55,6 +52,5 @@ export default {
     }
   .close-form:hover{
     color: red;
-    /* font-weight: 00; */
   }
 </style>

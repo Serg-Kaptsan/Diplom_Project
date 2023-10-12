@@ -1,6 +1,9 @@
 <template>
     <!-- <h2>Card of product CODE = {{ $route.params.id }} </h2> -->
         <div class="card-item" v-if="product">
+            <close-form title="back to product list"
+                @click="$router.push('/')">
+            </close-form>
             <div class="card-img-block">
                 <img class="card-img-top" 
                 :src="'data:image/jpeg;base64,' + product.imageData" :alt="product.name"/>                
@@ -13,15 +16,21 @@
                 </p>
                 <p class="card-text"> <strong> Price:</strong> {{ product.price }} </p>
                 <p class="card-text discount"> <strong> Discount:</strong> {{ product.discountPercent }} </p>
-                <p class="card-text"> <strong> Quantity in stock:</strong> {{ product.quantity }} </p>    
+                <p class="card-text last"> <strong> Quantity in stock:</strong> {{ product.quantity }} </p>
+                <img class="cart" title="add to cart" src='/trolley.png' alt="cart">   
             </div>
         </div> 
 </template>
 
 <script>
 import axios from 'axios';
+import CloseForm from "@/components/UI/CloseForm"
 
 export default {
+    components: {
+      CloseForm  
+    },
+
     data() {
         return {
             product: null,
@@ -46,41 +55,80 @@ export default {
         margin-left: 20px;
     }
      .card-item {
-        width: 1200px;
+        position: relative;
+        width: 95%;
         height: 100%;
         display: flex;
+        justify-content: space-between;
         flex-direction: row;
         flex-wrap: wrap;
         margin: auto;
         margin-top: 50px;
         padding: 25px;
         border: 1px solid rgb(120, 116, 116);
-        border-radius: 5px;
+        border-radius: 10px;
         background-color: white;
     }
     .card-img-block{
-        width: 600px;
+        width: 40%;
         height: 100%;
-        margin-right: 25px;
+        /* margin-right: 25px; */
         cursor: pointer;
     }
     .card-img-top {
-        object-fit: contain;
         width: 100%;
+        padding: 10px;
+        object-fit: contain;        
         vertical-align: middle;
     }
     .card-body{
-        padding: 30px;
+        width: 40%;
+        padding: 10px;
+        padding-left: 50px;
     }
     h5 {
         text-align: center;
         font-size: 24px;
-        font-weight: 700;  
+        font-weight: 700;
+        margin-bottom: 25px; 
     }
     p {
         font-size: 20px;
     }
+    .last {
+        margin-bottom: 5px;            
+    }
     span {
         font-size: 16px;
     }
+    .cart{
+        width: 36px;
+        height: 36px;
+        float: right;
+    }
+    @media only screen and (max-width: 768px) {
+        .card-img-block{
+            width: 100%;
+        }
+        .card-body{
+            width: 100%;
+        }
+    }
+    @media only screen and (max-width: 576px) {
+        h5 {
+            font-size: 20px;
+            margin-bottom: 16px; 
+        }
+        p {
+            font-size: 16px;
+        }
+        .last {
+            margin-bottom: 5px;            
+        }
+        span {
+            font-size: 12px;
+        }        
+    }   
+
+   
 </style>
