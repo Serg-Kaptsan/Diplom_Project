@@ -24,7 +24,7 @@
 
     <!-- <button @click="fetchProducts"> Завантажити продукти</button> -->
 
-    <div class="products-grid" id="productsList" style="display: flex;">
+    <div class="products-grid" id="productsList">
       <div v-if="!isProductsLoading" class="card-container" >
         <div v-for="(product, index) in filteredAndSortedProducts" :key="index">
         <product-item :product="product"> </product-item>
@@ -99,7 +99,7 @@ export default {
                 });
                 this.totalPages = Math.ceil(response.data.totalElements / this.itemsPerPage)
                 this.products = response.data.content;
-            console.log(response);
+                console.log(response);
             } catch (e) {
             console.error('Error Fetching:', e);
                 this.hasErrorFetching = true;
@@ -109,16 +109,19 @@ export default {
         },
         async loadMorePages() {
             try {
-                this.currentPage += 1;
-                const response = await axios.get('http://localhost:8081/products', {
-                    params: {
-                        page: this.currentPage,
-                        pageSize: this.itemsPerPage
-                    }                    
-                });
+                if (!this.isProductsLoading) {
+                    this.currentPage += 1;
+                    const response = await axios.get('http://localhost:8081/products', {
+                        params: {
+                            page: this.currentPage,
+                            pageSize: this.itemsPerPage
+                        }                    
+                    });                    
+                
                 this.totalPages = Math.ceil(response.data.totalElements / this.itemsPerPage)
                 this.products.push(...response.data.content);
             console.log(response);
+                }
             } catch (e) {
             console.error('Error Fetching:', e);
                 this.hasErrorFetching = true;
@@ -163,6 +166,9 @@ export default {
 </script>
 
 <style scoped>
+    #productsList{
+        display: flex;
+    }
     h1 {
         text-align: center;
         margin-top: 50px;

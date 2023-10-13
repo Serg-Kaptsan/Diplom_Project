@@ -8,8 +8,8 @@
             </div>
             <div class="card-body">
                 <h5 class="card-title"
-                @click="viewProduct"
-                    >
+                    @click="viewProduct"
+                >
                     {{ product.name }}
                 </h5>
                 <p class="card-text"> <strong> Code:</strong> {{ product.id }}</p>

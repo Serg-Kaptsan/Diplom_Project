@@ -124,52 +124,25 @@
         background-color: #f0f8f0;
         margin-top: 10px;
     }
-    /* 
-    button{
-        margin: auto;     
-        width: 100%;
-        margin-top: 10px;
+
+    /* @media only screen and (max-width: 768px) {
+        .registration-form {
+            max-width: 100%;
+        }
     }
-    .enter_button:hover{
-        background-color: #00bc52;        
-    }
-    .reg_button{
-        color: green;
-        background: transparent;
-        border: none;
-        transition: color 0.3s;
-    }
-    .reg_button:hover{
-        color:red;
+
+    @media only screen and (max-width: 600px) {
+        .form-group input {
+            font-size: 14px;
+        }
+
+        .back-to-product button,
+        .form-group button {
+            font-size: 14px;
+        }
+
+        .registration-form {
+            max-width: 250px;
+        }
     } */
-    @media only screen and (max-width: 768px) {
-            .login-form,
-            .registration-form {
-                max-width: 100%;
-            }
-
-            .header h1 {
-                font-size: 24px;
-            }
-        }
-
-        @media only screen and (max-width: 600px) {
-            .form-group input {
-                font-size: 14px;
-            }
-
-            .back-to-product button,
-            .form-group button {
-                font-size: 14px;
-            }
-
-            .login-form,
-            .registration-form {
-                max-width: 250px;
-            }
-
-            .header h1 {
-                font-size: 20px;
-            }
-        }
 </style>

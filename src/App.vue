@@ -1,15 +1,15 @@
 <template>
     <navbar class="navbar" @show-dialog="showDialog"/>
     <main>
-      <div class="app_container">
-
+      <!-- <div class="app_container">
+      </div>    -->
       <router-view></router-view>
         
         <my-dialog v-model:show="dialogVisible">
           <login-page v-model:show="isLoginPageVisible" />
           <registr-page v-if="!isLoginPageVisible" />
         </my-dialog>
-      </div>    
+ 
     </main>
 
 </template>

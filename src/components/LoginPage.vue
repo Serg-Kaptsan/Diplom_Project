@@ -9,7 +9,10 @@
             <label for="input_password">password:</label>
             <input type="password" class="form-control" id="input_password" placeholder="Enter password">
         </div>
-        <button class="btn enter_button"> <strong>Log in</strong> </button>
+        
+        <button type="submit" class="btn btn-success submit enter_button">
+            <strong>Log in</strong>
+        </button>
         
         <button class="reg_button"  @click="openRegistration"> <strong>Sign up</strong> </button>
     </div> 
@@ -58,7 +61,7 @@ export default{
         background-color: #00a046;
         transition: background-color 0.3s;
     }
-    .enter_button:hover{
+    .enter_button:hover {
         background-color: #00bc52;        
     }
     .reg_button{

@@ -57,7 +57,7 @@ export default {
      .card-item {
         position: relative;
         width: 95%;
-        height: 100%;
+        /* height: 100%; */
         display: flex;
         justify-content: space-between;
         flex-direction: row;
@@ -109,6 +109,11 @@ export default {
     @media only screen and (max-width: 768px) {
         .card-img-block{
             width: 100%;
+        }
+        .card-img-top {
+            padding: 15px;
+            object-fit: contain;        
+            vertical-align: middle;
         }
         .card-body{
             width: 100%;
