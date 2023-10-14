@@ -3,7 +3,7 @@
       <div class="home" @click="$router.push('/')"> HOME </div>
       <div class="navbar__btns">
         <button 
-          @click="$router.push('/composition')">
+          @click="$router.push('/composition')" >
           CART
         </button>
         <button 
@@ -12,6 +12,10 @@
         <button
           @click="showDialog">
           LOG IN
+        </button>
+        <button
+          @click="$router.push('/admin')">
+          ADMIN
         </button>
         <button @click="$router.push('/store')">GO OUT</button>
       </div>

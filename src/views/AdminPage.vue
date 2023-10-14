@@ -1,197 +1,296 @@
 <template>
-<body>
-  <div class="container">
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
-          <div class="form-group">
-              <label for="searchInput">Product search:</label>
-              <input type="text" id="searchInput" placeholder="Enter the product ID or name">
-              <button onclick="searchProduct()">
-                  <img src="https://cdn-icons-png.flaticon.com/512/483/483356.png" alt="Search">
-                  Search
-              </button>
-          </div>
-          <div>
-              <h1 id="listHeader">ADMIN PAGE</h1>
+    <h1 >ADMIN PAGE</h1>
+    <h2>PRODUCTS LIST</h2>
+    <div class="btn_container">
+        <div for="searchInput" class="serch_block">
+            <input type="text" id="searchInput"
+                v-focus
+                v-model="searchQuery"
+                placeholder="Enter the product CODE or name">
+            <button @click="search">
+            <img src="https://cdn-icons-png.flaticon.com/512/483/483356.png" alt="Search">
+                Search
+            </button>
+        </div>
+        <div class="dropdown">
+            <my-select 
+                v-model="selectedSort"
+                :options="sortOptions"                
+                id="sortButton" class="sort_btn btn btn-light">
+                Sort by
+            </my-select>
+        </div>
+    </div>
 
-          </div>
-          <div class="user-controls">
-              <button onclick="redirectToCartPage()">Cart</button>
-              <button onclick="goBackToProducts()">Products</button>
-              <button onclick="goToRegistrationPage()">Registration / Login</button>
-              <button onclick="logout()">Go out</button>
-          </div>
-
+    <div class="products-grid" id="productsList">
+      <div v-if="!isProductsLoading" class="card-container" >
+        <div 
+            v-for="(product, index) in filteredAndSortedProducts"
+            :key="index">
+        <admin-product-item 
+            :product="product"
+            :discount="discount">
+        </admin-product-item>
+        </div>
       </div>
+      <div v-else class="temporary">Loading</div>
 
-      <div class="products-grid" id="productsList"></div>
-      <div id="searchResult"></div>
-  </div>
-
-  <div class="product-details-container" id="productDetailsContainer" style="display: none;">
-      <h1>PRODUCT DETAILS</h1>
-      <div id="productDetails"></div>
-      <div class="back-button">
-          <button onclick="goBack()">Back</button>
-      </div>
-
-      <div class="form-g">
-          <button class="quantity-arrow" id="decrement" onclick="decrementQuantity()">-</button>
-          <span class="quantity-value" id="quantityValue">1</span>
-          <button class="quantity-arrow" id="increment" onclick="incrementQuantity()">+</button>
-          <button id="addToCartButton" style="background-color: #4CAF50; color: white;">Add to cart</button>
-      </div>
-  </div>
-</body>
+        <div class="empty-list" v-if="!isProductsLoading && filteredAndSortedProducts.length === 0">
+            Nothing was found for your search query
+        </div>
+    </div>
+    <div v-intersection="loadMorePages" class="observer"></div>
 </template>
 
 <script>
+import axios from 'axios';
+import AdminProductItem from "@/components/AdminProductItem";
+import MySelect from '@/components/UI/MySelect';
+
 export default {
-  
+    components: {
+        AdminProductItem,
+        MySelect,
+    },
+
+    data(){
+        return {
+            currentPage: 0,
+            itemsPerPage: 5,
+            totalPages: 0,
+            products:[],
+            isProductsLoading: false,
+            selectedSort: '',
+            searchQuery: '',
+            searchResults: [],
+            sortOptions: [
+                {value: 'name', name: 'name'},
+                {value: 'price', name: 'price'},
+                {value: 'id', name: 'code'},
+                {value: 'discount', name: 'discount'},
+            ],      
+        }
+    },
+
+    methods:{
+        // changePage(pageNumber){
+        //     this.currentPage = pageNumber
+        // },
+        async fetchProducts() {
+            try {
+                this.isProductsLoading = true;
+                const response = await axios.get('http://localhost:8081/products', {
+                    params: {
+                        page: this.currentPage,
+                        pageSize: this.itemsPerPage
+                    }                    
+                });
+                this.totalPages = Math.ceil(response.data.totalElements / this.itemsPerPage)
+                this.products = response.data.content;
+        //         console.log(response);
+        //     } catch (e) {
+        //     console.error('Error Fetching:', e);
+        //         this.hasErrorFetching = true;
+        //     } finally {
+        //         this.isProductsLoading = false; 
+        //     }
+        // },
+        const responseDiscount = await axios.get('http://localhost:8081/discount');
+    const discount = responseDiscount.data;
+
+    // Обновите компонент с данными о продуктах и скидке
+    this.discount = discount; // Предположим, что вы имеете свойство discount в вашем компоненте
+    console.log(responseProducts);
+    console.log(responseDiscount);
+  } catch (e) {
+    console.error('Error Fetching:', e);
+    this.hasErrorFetching = true;
+  } finally {
+    this.isProductsLoading = false;
+  }
+},
+        async loadMorePages() {
+            try {
+                if (!this.isProductsLoading) {
+                    this.currentPage += 1;
+                    const response = await axios.get('http://localhost:8081/products', {
+                        params: {
+                            page: this.currentPage,
+                            pageSize: this.itemsPerPage
+                        }                    
+                    });                    
+                
+                this.totalPages = Math.ceil(response.data.totalElements / this.itemsPerPage)
+                this.products.push(...response.data.content);
+            console.log(response);
+                }
+            } catch (e) {
+            console.error('Error Fetching:', e);
+                this.hasErrorFetching = true;
+            }
+        },        
+    },
+    watch: {
+    },
+    computed: {
+        filteredAndSortedProducts() {
+            if (!Array.isArray(this.products) || this.products.length === 0) {
+                return [];
+            }
+            const filteredProducts = this.products.filter(product => {
+                const nameMatches = product.name.toLowerCase().includes(this.searchQuery.toLowerCase());
+                const codeMatches = product.id.toString().includes(this.searchQuery.toString());
+                return nameMatches || codeMatches;
+            });
+
+            return [...filteredProducts].sort((product1, product2) => {
+                const value1 = product1[this.selectedSort];
+                const value2 = product2[this.selectedSort];
+
+                if (typeof value1 === 'number' && typeof value2 === 'number') {
+                return value1 - value2;
+                } else if (typeof value1 === 'string' && typeof value2 === 'string') {
+                return value1.localeCompare(value2);
+                }
+            });
+        },
+
+        handleSearchResults(results) {
+            this.searchResults = results;
+        },  
+    },
+
+    mounted() {
+        this.fetchProducts();
+        console.log(this.$refs.observer);
+    },
 }
-// <script type="text/javascript" src="product.js"></script>
-// <script type="text/javascript" src="cart.js"></script>
 </script>
 
-<style>
-    body {
-        font-family: Arial, sans-serif;
-        background-image: url("background.jpg");
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-        background-attachment: fixed;
-        margin: 0;
-    }
-
-    .product-details-container {
-        max-width: 600px;
-        width: 200%;
-        padding: 20px;
-        border: 1px solid #ccc;
-        background-color: #fff;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        margin: 0 auto;
-        margin-top: 50px;
-        position: relative;
-    }
-
-    .product-details-container h1 {
-        text-align: center;
-        margin-bottom: 20px;
-    }
-
-    .product-details-container div {
-        text-align: left;
-    }
-
-    .product-item img {
-        max-width: 100%;
-        max-height: 300px;
-        margin: 0 auto;
-        display: block;
-        object-fit: contain;
-    }
-
-    .back-button {
-        position: absolute;
-        top: 20px;
-        left: 20px;
-    }
-
-    .back-button button {
-        padding: 5px 10px;
-        background-color: #4CAF50;
-        color: white;
-        border: none;
-        cursor: pointer;
-        border-radius: 5px;
-        font-size: 14px;
-    }
-
-    .container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 20px;
-        position: relative;
-    }
-
+<style scoped>
     h1 {
         text-align: center;
+        margin-top: 50px;
     }
-
-    .form-group {
+    h2 {
+        margin-left: 30px;
+    }
+    .card-container{
+        margin-top: 15px;
+        margin-bottom: 15px;        
+    }
+    /* h2 {
+        margin-left: 20px;
+    } */
+    .btn_container {
         display: flex;
-        flex-direction: column;
-        margin-bottom: 10px;
-        top: 20px;
+        justify-content: space-between;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    .serch_block {
+        display: flex;
+        position: relative;
+        min-width: 400px;
         left: 20px;
     }
-
-    .form-group label {
-        font-weight: bold;
-        margin-bottom: 5px;
-    }
-
-    .form-group input {
+    .serch_block input {
+        width: 100%;
         padding: 5px;
         border: 2px solid #ccc;
         border-radius: 5px;
         outline: none;
     }
-
-    .form-group button {
-        padding: 8px 12px;
+    .serch_block button {
+        position: absolute;
+        right: 0;
+        top: 0;
+        padding: 7px 12px;
         background-color: #4CAF50;
         color: white;
         border: none;
         cursor: pointer;
-        border-radius: 5px;
+        border-radius: 0 5px 5px 0;
     }
-
-    .form-group button img {
+    .serch_block button img {
         width: 16px;
         height: 16px;
         margin-right: 5px;
         vertical-align: middle;
     }
-
-    .user-controls {
-        margin: auto;
+    .sort_btn{
+        padding: 5px 25px;
+        margin-right: 100px;
+        border: 2px solid #ccc;
     }
-
-    .user-controls button {
-        padding: 5px 10px;
-        background-color: #4CAF50;
-        color: white;
-        border: none;
-        cursor: pointer;
-        border-radius: 5px;
-        font-size: 14px;
+    #productsList{
+        margin: auto 25px;
     }
-
-    .products-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 20px;
-        justify-content: center;
-        margin-top: 20px;
-    }
-
-    body {
-        background-image: url("1586369.jpg");
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-    }
-
-    @media (max-width: 767px) {
-        .product-details-container {
-            max-width: 100%;
-            padding: 10px;
+    @media only screen and (max-width: 900px) {
+        .serch_block {
+            min-width: 350px;
+            left: 15px;          
         }
-
-        .product-details-container h1 {
+        .sort_btn{
+           margin-right: 40px; 
+        }
+    }
+    @media only screen and (max-width: 768px) {
+        .serch_block {
+            min-width: 350px;
+            left: 5px;          
+        }
+        .sort_btn{
+           margin-right: 15px; 
+        }
+    }
+    @media only screen and (max-width: 576px) {
+        h1{
             font-size: 24px;
         }
+        h2{
+            font-size: 20px;            
+        }
+        .btn_container {
+            padding: 0 0 10px 0;
+        }
+        *.btn_container {
+            font-size: 12px;
+        }        
+        .serch_block {
+            min-width: 260px;
+            left: 0;          
+        }
+        .serch_block button {
+            padding: 7px 5px;
+        }
+        .serch_block button img {
+            width: 12px;
+            height: 12px;
+            margin-right: 3px;
+        }
+        .sort_btn{
+            margin-right: 0;
+            padding: 5px 5px;
+            font-size: 12px;
+        }
     }
+    .empty-list {
+        width: 100%;
+        text-align: center;
+        font-weight: bold;
+        color: black;
+        padding: 10px;
+        border: 1px solid red;
+        background-color: #f0f8f0;
+        margin-top: 10px;
+    }
+    .observer{
+        height: 15px;
+        background: green;
+    }
+    .temporary{
+        font-weight: 500;
+        color: red;
+        }
 </style>

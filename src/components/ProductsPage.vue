@@ -26,8 +26,11 @@
 
     <div class="products-grid" id="productsList">
       <div v-if="!isProductsLoading" class="card-container" >
-        <div v-for="(product, index) in filteredAndSortedProducts" :key="index">
-        <product-item :product="product"> </product-item>
+        <div 
+            v-for="(product, index) in filteredAndSortedProducts"
+            :key="index">
+        <product-item 
+            :product="product"> </product-item>
         </div>
       </div>
       <div v-else class="temporary">Loading</div>
@@ -68,7 +71,7 @@ export default {
     data(){
         return {
             currentPage: 0,
-            itemsPerPage: 7,
+            // itemsPerPage: 7,
             totalPages: 0,
             products:[],
             isProductsLoading: false,
@@ -166,8 +169,12 @@ export default {
 </script>
 
 <style scoped>
-    #productsList{
-        display: flex;
+    .card-container{
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        grid-gap: 2px;
+        margin-top: 15px;
+        margin-bottom: 15px;        
     }
     h1 {
         text-align: center;
@@ -266,13 +273,6 @@ export default {
             padding: 5px 5px;
             font-size: 12px;
         }
-    }
-    .card-container{
-        display: flex;
-        flex-wrap: wrap;
-        margin-top: 15px;
-        margin-bottom: 15px;
-        gap: 2px;
     }
     .empty-list {
         width: 100%;

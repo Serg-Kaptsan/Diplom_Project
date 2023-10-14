@@ -4,7 +4,8 @@
             <close-form title="back to product list"
                 @click="$router.push('/')">
             </close-form>
-            <div class="card-img-block">
+            <div class="card-img-block"
+            v-focus>
                 <img class="card-img-top" 
                 :src="'data:image/jpeg;base64,' + product.imageData" :alt="product.name"/>                
             </div>
@@ -56,7 +57,7 @@ export default {
     }
      .card-item {
         position: relative;
-        width: 95%;
+        width: 85%;
         /* height: 100%; */
         display: flex;
         justify-content: space-between;
@@ -111,9 +112,7 @@ export default {
             width: 100%;
         }
         .card-img-top {
-            padding: 15px;
-            object-fit: contain;        
-            vertical-align: middle;
+            padding: 20px;
         }
         .card-body{
             width: 100%;
@@ -134,6 +133,5 @@ export default {
             font-size: 12px;
         }        
     }   
-
    
 </style>
