@@ -31,16 +31,21 @@
                 type="password" class="form-control" id="regPassword" placeholder="Create a password"
                 required>
         </div>
-            <button
+            <button type="submit" class="btn btn-success submit"
+                v-if="submitButtonHide"
                 @click="register"
-                type="submit" class="btn btn-success submit">
-                Register</button>
+            >    
+                Register
+            </button>
 
-            <div class="registration-success" id="registrationSuccess"
-                v-if="registrationSuccess">
-                You have successfully registered. Please log in to your account.
+            <div class="registration-success"
+                v-if="registrationSuccess"
+            >
+                You have successfully registered.
+                <br> Please log in to your account.
             </div>
     </div>
+
 </template>
 
 <script>
@@ -59,6 +64,7 @@
                 phone: '',
                 email: '',
                 password: '',
+                submitButtonHide: true,                
                 registrationSuccess: false,
             };
         },
@@ -76,6 +82,7 @@
                     .then((response) => {
             console.log('Registration successful:', response.data);
                     this.registrationSuccess = true;
+                    this.submitButtonHide = false;
                     this.clearForm();
                     })
                     .catch((error) => {
@@ -104,6 +111,7 @@
         margin-top: 10px;        
     }
     .submit{
+        /* display: none; */
         color: white;
         background-color: #00a046;
         transition: background-color 0.3s;
@@ -115,7 +123,7 @@
         background-color: #00bc52;        
     }
     .registration-success {
-        display: none;
+        /* display: none; */
         text-align: center;
         font-weight: bold;
         color: #4CAF50;
@@ -123,6 +131,7 @@
         border: 1px solid #4CAF50;
         background-color: #f0f8f0;
         margin-top: 10px;
+        cursor: pointer;
     }
 
     /* @media only screen and (max-width: 768px) {
