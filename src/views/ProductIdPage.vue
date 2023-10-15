@@ -1,5 +1,4 @@
 <template>
-    <!-- <h2>Card of product CODE = {{ $route.params.id }} </h2> -->
         <div class="card-item" v-if="product">
             <close-form title="back to product list"
                 @click="$router.push('/')">
@@ -58,7 +57,6 @@ export default {
      .card-item {
         position: relative;
         width: 85%;
-        /* height: 100%; */
         display: flex;
         justify-content: space-between;
         flex-direction: row;
@@ -73,7 +71,6 @@ export default {
     .card-img-block{
         width: 40%;
         height: 100%;
-        /* margin-right: 25px; */
         cursor: pointer;
     }
     .card-img-top {

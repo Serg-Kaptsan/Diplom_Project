@@ -8,23 +8,23 @@
         </div>
         <div class="card-body">
             <h5 class="card-title"> Name: {{ product.name }} </h5>
-            <p class="card-text"> <strong> ID:</strong> {{ product.id }} </p>
-            <p class="card-text"> <strong> Description:</strong>
-                    <br> <span> {{ product.description }} </span> </p>
-            <p class="card-text"> <strong> SKU:</strong> {{ product.sku }}</p>        
-            <p class="card-text"> <strong> Price:</strong> {{ product.price }}</p>
-            <p class="card-text discount"> <strong> Discount:</strong> {{ product.discountPercent }} </p>
-            <p class="card-text last"> <strong> quantity:</strong> {{ product.quantity }} </p>
-            <p class="card-text discount"> <strong> discountId:</strong> {{ discount.id }}</p>      
+            <p class="card-text"> <strong> ID: </strong> {{ product.id }} </p>
+            <p class="card-text"> <strong> Description: </strong>
+                <span> {{ product.description }} </span> </p>
+            <p class="card-text"> <strong> SKU: </strong> {{ product.sku }}</p>        
+            <p class="card-text"> <strong> Price: </strong> {{ product.price }}</p>
+            <p class="card-text discount"> <strong> Discount: </strong> {{ product.discountPercent }} </p>
+            <p class="card-text last"> <strong> quantity: </strong> {{ product.quantity }} </p>
+            <p class="card-text discount"> <strong> discountId: </strong> {{ discount.id }}</p>      
         </div>
         <div class="inform-block">
             <p class="card-title"> <strong> Name: {{ product.name }} </strong> </p>
-            <p class="card-text"> <strong> ID:</strong> {{ product.id }} </p>
-            <p class="card-text"> <strong> created:</strong> {{ product.createdAt }} </p>
-            <p class="card-text"> <strong> modified:</strong> {{ product.modifiedAt }} </p>
-            <p class="card-text"> <strong> deleted:</strong> {{ product.deletedAt }} </p>
-            <p class="card-text"> <strong> photoId:</strong> {{ product.photoId }} </p>
-            <!-- <p class="card-text"> <strong> category:</strong> {{ categories.categoryId }} </p> -->
+            <p class="card-text"> <strong> ID: </strong> {{ product.id }} </p>
+            <p class="card-text"> <strong> created: </strong> {{ product.createdAt }} </p>
+            <p class="card-text"> <strong> modified: </strong> {{ product.modifiedAt }} </p>
+            <p class="card-text"> <strong> deleted: </strong> {{ product.deletedAt }} </p>
+            <p class="card-text"> <strong> photoId: </strong> {{ product.photoId }} </p>
+            <!-- <p class="card-text"> <strong> category: </strong> {{ categories.categoryId }} </p> -->
 
         </div>
         <div class="button-block">
@@ -45,6 +45,10 @@ export default {
             required: true,
         },
         discount: {
+            type: Object,
+            required: true,
+        },
+        categories:{
             type: Object,
             required: true,
         }

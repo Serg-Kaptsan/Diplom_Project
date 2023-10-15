@@ -1,5 +1,14 @@
 <template>
-    <h1 >ADMIN PAGE</h1>
+    <div class="head-line">
+        <h1 >ADMIN PAGE</h1>
+        <div class="menu">
+            <div class="btn btn-dark buttons-menu">Product list</div>
+            <div class="btn btn-dark buttons-menu">Add product</div>
+            <div class="btn btn-dark buttons-menu">Users</div>
+            <div class="btn btn-dark buttons-menu">Discounts</div>
+            <div class="btn btn-dark buttons-menu">Orders</div>
+        </div>        
+    </div>
     <h2>PRODUCTS LIST</h2>
     <div class="btn_container">
         <div for="searchInput" class="serch_block">
@@ -29,7 +38,8 @@
             :key="index">
         <admin-product-item 
             :product="product"
-            :discount="discount">
+            :discount="discount"
+            :categories="categories">
         </admin-product-item>
         </div>
       </div>
@@ -64,18 +74,22 @@ export default {
             searchQuery: '',
             searchResults: [],
             sortOptions: [
+                {value: 'sku', name: 'SKU'},
                 {value: 'name', name: 'name'},
+                {value: 'id', name: 'code'},                
                 {value: 'price', name: 'price'},
-                {value: 'id', name: 'code'},
+                {value: 'quantity', name: 'quantity'},
                 {value: 'discount', name: 'discount'},
-            ],      
+                {value: 'createdAt', name: 'creation date'},
+                {value: 'modifiedAt', name: 'modification date'},
+                {value: 'deletedAt', name: 'deletion date'},
+            ],
+            discount: null,
+            categories: null,  
         }
     },
 
     methods:{
-        // changePage(pageNumber){
-        //     this.currentPage = pageNumber
-        // },
         async fetchProducts() {
             try {
                 this.isProductsLoading = true;
@@ -87,28 +101,25 @@ export default {
                 });
                 this.totalPages = Math.ceil(response.data.totalElements / this.itemsPerPage)
                 this.products = response.data.content;
-        //         console.log(response);
-        //     } catch (e) {
-        //     console.error('Error Fetching:', e);
-        //         this.hasErrorFetching = true;
-        //     } finally {
-        //         this.isProductsLoading = false; 
-        //     }
-        // },
-        const responseDiscount = await axios.get('http://localhost:8081/discount');
-    const discount = responseDiscount.data;
 
-    // Обновите компонент с данными о продуктах и скидке
-    this.discount = discount; // Предположим, что вы имеете свойство discount в вашем компоненте
-    console.log(responseProducts);
-    console.log(responseDiscount);
-  } catch (e) {
-    console.error('Error Fetching:', e);
-    this.hasErrorFetching = true;
-  } finally {
-    this.isProductsLoading = false;
-  }
-},
+                const responseDiscount = await axios.get('http://localhost:8081/discount');
+                const discount = responseDiscount.data;
+                this.discount = discount;
+
+                const responseCategories = await axios.get('http://localhost:8081/categories');
+                const categories = responseCategories.data;
+                this.categories = categories;
+
+                console.log(responseProducts);
+                console.log(responseDiscount);
+                console.log(responseCategories);
+            } catch (e) {
+                console.error('Error Fetching:', e);
+                this.hasErrorFetching = true;
+            } finally {
+                this.isProductsLoading = false;
+            }
+        },
         async loadMorePages() {
             try {
                 if (!this.isProductsLoading) {
@@ -137,7 +148,7 @@ export default {
             if (!Array.isArray(this.products) || this.products.length === 0) {
                 return [];
             }
-            const filteredProducts = this.products.filter(product => {
+                const filteredProducts = this.products.filter(product => {
                 const nameMatches = product.name.toLowerCase().includes(this.searchQuery.toLowerCase());
                 const codeMatches = product.id.toString().includes(this.searchQuery.toString());
                 return nameMatches || codeMatches;
@@ -168,25 +179,40 @@ export default {
 </script>
 
 <style scoped>
-    h1 {
-        text-align: center;
-        margin-top: 50px;
+    .head-line {
+      display: flex;
+      margin-top: 50px;
+      height: 50px;
+      align-items: center;
+      padding: 0 15px;
+      max-width: 1460px;
+    }
+    h1{
+        margin-left: auto;
+        padding-bottom: 0;
+    }
+    .menu{
+        margin-left: auto;
+        margin-right: 50px;
+    }
+    .buttons-menu{
+        margin-left: 20px;
     }
     h2 {
-        margin-left: 30px;
+        margin-left: 35px;
     }
     .card-container{
-        margin-top: 15px;
-        margin-bottom: 15px;        
+        margin: 15px;   
     }
-    /* h2 {
-        margin-left: 20px;
+    /* #productsList{
+        margin: auto 15px;
     } */
+
     .btn_container {
         display: flex;
         justify-content: space-between;
         margin: 0 auto;
-        padding: 20px;
+        padding: 10px 20px;
     }
     .serch_block {
         display: flex;
@@ -223,9 +249,7 @@ export default {
         margin-right: 100px;
         border: 2px solid #ccc;
     }
-    #productsList{
-        margin: auto 25px;
-    }
+
     @media only screen and (max-width: 900px) {
         .serch_block {
             min-width: 350px;

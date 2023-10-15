@@ -1,6 +1,9 @@
 <template>
     <div class="navbar">
-      <div class="home" @click="$router.push('/')"> HOME </div>
+      <div class="home"
+        @click="$router.push('/')">
+        HOME
+      </div>
       <div class="navbar__btns">
         <button 
           @click="$router.push('/composition')" >
@@ -17,7 +20,10 @@
           @click="$router.push('/admin')">
           ADMIN
         </button>
-        <button @click="$router.push('/store')">GO OUT</button>
+        <button
+          @click="$router.push('/')">
+          GO OUT
+        </button>
       </div>
     </div>
   </template>
