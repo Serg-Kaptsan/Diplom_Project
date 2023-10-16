@@ -40,6 +40,7 @@
 
             <div class="registration-success"
                 v-if="registrationSuccess"
+                @click="redirectToLoginPage"
             >
                 You have successfully registered.
                 <br> Please log in to your account.
@@ -96,6 +97,9 @@
                 this.email = '';
                 this.password = '';
             },
+            redirectToLoginPage(){
+                this.$emit('close-registration-page');
+            }
         },    
     }
 </script>

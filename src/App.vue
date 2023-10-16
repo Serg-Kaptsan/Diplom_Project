@@ -6,8 +6,14 @@
       <router-view></router-view>
         
         <my-dialog v-model:show="dialogVisible">
-          <login-page v-model:show="isLoginPageVisible" />
-          <registr-page v-if="!isLoginPageVisible" />
+
+          <!-- <login-page v-model:show="isLoginPageVisible" />
+          <registr-page v-if="!isLoginPageVisible" /> -->
+
+          <login-page v-model:show="isLoginPageVisible"
+            @close-registration-page="closeRegistrationPage" />
+          <registr-page v-if="!isLoginPageVisible" 
+            @close-registration-page="closeRegistrationPage" />
         </my-dialog>
  
     </main>
@@ -46,6 +52,9 @@ export default {
     openRegistration() {
       this.isLoginPageVisible = false;
     },
+    closeRegistrationPage() {
+        this.isLoginPageVisible = true;
+    }
   },
   mixins: [showMixin]  
 }
