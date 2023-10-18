@@ -1,5 +1,6 @@
 import ProductsPage from "@/components/ProductsPage";
 import ProductIdPage from "@/views/ProductIdPage";
+import LargeImag from "@/components/LargeImag";
 import { createRouter, createWebHistory } from 'vue-router'
 
 const routes = [
@@ -27,7 +28,12 @@ const routes = [
     props: true, 
     component: ProductIdPage,
   },
-
+  {
+    path: '/image/:imageData',
+    name: 'image',
+    props: true, 
+    component: LargeImag,
+  },
 ]
 
 const router = createRouter({

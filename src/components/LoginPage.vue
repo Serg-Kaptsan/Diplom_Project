@@ -14,7 +14,7 @@
             <strong>Log in</strong>
         </button>
         
-        <button class="reg_button"  @click="openRegistration"> <strong>Sign up</strong> </button>
+        <div class="redirect"  @click="openRegistration"> <strong>Sign up</strong> </div>
     </div> 
 </template>
 
@@ -64,13 +64,12 @@ export default{
     .enter_button:hover {
         background-color: #00bc52;        
     }
-    .reg_button{
+    .redirect{
+        margin-top: 10px;
         color: green;
-        background: transparent;
-        border: none;
-        transition: color 0.3s;
+        text-align: center;
     }
-    .reg_button:hover{
+    .redirect:hover, .redirect:focus{
         color:red;
     }
 </style>

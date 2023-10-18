@@ -1,22 +1,36 @@
 <template>
         <div class="card-item" v-if="product">
             <close-form title="back to product list"
-                @click="$router.push('/')">
+                @click="$router.push('/')" >
             </close-form>
+
+            <div class="large-image"
+                v-if="isLargeImageVisible" 
+                @click.stop="closeLargeImage"
+            >
+                <img 
+                    :src="largeImageSrc" :alt="product.name" 
+                    @click="closeLargeImage" />
+            </div>
+
             <div class="card-img-block"
-            v-focus>
+                @click="openLargeImage"
+            >
                 <img class="card-img-top" 
-                :src="'data:image/jpeg;base64,' + product.imageData" :alt="product.name"/>                
+                    :src="'data:image/jpeg;base64,' + product.imageData" 
+                    :alt="product.name"
+                    v-focus
+                />
             </div>
             <div class="card-body">
                 <h5 class="card-title"> {{ product.name }} </h5>
-                <p class="card-text"> <strong> Code:</strong> {{ product.id }}</p>
-                <p class="card-text"> <strong> Product Description:</strong>
+                <p class="card-text"> <strong> Code: </strong> {{ product.id }}</p>
+                <p class="card-text"> <strong> Product Description: </strong>
                     <br> <span> {{ product.description }} </span>
                 </p>
-                <p class="card-text"> <strong> Price:</strong> {{ product.price }} </p>
-                <p class="card-text discount"> <strong> Discount:</strong> {{ product.discountPercent }} </p>
-                <p class="card-text last"> <strong> Quantity in stock:</strong> {{ product.quantity }} </p>
+                <p class="card-text"> <strong> Price: </strong> {{ product.price }} $</p>
+                <p class="card-text discount"> <strong> Discount: </strong> {{ product.discountPercent }} %</p>
+                <p class="card-text last"> <strong> Quantity in stock: </strong> {{ product.quantity }} </p>
                 <img class="cart" title="add to cart" src='/trolley.png' alt="cart">   
             </div>
         </div> 
@@ -25,17 +39,21 @@
 <script>
 import axios from 'axios';
 import CloseForm from "@/components/UI/CloseForm"
+// import LargeImag from "@/components/LargeImag"
 
 export default {
     components: {
-      CloseForm  
+      CloseForm,
+    //   LargeImag 
     },
-
     data() {
         return {
             product: null,
+            isLargeImageVisible: false,
+            largeImageSrc: ''
         };
     },
+
     created() {
         const productId = this.$route.params.id;
         axios.get(`http://localhost:8081/product/${productId}`)
@@ -46,6 +64,15 @@ export default {
             console.error('Error fetching product:', error);
         });
     },
+    methods:{
+        openLargeImage() {
+            this.isLargeImageVisible = true;
+            this.largeImageSrc = `data:image/jpeg;base64, ${this.product.imageData}`;
+        },
+        closeLargeImage() {
+            this.isLargeImageVisible = false;
+        }
+    },      
 };
 </script>
 
@@ -76,7 +103,8 @@ export default {
     .card-img-top {
         width: 100%;
         padding: 10px;
-        object-fit: contain;        
+        max-height: 550px;
+        object-fit: contain;      
         vertical-align: middle;
     }
     .card-body{
@@ -129,6 +157,20 @@ export default {
         span {
             font-size: 12px;
         }        
-    }   
-   
+    }
+    .large-image{
+        position: fixed;
+        display: flex;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        background: rgba(0, 0, 0, 0.7);
+    }
+    .large-image img{
+        margin: 50px auto auto;
+        max-width: 90%;
+        max-height: 90%;
+    }
+
 </style>

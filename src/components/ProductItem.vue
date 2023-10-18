@@ -12,9 +12,9 @@
                 >
                     {{ product.name }}
                 </h5>
-                <p class="card-text"> <strong> Code:</strong> {{ product.id }}</p>
-                <p class="card-text"> <strong> Price:</strong> {{ product.price }}</p>
-                <p class="card-text discount"> <strong> Discount:</strong> {{ product.discountPercent }}</p>      
+                <p class="card-text"> <strong> Code: </strong> {{ product.id }}</p>
+                <p class="card-text"> <strong> Price: </strong> {{ product.price }} $</p>
+                <p class="card-text discount"> <strong> Discount: </strong> {{ product.discountPercent }} %</p>      
             </div>
         </div>          
 </template>

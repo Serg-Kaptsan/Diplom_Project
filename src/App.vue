@@ -14,6 +14,7 @@
             @close-registration-page="closeRegistrationPage" />
           <registr-page v-if="!isLoginPageVisible" 
             @close-registration-page="closeRegistrationPage" />
+            
         </my-dialog>
  
     </main>

@@ -2,11 +2,11 @@
     <div class="head-line">
         <h1 >ADMIN PAGE</h1>
         <div class="menu">
-            <div class="btn btn-dark buttons-menu">Product list</div>
-            <div class="btn btn-dark buttons-menu">Add product</div>
-            <div class="btn btn-dark buttons-menu">Users</div>
-            <div class="btn btn-dark buttons-menu">Discounts</div>
-            <div class="btn btn-dark buttons-menu">Orders</div>
+            <div class="btn btn-dark">Product list</div>
+            <div class="btn btn-dark">Add product</div>
+            <div class="btn btn-dark">Users</div>
+            <div class="btn btn-dark">Discounts</div>
+            <div class="btn btn-dark">Orders</div>
         </div>        
     </div>
     <h2>PRODUCTS LIST</h2>
@@ -195,7 +195,7 @@ export default {
         margin-left: auto;
         margin-right: 50px;
     }
-    .buttons-menu{
+    .menu *{
         margin-left: 20px;
     }
     h2 {
