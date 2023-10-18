@@ -181,7 +181,7 @@ export default {
         margin-top: 50px;
     }
     h2 {
-        margin-left: 35px;
+        margin-left: 40px;
     }
 
     .btn_container {
