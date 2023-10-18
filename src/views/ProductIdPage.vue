@@ -1,5 +1,5 @@
 <template>
-        <div class="card-item" v-if="product">
+        <div class="card-item" v-if="product" >
             <close-form title="back to product list"
                 @click="$router.push('/')" >
             </close-form>
@@ -131,6 +131,7 @@ export default {
         width: 36px;
         height: 36px;
         float: right;
+        cursor: pointer;
     }
     @media only screen and (max-width: 768px) {
         .card-img-block{

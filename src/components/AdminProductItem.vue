@@ -1,5 +1,15 @@
 <template>
     <div class="card">
+
+        <div class="large-image"
+                v-if="isLargeImageVisible" 
+                @click.stop="closeLargeImage"
+            >
+                <img 
+                    :src="largeImageSrc" :alt="product.name" 
+                    @click="closeLargeImage" />
+            </div>
+
         <div class="card-img-block">
             <img class="card-img-top" 
             :src="'data:image/jpeg;base64,' + product.imageData" :alt="product.name" 
@@ -47,7 +57,12 @@
 <script>
 
 export default {
-
+    data () {
+        return{
+            isLargeImageVisible: false,
+            largeImageSrc: ''
+        }
+    },
     props: {
         product: {
             type: Object,
@@ -67,8 +82,16 @@ export default {
         viewProduct() {
             this.$router.push({ name: 'product', params: { id: this.product.id } });
         },
+
+        openLargeImage() {
+            this.isLargeImageVisible = true;
+            this.largeImageSrc = `data:image/jpeg;base64, ${this.product.imageData}`;
+        },
+        closeLargeImage() {
+            this.isLargeImageVisible = false;
+        }
     },
-    }
+}
 </script>
 
 <style scoped >
@@ -135,5 +158,19 @@ export default {
     }
     .button-block *{
         margin-left: 20px;
+    }
+    .large-image{
+        position: fixed;
+        display: flex;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        background: rgba(0, 0, 0, 0.7);
+    }
+    .large-image img{
+        margin: 50px auto auto;
+        max-width: 90%;
+        max-height: 90%;
     }
 </style>
