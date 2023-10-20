@@ -11,7 +11,9 @@
           <registr-page v-if="!isLoginPageVisible" /> -->
 
           <login-page v-model:show="isLoginPageVisible"
-            @close-registration-page="closeRegistrationPage" />
+            @close-registration-page="closeRegistrationPage"
+            @close-dialog="closeDialog"
+            />
           <registr-page v-if="!isLoginPageVisible" 
             @close-registration-page="closeRegistrationPage" />
             
@@ -55,6 +57,9 @@ export default {
     },
     closeRegistrationPage() {
         this.isLoginPageVisible = true;
+    },
+    closeDialog() {
+      this.dialogVisible = false;
     }
   },
   mixins: [showMixin]  
