@@ -7,9 +7,6 @@
         
         <my-dialog v-model:show="dialogVisible">
 
-          <!-- <login-page v-model:show="isLoginPageVisible" />
-          <registr-page v-if="!isLoginPageVisible" /> -->
-
           <login-page v-model:show="isLoginPageVisible"
             @close-registration-page="closeRegistrationPage"
             @close-dialog="closeDialog"

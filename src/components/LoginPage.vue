@@ -3,23 +3,35 @@
         <h4>Enter</h4>
         <div class="form-group">
             <label for="input_email">email:</label>
-            <input type="email" class="form-control" id="input_email" 
+            <input
+                type="email" 
+                class="form-control" 
+                id="input_email" 
                 v-model="email" 
                 v-focus 
-                placeholder="Enter your email address" >
+                placeholder="Enter your email address"
+            />
 
             <label for="input_password">password:</label>
-            <input type="password" class="form-control" id="input_password" 
+            <input
+                type="password"
+                class="form-control" 
+                id="input_password" 
                 v-model="password"
-                placeholder="Enter password" >
+                placeholder="Enter password" 
+            />
         </div>
         
-        <button type="submit" class="btn btn-success submit enter_button" 
+        <button
+            type="submit" 
+            class="btn btn-success submit enter_button" 
             @click="login" >
             <strong>Log in</strong>
         </button>
         
-        <div class="redirect" @click="isOpenRegistr"> <strong>Sign up</strong> </div>
+        <div class="redirect" @click="isOpenRegistr">
+            <strong>Sign up</strong>
+        </div>
     </div> 
 </template>
 
@@ -91,6 +103,13 @@ export default{
                 alert('Login failed. Please check your credentials and try again.');
             }
         },
+        
+        // submitForm() {
+        //     if (this.email && this.password) {
+        //         this.login();
+        //     console.log('Enter pressed')    
+        //     }
+        // },
     },
     emits: ['update:show'],
     mixins: [showMixin],
