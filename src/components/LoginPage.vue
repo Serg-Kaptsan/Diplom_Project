@@ -93,7 +93,6 @@ export default{
                         this.$emit('close-dialog');
                     } else if (user.roles.includes('ROLE_ADMIN')) {
                        this.$router.push('/admin');
-                       this.hideDialog();
                        this.$emit('close-dialog');
                     }
                 } else {
@@ -104,12 +103,6 @@ export default{
             }
         },
         
-        // submitForm() {
-        //     if (this.email && this.password) {
-        //         this.login();
-        //     console.log('Enter pressed')    
-        //     }
-        // },
     },
     emits: ['update:show'],
     mixins: [showMixin],

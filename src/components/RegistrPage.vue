@@ -1,34 +1,53 @@
 <template>
     <div class="registr-form">
-
             <h4>Sign up</h4>
 
         <div class="form-group">
             <label for="input_name">name:</label>
             <input
+                v-model.trim="name"
                 v-focus
-                v-model="name"
-                type="text" class="form-control" id="input_name" placeholder="Enter your name"
+                type="text" class="form-control" 
+                id="input_name" 
+                placeholder="Enter your name"
+                @blur="validateName"
                 required>
             <label for="input_surname">surname:</label>
             <input
-                v-model="surname"
-                type="text" class="form-control" id="input_surname" placeholder="Enter your surname">
+                v-model.trim="surname"
+                type="text" 
+                class="form-control" 
+                id="input_surname"
+                placeholder="Enter your surname">
             <label for="input_phone">phone:</label>
             <input
-                v-model="phone"
-                type="text" class="form-control" id="input_phone"  aria-describedby="phonHelp" placeholder="Your phone number"
+                v-model.trim="phone"
+                type="text" 
+                class="form-control" 
+                id="input_phone"  
+                aria-describedby="phonHelp" 
+                placeholder="Your phone number"
+                @blur="validatePhone"
                 required >
             <div class="form-text" id="phonHelp"> phone number in the format +380XXXXXXXXX
             </div>
             <label for="email">email:</label>
             <input
-                v-model="email"
-                type="email" class="form-control" id="regEmail" placeholder="Enter your email address" required>
+                v-model.trim="email"
+                type="email" 
+                class="form-control" 
+                id="regEmail" 
+                placeholder="Enter your email address"
+                @blur="validateEmail"
+                required>
             <label for="password">password:</label>
             <input
-                v-model="password"
-                type="password" class="form-control" id="regPassword" placeholder="Create a password"
+                v-model.trim="password"
+                type="password" 
+                class="form-control" 
+                id="regPassword" 
+                placeholder="Create a password"
+                @blur = "validatePassword"
                 required>
         </div>
             <button type="submit" class="btn btn-success submit"
@@ -41,8 +60,7 @@
             <div class="registration-success"
                 v-if="registrationSuccess"
                 @click="redirectToLoginPage"
-            >
-                You have successfully registered.
+            >   You have successfully registered.
                 <br> Please log in to your account.
             </div>
     </div>
@@ -99,7 +117,39 @@
             },
             redirectToLoginPage(){
                 this.$emit('close-registration-page');
-            }
+            },
+            validateName() {
+                if (this.name.length > 0) {
+                    const nameRegex = /^(?!script$)(?![^.]*\.\.)[a-zа-яіІїЇєЄґҐ0-9.-]{2,}$/i;
+                    if (!nameRegex.test(this.name)) {
+                        alert('The name can only contain numbers, letters of the Latin, Cyrillic or Ukrainian alphabet, and must consist of at least 2 characters.')
+                    }                    
+                }
+            },
+            validatePhone() {
+                if (this.phone.length >0) {
+                    const phoneRegex = /^\+380\d{9}$/;
+                    if (!phoneRegex.test(this.phone)) {
+                        alert('Incorrect phone nomber format.')
+                    }
+                }                
+            },
+            validateEmail() {
+                if (this.email.length >0) {
+                    const emailRegex = /^(?!(script|.*[<>]|.*\.\.))[a-z0-9._-]+@[a-z0-9._-]+\.[a-z]{2,}$/i;
+                    if (!emailRegex.test(this.email)) {
+                        alert('Incorrect email address format.')
+                    }   
+                }
+            },
+            validatePassword() {
+                if (this.password.length >0) {
+                    const passwordRegex = /^(?!(script|.*[<>]|.*\.\.))(?=.*[a-z])(?=.*[A-Z]).{5,}$/
+                    if (!passwordRegex.test(this.password)) {
+                        alert('The password must contain at least one uppercase and one lowercase letter and be at least 5 characters long.')
+                    }
+                }
+            },
         },    
     }
 </script>
