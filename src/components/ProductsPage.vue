@@ -3,14 +3,12 @@
     <h2 id="listHeader">CHOOSE YOUR DEVICE</h2>   
     <div class="btn_container">
         <div for="searchInput" class="serch_block">
-            <input type="text" id="searchInput"
+            <input type="text" 
+                id="searchInput"
                 v-focus
                 v-model="searchQuery"
                 placeholder="Enter the product CODE or name">
-            <button @click="search">
             <img src="https://cdn-icons-png.flaticon.com/512/483/483356.png" alt="Search">
-            Search
-            </button>
         </div>
         <div class="dropdown">
             <my-select 
@@ -35,7 +33,8 @@
       </div>
       <div v-else class="temporary">Loading</div>
 
-        <div class="empty-list" v-if="!isProductsLoading && filteredAndSortedProducts.length === 0">
+        <div class="empty-list" 
+            v-if="!isProductsLoading && filteredAndSortedProducts.length === 0">
             Nothing was found for your search query
         </div>
     </div>
@@ -193,7 +192,7 @@ export default {
     .serch_block {
         display: flex;
         position: relative;
-        min-width: 400px;
+        min-width: 325px;
         left: 20px;
     }
     .serch_block input {
@@ -203,22 +202,12 @@ export default {
         border-radius: 5px;
         outline: none;
     }
-    .serch_block button {
+    .serch_block img {
         position: absolute;
-        right: 0;
-        top: 0;
-        padding: 7px 12px;
-        background-color: #4CAF50;
-        color: white;
-        border: none;
-        cursor: pointer;
-        border-radius: 0 5px 5px 0;
-    }
-    .serch_block button img {
+        right: 10px;
+        top: 11px;
         width: 16px;
         height: 16px;
-        margin-right: 5px;
-        vertical-align: middle;
     }
     .sort_btn{
         padding: 5px 25px;

@@ -1,6 +1,9 @@
 @import './base.css';
 
-html, body, #app, main{
+html{
+  height: 100%;  
+}
+body{
   height: 100vh;
 }
 #app{
@@ -17,11 +20,11 @@ html, body, #app, main{
 
 main{
   width: 100%;
-  background-image: url('/public/background.jpg');
+  /* background-image: url('/public/background.jpg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  background-attachment: fixed;
+  background-attachment: fixed; */
   font-weight: normal;
   font-family: Arial, sans-serif;
   padding: 24px;

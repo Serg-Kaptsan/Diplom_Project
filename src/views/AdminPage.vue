@@ -1,31 +1,42 @@
 <template>
     <div class="head-line">
-        <h1 >ADMIN PAGE</h1>
+        <h1> ADMIN PAGE </h1>
         <div class="menu">
-            <div class="btn btn-dark">Product list</div>
-            <div class="btn btn-dark">Add product</div>
-            <div class="btn btn-dark">Users</div>
-            <div class="btn btn-dark">Discounts</div>
-            <div class="btn btn-dark">Orders</div>
+            <div class="btn btn-dark" >Products list</div>
+            <div class="btn btn-dark" 
+                @click="$router.push('/add-product')">
+                Add product
+            </div>
+            <div class="btn btn-dark" 
+                @click="$router.push('/discounts')">
+                Users
+            </div>
+            <div class="btn btn-dark" 
+                @click="$router.push('/orders')">
+                Discounts
+            </div>
+            <div class="btn btn-dark" 
+                @click="$router.push('/users')">
+                Orders
+            </div>
         </div>        
     </div>
     <h2>PRODUCTS LIST</h2>
     <div class="btn_container">
         <div for="searchInput" class="serch_block">
-            <input type="text" id="searchInput"
+            <input type="text" 
+                id="searchInput"
                 v-focus
                 v-model="searchQuery"
                 placeholder="Enter the product CODE or name">
-            <button @click="search">
             <img src="https://cdn-icons-png.flaticon.com/512/483/483356.png" alt="Search">
-                Search
-            </button>
         </div>
         <div class="dropdown">
             <my-select 
                 v-model="selectedSort"
                 :options="sortOptions"                
-                id="sortButton" class="sort_btn btn btn-light">
+                id="sortButton" 
+                class="sort_btn btn btn-light">
                 Sort by
             </my-select>
         </div>
@@ -45,7 +56,8 @@
       </div>
       <div v-else class="temporary">Loading</div>
 
-        <div class="empty-list" v-if="!isProductsLoading && filteredAndSortedProducts.length === 0">
+        <div class="empty-list" 
+            v-if="!isProductsLoading && filteredAndSortedProducts.length === 0">
             Nothing was found for your search query
         </div>
     </div>
@@ -110,11 +122,11 @@ export default {
                 const categories = responseCategories.data;
                 this.categories = categories;
 
-                console.log(responseProducts);
-                console.log(responseDiscount);
-                console.log(responseCategories);
+    console.log(responseProducts);
+    console.log(responseDiscount);
+    console.log(responseCategories);
             } catch (e) {
-                console.error('Error Fetching:', e);
+    console.error('Error Fetching:', e);
                 this.hasErrorFetching = true;
             } finally {
                 this.isProductsLoading = false;
@@ -133,10 +145,10 @@ export default {
                 
                 this.totalPages = Math.ceil(response.data.totalElements / this.itemsPerPage)
                 this.products.push(...response.data.content);
-            console.log(response);
+    console.log(response);
                 }
             } catch (e) {
-            console.error('Error Fetching:', e);
+    console.error('Error Fetching:', e);
                 this.hasErrorFetching = true;
             }
         },        
@@ -217,7 +229,7 @@ export default {
     .serch_block {
         display: flex;
         position: relative;
-        min-width: 400px;
+        min-width: 325px;
         left: 20px;
     }
     .serch_block input {
@@ -227,22 +239,12 @@ export default {
         border-radius: 5px;
         outline: none;
     }
-    .serch_block button {
+    .serch_block img {
         position: absolute;
-        right: 0;
-        top: 0;
-        padding: 7px 12px;
-        background-color: #4CAF50;
-        color: white;
-        border: none;
-        cursor: pointer;
-        border-radius: 0 5px 5px 0;
-    }
-    .serch_block button img {
+        right: 10px;
+        top: 11px;
         width: 16px;
         height: 16px;
-        margin-right: 5px;
-        vertical-align: middle;
     }
     .sort_btn{
         padding: 5px 25px;
