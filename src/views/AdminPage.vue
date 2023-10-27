@@ -313,7 +313,6 @@ export default {
     }
     .observer{
         height: 15px;
-        background: green;
     }
     .temporary{
         font-weight: 500;

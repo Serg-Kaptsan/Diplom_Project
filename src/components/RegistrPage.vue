@@ -29,7 +29,8 @@
                 placeholder="Your phone number"
                 @blur="validatePhone"
                 required >
-            <div class="form-text" id="phonHelp"> phone number in the format +380XXXXXXXXX
+            <div class="form-text" id="phonHelp">
+                phone number in the format +380XXXXXXXXX
             </div>
             <label for="email">email:</label>
             <input
@@ -48,6 +49,7 @@
                 id="regPassword" 
                 placeholder="Create a password"
                 @blur = "validatePassword"
+                autocomplete="off"
                 required>
         </div>
             <button type="submit" class="btn btn-success submit"

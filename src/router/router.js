@@ -52,7 +52,7 @@ const routes = [
   {
     path: '/users',
     name: 'users',
-    component: () => import('@/components/UsersList.vue')
+    component: () => import ('@/components/UsersList.vue')
   },
 ]
 

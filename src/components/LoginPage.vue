@@ -18,7 +18,8 @@
                 class="form-control" 
                 id="input_password" 
                 v-model="password"
-                placeholder="Enter password" 
+                placeholder="Enter password"
+                autocomplete="off"
             />
         </div>
         
@@ -74,7 +75,7 @@ export default{
                 }
 
                 const accessToken = response.data;
-        console.log('Access token:', accessToken);
+    console.log('Access token:', accessToken);
                 localStorage.setItem('token', accessToken);
 
                 const userResponse = await axios.get('http://localhost:8081/users/principal', {
@@ -82,8 +83,7 @@ export default{
                         Authorization: `Bearer ${accessToken}`
                     }
                 });
-
-                if (userResponse.status ==200) {
+                if (userResponse.status === 200) {
                     const user = userResponse.data;
                     localStorage.setItem('userId', user.id);
 
