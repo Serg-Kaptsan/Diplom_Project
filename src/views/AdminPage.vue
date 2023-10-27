@@ -2,7 +2,7 @@
     <div class="head-line">
         <h1> ADMIN PAGE </h1>
         <div class="menu">
-            <div class="btn btn-dark" >Products list</div>
+            <div class="btn btn-dark" >Products</div>
             <div class="btn btn-dark" 
                 @click="$router.push('/add-product')">
                 Add product
@@ -21,6 +21,7 @@
             </div>
         </div>        
     </div>
+
     <h2>PRODUCTS LIST</h2>
     <div class="btn_container">
         <div for="searchInput" class="serch_block">
@@ -118,7 +119,7 @@ export default {
                 const discount = responseDiscount.data;
                 this.discount = discount;
 
-                const responseCategories = await axios.get('http://localhost:8081/categories');
+                const responseCategories = await axios.get('http://localhost:8081/product-categories');
                 const categories = responseCategories.data;
                 this.categories = categories;
 

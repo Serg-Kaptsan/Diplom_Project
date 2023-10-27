@@ -25,6 +25,7 @@
             <div class="card-body">
                 <h5 class="card-title"> {{ product.name }} </h5>
                 <p class="card-text"> <strong> Code: </strong> {{ product.id }}</p>
+                <p class="card-text"> <strong> Category: </strong> {{ product.category }}</p>
                 <p class="card-text"> <strong> Product Description: </strong>
                     <br> <span> {{ product.description }} </span>
                 </p>
@@ -33,19 +34,18 @@
                 <p class="card-text last"> <strong> Quantity in stock: </strong> {{ product.quantity }} </p>
                 <img class="cart" title="add to cart" src='/trolley.png' alt="cart">   
             </div>
-        </div> 
+        </div>
 </template>
 
 <script>
 import axios from 'axios';
 import CloseForm from "@/components/UI/CloseForm"
-// import LargeImag from "@/components/LargeImag"
 
 export default {
     components: {
       CloseForm,
-    //   LargeImag 
     },
+
     data() {
         return {
             product: null,

@@ -11,6 +11,7 @@
         </div>
 
         <form class="edit-form" id="edition">
+            
             <div class="section mb-4" id="photo_box">
                 <div>
                     <label for="image" class="form-label">Select photo:</label>
@@ -19,11 +20,18 @@
                         id="image"
                         ref="image" 
                         accept=".jpg, .jpeg, .png" 
-                        data-placeholder="Choose a photo">
+                        data-placeholder="Choose a photo"
+                        @change="handleImageChange"
+                    >
                 </div>
-                <button class="btn btn-secondary upload">
-                    Upload
-                </button>
+                <div>
+                    <img 
+                        id="image-preview"
+                        :src="selectedImage"
+                        alt="Preview"
+                        v-if="selectedImage"
+                    >
+                </div>
             </div>
             <div class="section mb-4" id="discount_box">
                 <div>
@@ -33,13 +41,18 @@
                         id="discount"
                         placeholder="Enter Discount" >
                 </div>
-                <button class="btn btn-secondary discount_button">
-                    Save discount
-                </button>
+            </div>
+            <div class="section mb-4" id="category_box">
+                <div>
+                    <label for="category" class="form-label">Category:</label>
+                    <input class="form-group main_input"
+                        type="number"
+                        id="category"
+                        placeholder="Enter Category" >
+                </div>
             </div>
 
             <div class="information">
-                <h3>Product Information</h3>
                 <input class="form-group product_name"
                     type="text"
                     id="name"
@@ -108,6 +121,8 @@ export default {
             },
             createSuccess: false,
             maxLength: 255,
+            // imagePreview: null,
+            selectedImage: null
         }
     },
     computed: {
@@ -121,64 +136,74 @@ export default {
             this.product.description = this.product.description.slice(0, this.maxLength);
           }
         },
+
+        handleImageChange(event) {
+            const file = event.target.files[0];
+            if (file) {
+                this.selectedImage = URL.createObjectURL(file);
+            } else {
+                this.selectedImage = null;
+            }
+        },
+
         async createProduct() {
-    if (!this.product.name) {
-        alert("Product name is required.");
-        return;
-    }
+            if (!this.product.name) {
+                alert("Product name is required.");
+                return;
+            }
 
-    try {
-        const accessToken = localStorage.getItem('token');
-        const fileInput = this.$refs.image.files[0];
-        let photoId = null;
+            try {
+                const accessToken = localStorage.getItem('token');
+                const fileInput = this.$refs.image.files[0];
+                let photoId = null;
 
-        if (fileInput) {
-            const formData = new FormData();
-            formData.append('image', fileInput);
+                if (fileInput) {
+                    const formData = new FormData();
+                    formData.append('image', fileInput);
 
-            const uploadResponse = await axios.post('http://localhost:8081/upload', formData, {
-                headers: {
-                    'Authorization': `Bearer ${accessToken}`,
-                    'Content-Type': 'multipart/form-data',
-                },
-            });
+                    const uploadResponse = await axios.post('http://localhost:8081/upload', formData, {
+                        headers: {
+                            'Authorization': `Bearer ${accessToken}`,
+                            'Content-Type': 'multipart/form-data',
+                        },
+                    });
 
-            if (uploadResponse.status === 200) {
-                console.log('File uploaded successfully.');
-                photoId = uploadResponse.data;
+                    if (uploadResponse.status === 200) {
+                        console.log('File uploaded successfully.');
+                        photoId = uploadResponse.data;
+                    }
+                }
+
+                const productData = {
+                    name: this.product.name,
+                    description: this.product.description,
+                    sku: this.product.sku,
+                    price: this.product.price,
+                    createdAt: new Date().toISOString(),
+                    modifiedAt: new Date().toISOString(),
+                    deletedAt: null,
+                    discountId: null,
+                    quantity: this.product.quantity,
+                    photoId: photoId,
+                };
+
+                const createResponse = await axios.post('http://localhost:8081/product/', productData, {
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`,
+                        'Content-Type': 'application/json',
+                    },
+                });
+
+                if (createResponse.status === 200) {
+                    this.createSuccess = true;
+                    console.log('Data sent successfully.');
+                } else {
+                    console.error('Error sending data.');
+                }
+            } catch (error) {
+                console.error('Error sending data to /product/', error);
             }
         }
-
-        const productData = {
-            name: this.product.name,
-            description: this.product.description,
-            sku: this.product.sku,
-            price: this.product.price,
-            createdAt: new Date().toISOString(),
-            modifiedAt: new Date().toISOString(),
-            deletedAt: null,
-            discountId: null,
-            quantity: this.product.quantity,
-            photoId: photoId,
-        };
-
-        const createResponse = await axios.post('http://localhost:8081/product/', productData, {
-            headers: {
-                'Authorization': `Bearer ${accessToken}`,
-                'Content-Type': 'application/json',
-            },
-        });
-
-        if (createResponse.status === 200) {
-            this.createSuccess = true;
-            console.log('Data sent successfully.');
-        } else {
-            console.error('Error sending data.');
-        }
-    } catch (error) {
-        console.error('Error sending data to /product/', error);
-    }
-}
     }
 }
 </script>
@@ -227,8 +252,11 @@ export default {
         width: 100%;
         padding: 5px;
     }
-
-    #discount {
+    #image-preview{
+        max-width: 50px;
+        max-height: 100px;
+    } 
+    #discount, #category {
         text-align: center;
     }
     .information {

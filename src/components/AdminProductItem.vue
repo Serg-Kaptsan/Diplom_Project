@@ -19,6 +19,7 @@
         <div class="card-body">
             <h5 class="card-title"> {{ product.name }} </h5>
             <p class="card-text"> <strong> Code: </strong> {{ product.id }} </p>
+            <p class="card-text"> <strong> Category: </strong> {{ product.category }} </p>
             <p class="card-text"> <strong> Description: </strong>
                 <br> <span> {{ product.description }} </span> </p>
             <p class="card-text"> <strong> SKU: </strong> {{ product.sku }}</p>        
@@ -42,7 +43,6 @@
             </p>
             <!-- <p class="card-text"> <strong> discountId: </strong> {{ discount.id }}</p> -->
             <p class="card-text"> <strong> photoId: </strong> {{ product.photoId }} </p>
-            <!-- <p class="card-text"> <strong> category: </strong> {{ categories.categoryId }} </p> -->
             <div class="button-block">
                 <!-- <my-button class="btn btn-secondary"> Сhange data </my-button>
                 <my-button class="btn btn-danger"> Delete product</my-button> -->
@@ -100,14 +100,14 @@ export default {
         flex-direction: row;
         flex-wrap: nowrap;
         width: 100%;
-        height: 300px;
+        height: 305px;
         margin: 10px auto;
         padding: 10px;
         border: 1px solid rgb(48, 48, 48);
         border-radius: 0;
     }
     h6, h5{
-        margin-bottom: 10px;
+        margin-bottom: 5px;
         text-align: center;
         font-weight: 700;
     }
