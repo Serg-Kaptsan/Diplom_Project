@@ -105,7 +105,6 @@ export default {
                 price: '',
                 discountId: '',                
                 quantity: '',
-
             },
             createSuccess: false,
             maxLength: 255,
@@ -146,7 +145,7 @@ export default {
 
             if (uploadResponse.status === 200) {
                 console.log('File uploaded successfully.');
-                photoId = uploadResponse.data.photoId;
+                photoId = uploadResponse.data;
             }
         }
 
