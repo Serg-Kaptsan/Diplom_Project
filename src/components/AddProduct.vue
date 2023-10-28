@@ -2,12 +2,10 @@
     <div class="container">
         <div class="header">
             <h1>Create product</h1>
-            <div class="back-to-product">
-                <button class="main_button" 
-                    @click="$router.push ('/admin')" >
-                    Back to Products
-                </button>
-            </div>
+            <button class="main_button" 
+                @click="$router.push ('/admin')" >
+                Back to Products
+            </button>
         </div>
 
         <form class="edit-form" id="edition">
@@ -27,28 +25,37 @@
                 <div>
                     <img 
                         id="image-preview"
-                        :src="selectedImage"
+                        :src="imagePreview"
                         alt="Preview"
-                        v-if="selectedImage"
+                        v-if="imagePreview"
                     >
                 </div>
             </div>
             <div class="section mb-4" id="discount_box">
                 <div>
                     <label for="discount" class="form-label">Discount:</label>
-                    <input class="form-group main_input"
-                        type="number"
+                    <select class="form-group main_input"
                         id="discount"
-                        placeholder="Enter Discount" >
+                        v-model="product.discountId">
+                        <option value="">Select a discount</option>
+                        <option 
+                            v-for="discount in discounts"
+                            :key="discount.id"
+                            :value="discount.id"
+                        >
+                            {{ discount.name }}
+                        </option>
+                    </select>
                 </div>
             </div>
             <div class="section mb-4" id="category_box">
                 <div>
                     <label for="category" class="form-label">Category:</label>
                     <input class="form-group main_input"
-                        type="number"
+                        type="select"
                         id="category"
-                        placeholder="Enter Category" >
+                        placeholder="Enter Category">
+
                 </div>
             </div>
 
@@ -64,10 +71,13 @@
                     id="description"
                     v-model="product.description"
                     placeholder="Enter Product Description"
-                    autocomplete="on">
-                    @input="checkDescriptionLength">
+                    autocomplete="on"
+                    @input="checkDescriptionLength"
+                    aria-describedby="remain">
                 </textarea>
-                    <p>Remaining characters: {{ remainingCharacters }}</p>
+                    <p class="form-text" id="remain">
+                        Remaining characters: {{ remainingCharacters }}
+                    </p>
 
                 <input class="form-group sku"
                     type="text"
@@ -90,13 +100,16 @@
             <div class="form-group">
                 <button class="main_button submit"
                     type="button" 
-                    @click="createProduct">
+                    @click="createProduct"
+                    v-if="buttonVisible"
+                    >
                     Save data
                 </button>
             </div>
             <div class="create_Success"
                 id="editSuccess"
-                v-if="createSuccess">
+                v-if="createSuccess"
+                @click="clearForm">
                 Data saved successfully.
                 <br>Click for create next product.
             </div>
@@ -107,8 +120,13 @@
 
 <script>
 import axios from 'axios';
+import MySelect from '@/components/UI/MySelect';
 
 export default {
+    component:{
+        MySelect,
+    },
+    
     data() {
         return {
             product: {
@@ -120,9 +138,10 @@ export default {
                 quantity: '',
             },
             createSuccess: false,
+            buttonVisible: true,
             maxLength: 255,
-            // imagePreview: null,
-            selectedImage: null
+            imagePreview: null,
+            discounts: [],
         }
     },
     computed: {
@@ -140,9 +159,9 @@ export default {
         handleImageChange(event) {
             const file = event.target.files[0];
             if (file) {
-                this.selectedImage = URL.createObjectURL(file);
+                this.imagePreview = URL.createObjectURL(file);
             } else {
-                this.selectedImage = null;
+                this.imagePreview = null;
             }
         },
 
@@ -172,7 +191,17 @@ export default {
                         console.log('File uploaded successfully.');
                         photoId = uploadResponse.data;
                     }
-                }
+                },
+                async fetchDiscounts() {
+  try {
+    const response = await axios.get('http://localhost:8081/discounts');
+    if (response.status === 200) {
+      this.discounts = response.data; // Предположим, что данные о скидках находятся в массиве discounts
+    }
+  } catch (error) {
+    console.error('Error fetching discounts:', error);
+  }
+}
 
                 const productData = {
                     name: this.product.name,
@@ -182,7 +211,7 @@ export default {
                     createdAt: new Date().toISOString(),
                     modifiedAt: new Date().toISOString(),
                     deletedAt: null,
-                    discountId: null,
+                    discountId: discountId,
                     quantity: this.product.quantity,
                     photoId: photoId,
                 };
@@ -196,6 +225,7 @@ export default {
 
                 if (createResponse.status === 200) {
                     this.createSuccess = true;
+                    this.buttonVisible = false;
                     console.log('Data sent successfully.');
                 } else {
                     console.error('Error sending data.');
@@ -203,6 +233,20 @@ export default {
             } catch (error) {
                 console.error('Error sending data to /product/', error);
             }
+        },
+        clearForm() {
+            this.product = {
+                name: '',
+                description: '',
+                sku: '',
+                price: '',
+                discountId: '',                
+                quantity: '',
+                photoId: null
+                };
+            this.createSuccess = false;
+            this.buttonVisible = true;
+            this.imagePreview = null;
         }
     }
 }
@@ -227,8 +271,12 @@ export default {
         overflow: auto;
     }
     .header {
-        text-align: center;
-        margin-bottom: 20px;
+        width: 100%;
+        max-width: 625px;
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+        margin-top: 20px;
     }
     .header h1 {
         margin: 0;
@@ -241,8 +289,12 @@ export default {
         text-align: start;
         justify-content: space-between;
         align-items: flex-end;
+        margin-bottom:1.2rem !important;
     }
-
+    #photo_box{
+        display: flex;
+        align-items: center;
+    }
     label {
         font-weight: bold;
         margin-bottom: 5px;
@@ -253,9 +305,10 @@ export default {
         padding: 5px;
     }
     #image-preview{
-        max-width: 50px;
+        max-width: 65px;
         max-height: 100px;
-    } 
+        margin-right: 15px;
+    }
     #discount, #category {
         text-align: center;
     }
@@ -268,21 +321,26 @@ export default {
     }
     .information *{
         text-align: center;
-        margin: 10px;
+        margin: 7px;
         padding: 5px;
         width: 100%;
     }
     .information textarea {
         text-align: left;
     }
+    #remain {
+        text-align: left;
+        margin-left: 5;
+        margin-top: -15px;
+    }
     .main_button {
-        margin-top: 10px;
         padding: 8px 12px;
         background-color: #4CAF50;
         color: white;
         border: none;
-        cursor: pointer;
         border-radius: 5px;
+        font-size: 13px;
+        margin: auto 15px;
     }
     .submit {
         float: right;
@@ -295,6 +353,7 @@ export default {
         border: 1px solid #4CAF50;
         background-color: #f0f8f0;
         margin-top: 10px;
+        cursor: pointer;
     }
     textarea:hover {
         background-color: transparent;
@@ -310,7 +369,6 @@ export default {
         .header h1 {
             font-size: 20px;
         }
-        .back-to-product button,
         .form-group button,
         .form-group textarea {
             font-size: 14px;
