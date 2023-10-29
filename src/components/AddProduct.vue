@@ -23,7 +23,7 @@
                     >
                 </div>
                 <div>
-                    <img 
+                    <img
                         id="image-preview"
                         :src="imagePreview"
                         alt="Preview"
@@ -36,14 +36,16 @@
                     <label for="discount" class="form-label">Discount:</label>
                     <select class="form-group main_input"
                         id="discount"
-                        v-model="product.discountId">
+                        v-model="selectedDiscount"
+                        @focus="loadDiscounts"
+                    >
                         <option value="">Select a discount</option>
                         <option 
                             v-for="discount in discounts"
-                            :key="discount.id"
-                            :value="discount.id"
-                        >
-                            {{ discount.name }}
+                            :key="discount"
+                            :value="discount"
+                        >                            
+                            {{ discount }}
                         </option>
                     </select>
                 </div>
@@ -55,7 +57,6 @@
                         type="select"
                         id="category"
                         placeholder="Enter Category">
-
                 </div>
             </div>
 
@@ -67,7 +68,7 @@
                     v-model="product.name"    
                     placeholder="Enter Product Name" >
 
-                <textarea class="form-group description" wrap="hard"
+                <textarea class="form-group description"
                     id="description"
                     v-model="product.description"
                     placeholder="Enter Product Description"
@@ -129,12 +130,13 @@ export default {
     
     data() {
         return {
+            accessToken: localStorage.getItem('token'),
             product: {
                 name: '',
                 description: '',
                 sku: '',
                 price: '',
-                discountId: '',                
+                discount: '',     
                 quantity: '',
             },
             createSuccess: false,
@@ -142,6 +144,7 @@ export default {
             maxLength: 255,
             imagePreview: null,
             discounts: [],
+            selectedDiscount: ''
         }
     },
     computed: {
@@ -164,6 +167,20 @@ export default {
                 this.imagePreview = null;
             }
         },
+        async loadDiscounts() {
+            try {
+                const response = await axios.get('http://localhost:8081/discount', {
+                    headers: {
+                        'Authorization': `Bearer ${this.accessToken}`
+                    },
+                });
+                if (response.status === 200) {
+                    this.discounts = response.data.map(discount => discount.name);
+                }
+            } catch (error) {
+                console.error('Error fetching discounts:', error);
+            }
+        },
 
         async createProduct() {
             if (!this.product.name) {
@@ -172,7 +189,7 @@ export default {
             }
 
             try {
-                const accessToken = localStorage.getItem('token');
+                // const accessToken = localStorage.getItem('token');
                 const fileInput = this.$refs.image.files[0];
                 let photoId = null;
 
@@ -191,17 +208,9 @@ export default {
                         console.log('File uploaded successfully.');
                         photoId = uploadResponse.data;
                     }
-                },
-                async fetchDiscounts() {
-  try {
-    const response = await axios.get('http://localhost:8081/discounts');
-    if (response.status === 200) {
-      this.discounts = response.data; // Предположим, что данные о скидках находятся в массиве discounts
-    }
-  } catch (error) {
-    console.error('Error fetching discounts:', error);
-  }
-}
+                }
+
+                // const selectedDiscount = this.discounts.find(discount => discount.id === this.product.discountId);
 
                 const productData = {
                     name: this.product.name,
@@ -211,7 +220,7 @@ export default {
                     createdAt: new Date().toISOString(),
                     modifiedAt: new Date().toISOString(),
                     deletedAt: null,
-                    discountId: discountId,
+                    discountId: This.product.discountId,
                     quantity: this.product.quantity,
                     photoId: photoId,
                 };
@@ -325,8 +334,9 @@ export default {
         padding: 5px;
         width: 100%;
     }
-    .information textarea {
+    .description {
         text-align: left;
+        white-space: pre-line;
     }
     #remain {
         text-align: left;
