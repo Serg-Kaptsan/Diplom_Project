@@ -199,7 +199,7 @@ export default {
 
                     const uploadResponse = await axios.post('http://localhost:8081/upload', formData, {
                         headers: {
-                            'Authorization': `Bearer ${accessToken}`,
+                            'Authorization': `Bearer ${this.accessToken}`,
                             'Content-Type': 'multipart/form-data',
                         },
                     });
@@ -209,9 +209,7 @@ export default {
                         photoId = uploadResponse.data;
                     }
                 }
-
-                // const selectedDiscount = this.discounts.find(discount => discount.id === this.product.discountId);
-
+               
                 const productData = {
                     name: this.product.name,
                     description: this.product.description,
@@ -220,14 +218,14 @@ export default {
                     createdAt: new Date().toISOString(),
                     modifiedAt: new Date().toISOString(),
                     deletedAt: null,
-                    discountId: This.product.discountId,
+                    discount: this.product.discount,
                     quantity: this.product.quantity,
                     photoId: photoId,
                 };
 
                 const createResponse = await axios.post('http://localhost:8081/product/', productData, {
                     headers: {
-                        'Authorization': `Bearer ${accessToken}`,
+                        'Authorization': `Bearer ${this.accessToken}`,
                         'Content-Type': 'application/json',
                     },
                 });
