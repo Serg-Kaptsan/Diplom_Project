@@ -14,7 +14,7 @@
                 </h5>
                 <p class="card-text"> <strong> Code: </strong> {{ product.id }}</p>
                 <p class="card-text"> <strong> Price: </strong> {{ product.price }} $</p>
-                <p class="card-text discount"> <strong> Discount: </strong> {{ product.discountPercent }} %</p>      
+                <p class="card-text discount"> <strong> Discount: </strong> {{ productDiscount.discountPercent}} </p>      
             </div>
         </div>          
 </template>
@@ -28,8 +28,17 @@ export default {
         type: Object,
         required: true,
         },
+        discount: {
+        type: Object,
+        required: true,            
+        }
     },
-
+    computed:{
+        productDiscount() {
+            const matchingDiscount = this.discount.find(discount => discount.id === this.product.discountId);
+            return matchingDiscount || { discountPercent: "" };
+        },
+    },
     methods: {
     viewProduct() {
       this.$router.push({ name: 'product', params: { id: this.product.id } });

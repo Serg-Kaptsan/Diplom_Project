@@ -50,7 +50,7 @@
             :key="index">
         <admin-product-item 
             :product="product"
-            :discount="discount"
+            :discount="discount || {}"
             :categories="categories">
         </admin-product-item>
         </div>
@@ -95,7 +95,6 @@ export default {
                 {value: 'discount', name: 'discount'},
                 {value: 'createdAt', name: 'creation date'},
                 {value: 'modifiedAt', name: 'modification date'},
-                {value: 'deletedAt', name: 'deletion date'},
             ],
             discount: null,
             categories: null,  
@@ -115,17 +114,12 @@ export default {
                 this.totalPages = Math.ceil(response.data.totalElements / this.itemsPerPage)
                 this.products = response.data.content;
 
-                const responseDiscount = await axios.get('http://localhost:8081/discount');
-                const discount = responseDiscount.data;
-                this.discount = discount;
+                this.discount = (await axios.get('http://localhost:8081/discount')).data;
+                this.categories = (await axios.get('http://localhost:8081/product-categories')).data;
 
-                const responseCategories = await axios.get('http://localhost:8081/product-categories');
-                const categories = responseCategories.data;
-                this.categories = categories;
-
-    console.log(responseProducts);
-    console.log(responseDiscount);
-    console.log(responseCategories);
+    console.log(this.products);
+    console.log(this.discount);
+    console.log(this.categories);
             } catch (e) {
     console.error('Error Fetching:', e);
                 this.hasErrorFetching = true;

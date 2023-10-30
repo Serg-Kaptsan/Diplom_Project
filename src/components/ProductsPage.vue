@@ -28,7 +28,9 @@
             v-for="(product, index) in filteredAndSortedProducts"
             :key="index">
         <product-item 
-            :product="product"> </product-item>
+            :product="product"
+            :discount="discount">
+        </product-item>
         </div>
       </div>
       <div v-else class="temporary">Loading</div>
@@ -102,6 +104,9 @@ export default {
                 this.totalPages = Math.ceil(response.data.totalElements / this.itemsPerPage)
                 this.products = response.data.content;
                 console.log(response);
+
+                this.discount = (await axios.get('http://localhost:8081/discount')).data;
+
             } catch (e) {
             console.error('Error Fetching:', e);
                 this.hasErrorFetching = true;
@@ -128,7 +133,7 @@ export default {
             console.error('Error Fetching:', e);
                 this.hasErrorFetching = true;
             }
-        },        
+        },      
     },
     watch: {
     },

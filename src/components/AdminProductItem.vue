@@ -24,7 +24,7 @@
                 <br> <span> {{ product.description }} </span> </p>
             <p class="card-text"> <strong> SKU: </strong> {{ product.sku }}</p>        
             <p class="card-text"> <strong> Price: </strong> {{ product.price }} $</p>
-            <p class="card-text"> <strong> Discount: </strong> {{ product.discountPercent }} %</p>
+            <p class="card-text"> <strong> Discount: </strong> {{ productDiscount.discountPercent }} </p>
             <p class="card-text last"> <strong> Quantity: </strong> {{ product.quantity }} </p> 
         </div>
         <div class="inform-block">
@@ -35,7 +35,7 @@
             <p class="card-text"> <strong> modified: </strong> {{ product.modifiedAt }} </p>
             <p class="card-text"> <strong> deleted: </strong> {{ product.deletedAt }} </p>
             <p class="empty-line"></p>
-            <p class="card-text"> <strong> discount name: </strong> {{ discount.name }} 
+            <p class="card-text"> <strong> discount name: </strong> {{ productDiscount.name }} 
                 <img 
                     title="Open discount card"
                     src="https://cdn-icons-png.flaticon.com/512/483/483356.png"
@@ -44,8 +44,6 @@
             <!-- <p class="card-text"> <strong> discountId: </strong> {{ discount.id }}</p> -->
             <p class="card-text"> <strong> photoId: </strong> {{ product.photoId }} </p>
             <div class="button-block">
-                <!-- <my-button class="btn btn-secondary"> Сhange data </my-button>
-                <my-button class="btn btn-danger"> Delete product</my-button> -->
                 <button class="btn btn-secondary"> Сhange data </button>
                 <button class="btn btn-danger"> Delete product </button>
             </div>
@@ -77,7 +75,12 @@ export default {
             required: true,
         }
     },
-
+    computed: {
+        productDiscount() {
+            const matchingDiscount = this.discount.find(discount => discount.id === this.product.discountId);
+            return matchingDiscount || { name: "", discountPercent: "" };
+        },
+    },
     methods: {
         viewProduct() {
             this.$router.push({ name: 'product', params: { id: this.product.id } });

@@ -36,7 +36,8 @@
                     <label for="discount" class="form-label">Discount:</label>
                     <select class="form-group main_input"
                         id="discount"
-                        v-model="selectedDiscount"
+                        v-model="selectedDiscountName"
+                        @change="handleDiscountChange"
                         @focus="loadDiscounts"
                     >
                         <option value="">Select a discount</option>
@@ -136,7 +137,9 @@ export default {
                 description: '',
                 sku: '',
                 price: '',
-                discount: '',     
+                discount: '',
+                discountId: null,
+                discountIdMap: {}, 
                 quantity: '',
             },
             createSuccess: false,
@@ -144,7 +147,9 @@ export default {
             maxLength: 255,
             imagePreview: null,
             discounts: [],
-            selectedDiscount: ''
+            selectedDiscountName: '',
+            selectedDiscountId: null,
+            discountIdMap: {},
         }
     },
     computed: {
@@ -176,10 +181,19 @@ export default {
                 });
                 if (response.status === 200) {
                     this.discounts = response.data.map(discount => discount.name);
+                    this.discountIdMap = response.data.reduce((map, discount) => 
+                    {map[discount.name] = discount.id;
+                    return map;}, {});
                 }
             } catch (error) {
                 console.error('Error fetching discounts:', error);
             }
+        },
+
+        handleDiscountChange() {
+            console.log('Selected discount:', this.selectedDiscountName);
+            this.selectedDiscountId = this.discountIdMap[this.selectedDiscountName];
+            console.log('Selected discount id:', this.selectedDiscountId);
         },
 
         async createProduct() {
@@ -188,8 +202,13 @@ export default {
                 return;
             }
 
+                if (this.selectedDiscountName) {
+                    this.product.discountId = this.selectedDiscountId;
+                } else {
+                    this.product.discountId = null;
+                }
+
             try {
-                // const accessToken = localStorage.getItem('token');
                 const fileInput = this.$refs.image.files[0];
                 let photoId = null;
 
@@ -218,7 +237,7 @@ export default {
                     createdAt: new Date().toISOString(),
                     modifiedAt: new Date().toISOString(),
                     deletedAt: null,
-                    discount: this.product.discount,
+                    discountId: this.product.discountId,
                     quantity: this.product.quantity,
                     photoId: photoId,
                 };
@@ -255,7 +274,7 @@ export default {
             this.buttonVisible = true;
             this.imagePreview = null;
         }
-    }
+    },
 }
 </script>
 
