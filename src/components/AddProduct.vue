@@ -54,10 +54,21 @@
             <div class="section mb-4" id="category_box">
                 <div>
                     <label for="category" class="form-label">Category:</label>
-                    <input class="form-group main_input"
-                        type="select"
+                    <select class="form-group main_input"
                         id="category"
-                        placeholder="Enter Category">
+                        v-model="selectedCategoryName"
+                        @change="handleCategoryChange"
+                        @focus="loadCategory"
+                    >
+                        <option value="">Select a category</option>
+                        <option 
+                            v-for="category in categories"
+                            :key="category"
+                            :value="category"
+                        >                            
+                            {{ category }}
+                        </option>
+                    </select>
                 </div>
             </div>
 
@@ -137,10 +148,13 @@ export default {
                 description: '',
                 sku: '',
                 price: '',
+                quantity: '',                
                 discount: '',
                 discountId: null,
-                discountIdMap: {}, 
-                quantity: '',
+                discountIdMap: {},
+                category: '',
+                categoryId: null,
+                categoryIdMap: {}
             },
             createSuccess: false,
             buttonVisible: true,
@@ -150,6 +164,10 @@ export default {
             selectedDiscountName: '',
             selectedDiscountId: null,
             discountIdMap: {},
+            categories: [],
+            selectedCategoryName: '',
+            selectedCategoryId: null,
+            categoryIdMap: {},
         }
     },
     computed: {
@@ -172,6 +190,7 @@ export default {
                 this.imagePreview = null;
             }
         },
+
         async loadDiscounts() {
             try {
                 const response = await axios.get('http://localhost:8081/discount', {
@@ -189,11 +208,33 @@ export default {
                 console.error('Error fetching discounts:', error);
             }
         },
-
         handleDiscountChange() {
             console.log('Selected discount:', this.selectedDiscountName);
             this.selectedDiscountId = this.discountIdMap[this.selectedDiscountName];
             console.log('Selected discount id:', this.selectedDiscountId);
+        },
+
+        async loadCategory() {
+            try {
+                const response = await axios.get('http://localhost:8081/product-categories', {
+                    headers: {
+                        'Authorization': `Bearer ${this.accessToken}`
+                    },
+                });
+                if (response.status === 200) {
+                    this.categories = response.data.map(category => category.name);
+                    this.categoryIdMap = response.data.reduce((map, category) => 
+                    {map[category.name] = category.id;
+                    return map;}, {});
+                }
+            } catch (error) {
+                console.error('Error fetching categories:', error);
+            }
+        },
+        handleCategoryChange() {
+            console.log('Selected category:', this.selectedCategoryName);
+            this.selectedCategoryId = this.categoryIdMap[this.selectedCategoryName];
+            console.log('Selected category id:', this.selectedCategoryId);
         },
 
         async createProduct() {
@@ -238,6 +279,7 @@ export default {
                     modifiedAt: new Date().toISOString(),
                     deletedAt: null,
                     discountId: this.product.discountId,
+                    categoryId: this.product.categoryId,
                     quantity: this.product.quantity,
                     photoId: photoId,
                 };
