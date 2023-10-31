@@ -46,12 +46,13 @@
     <div class="products-grid" id="productsList">
       <div v-if="!isProductsLoading" class="card-container" >
         <div 
-            v-for="(product, index) in filteredAndSortedProducts"
-            :key="index">
+            v-for="product in filteredAndSortedProducts"
+            :key="product.id">
         <admin-product-item 
             :product="product"
             :discount="discount || {}"
-            :categories="categories">
+            :category="category || {}"
+            @delete="deleteProduct">
         </admin-product-item>
         </div>
       </div>
@@ -78,8 +79,9 @@ export default {
 
     data(){
         return {
+            accessToken: localStorage.getItem('token'),
             currentPage: 0,
-            itemsPerPage: 5,
+            itemsPerPage: 10,
             totalPages: 0,
             products:[],
             isProductsLoading: false,
@@ -89,7 +91,8 @@ export default {
             sortOptions: [
                 {value: 'sku', name: 'SKU'},
                 {value: 'name', name: 'name'},
-                {value: 'id', name: 'code'},                
+                {value: 'id', name: 'code'},
+                {value: 'category', name: 'category'},              
                 {value: 'price', name: 'price'},
                 {value: 'quantity', name: 'quantity'},
                 {value: 'discount', name: 'discount'},
@@ -97,7 +100,7 @@ export default {
                 {value: 'modifiedAt', name: 'modification date'},
             ],
             discount: null,
-            categories: null,  
+            category: null,
         }
     },
 
@@ -115,11 +118,11 @@ export default {
                 this.products = response.data.content;
 
                 this.discount = (await axios.get('http://localhost:8081/discount')).data;
-                this.categories = (await axios.get('http://localhost:8081/product-categories')).data;
+                this.category = (await axios.get('http://localhost:8081/product-categories')).data;
 
     console.log(this.products);
     console.log(this.discount);
-    console.log(this.categories);
+    console.log(this.category);
             } catch (e) {
     console.error('Error Fetching:', e);
                 this.hasErrorFetching = true;
@@ -146,7 +149,21 @@ export default {
     console.error('Error Fetching:', e);
                 this.hasErrorFetching = true;
             }
-        },        
+        },
+
+        async deleteProduct(product) {
+            try {
+                await axios.delete(`http://localhost:8081/product/${product.id}`, {
+                    headers:{
+                        'Authorization': `Bearer ${this.accessToken}`
+                    },
+                });
+                    alert('The element was deleted successfully');
+                    this.fetchProducts();
+            } catch (e) {
+                console.error('Error deleting product:', e);
+            }
+        },
     },
     watch: {
     },

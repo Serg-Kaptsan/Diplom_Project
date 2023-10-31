@@ -31,6 +31,10 @@ export default {
         discount: {
         type: Object,
         required: true,            
+        },
+        category:{
+        type: Object,
+        required: true,      
         }
     },
     computed:{

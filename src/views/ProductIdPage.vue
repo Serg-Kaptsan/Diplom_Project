@@ -30,7 +30,7 @@
                     <br> <span> {{ product.description }} </span>
                 </p>
                 <p class="card-text"> <strong> Price: </strong> {{ product.price }} $</p>
-                <p class="card-text discount"> <strong> Discount: </strong> {{ product.discountPercent }} %</p>
+                <p class="card-text discount"> <strong> Discount: </strong> {{ product.discountPercent }} </p>
                 <p class="card-text last"> <strong> Quantity in stock: </strong> {{ product.quantity }} </p>
                 <img class="cart" title="add to cart" src='/trolley.png' alt="cart">   
             </div>

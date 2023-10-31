@@ -19,7 +19,7 @@
         <div class="card-body">
             <h5 class="card-title"> {{ product.name }} </h5>
             <p class="card-text"> <strong> Code: </strong> {{ product.id }} </p>
-            <p class="card-text"> <strong> Category: </strong> {{ product.category }} </p>
+            <p class="card-text"> <strong> Category: </strong> {{ productCategory.name }} </p>
             <p class="card-text"> <strong> Description: </strong>
                 <br> <span> {{ product.description }} </span> </p>
             <p class="card-text"> <strong> SKU: </strong> {{ product.sku }}</p>        
@@ -45,10 +45,13 @@
             <p class="card-text"> <strong> photoId: </strong> {{ product.photoId }} </p>
             <div class="button-block">
                 <button class="btn btn-secondary"> Сhange data </button>
-                <button class="btn btn-danger"> Delete product </button>
+                <button class="btn btn-danger"
+                    @click="$emit('delete', product)"
+                >
+                    Delete product
+                </button>
             </div>
         </div>
-
     </div>         
 </template>
 
@@ -70,7 +73,7 @@ export default {
             type: Object,
             required: true,
         },
-        categories:{
+        category:{
             type: Object,
             required: true,
         }
@@ -79,6 +82,10 @@ export default {
         productDiscount() {
             const matchingDiscount = this.discount.find(discount => discount.id === this.product.discountId);
             return matchingDiscount || { name: "", discountPercent: "" };
+        },
+        productCategory() {
+            const matchingCategory = this.category.find(category => category.id === this.product.categoryId);
+            return matchingCategory || { name: "" };
         },
     },
     methods: {

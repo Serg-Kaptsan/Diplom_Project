@@ -25,11 +25,12 @@
     <div class="products-grid" id="productsList">
       <div v-if="!isProductsLoading" class="card-container" >
         <div 
-            v-for="(product, index) in filteredAndSortedProducts"
-            :key="index">
+            v-for="(product) in filteredAndSortedProducts"
+            :key="product.id">
         <product-item 
             :product="product"
-            :discount="discount">
+            :discount="discount"
+            :category="category">
         </product-item>
         </div>
       </div>
@@ -83,6 +84,7 @@ export default {
                 {value: 'name', name: 'name'},
                 {value: 'price', name: 'price'},
                 {value: 'id', name: 'code'},
+                {value: 'category', name: 'category'},
                 {value: 'discount', name: 'discount'},
             ],      
         }
@@ -106,6 +108,7 @@ export default {
                 console.log(response);
 
                 this.discount = (await axios.get('http://localhost:8081/discount')).data;
+                this.category = (await axios.get('http://localhost:8081/product-categories')).data;
 
             } catch (e) {
             console.error('Error Fetching:', e);
