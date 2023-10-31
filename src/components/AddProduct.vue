@@ -63,7 +63,7 @@
                         <option value="">Select a category</option>
                         <option 
                             v-for="category in categories"
-                            :key="category"
+                            :key="category.id"
                             :value="category"
                         >                            
                             {{ category }}
@@ -209,7 +209,6 @@ export default {
             }
         },
         handleDiscountChange() {
-            console.log('Selected discount:', this.selectedDiscountName);
             this.selectedDiscountId = this.discountIdMap[this.selectedDiscountName];
             console.log('Selected discount id:', this.selectedDiscountId);
         },
@@ -232,7 +231,6 @@ export default {
             }
         },
         handleCategoryChange() {
-            console.log('Selected category:', this.selectedCategoryName);
             this.selectedCategoryId = this.categoryIdMap[this.selectedCategoryName];
             console.log('Selected category id:', this.selectedCategoryId);
         },
@@ -247,6 +245,11 @@ export default {
                     this.product.discountId = this.selectedDiscountId;
                 } else {
                     this.product.discountId = null;
+                }
+                if (this.selectedCategoryName) {
+                    this.product.categoryId = this.selectedCategoryId;
+                } else {
+                    this.product.categoryId = null;
                 }
 
             try {
@@ -308,12 +311,15 @@ export default {
                 description: '',
                 sku: '',
                 price: '',
-                discountId: '',                
+                discountId: null,                
                 quantity: '',
                 photoId: null
                 };
+            this.selectedDiscountName = '';
+            this.selectedCategoryName = '';
             this.createSuccess = false;
             this.buttonVisible = true;
+            this.$refs.image.value = '';
             this.imagePreview = null;
         }
     },
