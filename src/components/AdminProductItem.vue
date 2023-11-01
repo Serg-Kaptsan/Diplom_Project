@@ -2,19 +2,16 @@
     <div class="card">
 
         <div class="large-image"
-                v-if="isLargeImageVisible" 
-                @click.stop="closeLargeImage"
-            >
-                <img 
-                    :src="largeImageSrc" :alt="product.name" 
-                    @click="closeLargeImage" />
+            v-if="isLargeImageVisible" 
+            @click.stop="closeLargeImage">
+            <img 
+                :src="largeImageSrc" :alt="product.name" 
+                @click="closeLargeImage" />
             </div>
-
         <div class="card-img-block">
             <img class="card-img-top" 
-            :src="'data:image/jpeg;base64,' + product.imageData" :alt="product.name" 
-            @click="viewProduct"
-            />                
+                :src="'data:image/jpeg;base64,' + product.imageData" :alt="product.name" 
+                @click="viewProduct" />                
         </div>
         <div class="card-body">
             <h5 class="card-title"> {{ product.name }} </h5>

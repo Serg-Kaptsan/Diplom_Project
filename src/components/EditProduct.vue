@@ -9,7 +9,6 @@
         </div>
 
         <form class="edit-form" id="edition">
-            
             <div class="section mb-4" id="photo_box">
                 <div>
                     <label for="image" class="form-label">Select photo:</label>
@@ -18,9 +17,7 @@
                         id="image"
                         ref="image" 
                         accept=".jpg, .jpeg, .png" 
-                        data-placeholder="Choose a photo"
-                        @change="handleImageChange"
-                    >
+                        data-placeholder="Choose a photo">
                 </div>
                 <div>
                     <img
@@ -30,46 +27,34 @@
                         v-if="imagePreview"
                     >
                 </div>
+                <button class="btn btn-secondary upload">
+                    Upload
+                </button>
             </div>
             <div class="section mb-4" id="discount_box">
                 <div>
                     <label for="discount" class="form-label">Discount:</label>
-                    <select class="form-group main_input"
+                    <input class="form-group main_input"
+                        type="text"
                         id="discount"
-                        v-model="selectedDiscountName"
-                        @change="handleDiscountChange"
-                        @focus="loadDiscounts"
-                    >
-                        <option value="">Select a discount</option>
-                        <option 
-                            v-for="discount in discounts"
-                            :key="discount"
-                            :value="discount"
-                        >                            
-                            {{ discount }}
-                        </option>
-                    </select>
+                        placeholder="Enter Discount" >
                 </div>
+                <button class="btn btn-secondary discount_button">
+                    Save discount
+                </button>
             </div>
+
             <div class="section mb-4" id="category_box">
                 <div>
                     <label for="category" class="form-label">Category:</label>
-                    <select class="form-group main_input"
+                    <input class="form-group main_input"
+                        type="text"
                         id="category"
-                        v-model="selectedCategoryName"
-                        @change="handleCategoryChange"
-                        @focus="loadCategory"
-                    >
-                        <option value="">Select a category</option>
-                        <option 
-                            v-for="category in categories"
-                            :key="category.id"
-                            :value="category"
-                        >                            
-                            {{ category }}
-                        </option>
-                    </select>
+                        placeholder="Enter Category" >
                 </div>
+                <button class="btn btn-secondary category_button">
+                    Save category
+                </button>
             </div>
 
             <div class="information">
@@ -80,13 +65,12 @@
                     v-model="product.name"    
                     placeholder="Enter Product Name" >
 
-                <textarea class="form-group description"
+                <textarea class="form-group description" wrap="hard"
                     id="description"
                     v-model="product.description"
                     placeholder="Enter Product Description"
-                    autocomplete="on"
-                    @input="checkDescriptionLength"
-                    aria-describedby="remain">
+                    autocomplete="on">
+                    @input="checkDescriptionLength">
                 </textarea>
                     <p class="form-text" id="remain">
                         Remaining characters: {{ remainingCharacters }}
@@ -110,21 +94,23 @@
                     v-model="product.quantity"
                     placeholder="Enter quantity of products" >
             </div>
-            <div class="form-group">
+            <div class="button_group">
+                <button class="main_button cancel"
+                    type="button" 
+                    @click="createProduct">
+                    Cancel changes
+                </button>
                 <button class="main_button submit"
                     type="button" 
-                    @click="createProduct"
-                    v-if="buttonVisible"
-                    >
+                    @click="createProduct">
                     Save changes
                 </button>
-            </div>
-            <div class="create_Success"
-                id="editSuccess"
-                v-if="createSuccess"
-                @click="clearForm">
-                Changes saved successfully.
-                <br>Click for back to Products.
+                <div class="create_Success"
+                    id="editSuccess"
+                    v-if="createSuccess">
+                    Data edited successfully.
+                    <br>Click for back to products.
+                </div>                
             </div>
         </form>
     </div>
@@ -133,41 +119,21 @@
 
 <script>
 import axios from 'axios';
-import MySelect from '@/components/UI/MySelect';
 
 export default {
-    component:{
-        MySelect,
-    },
-    
     data() {
         return {
-            accessToken: localStorage.getItem('token'),
             product: {
                 name: '',
                 description: '',
                 sku: '',
                 price: '',
-                quantity: '',                
-                discount: '',
-                discountId: null,
-                discountIdMap: {},
-                category: '',
-                categoryId: null,
-                categoryIdMap: {}
+                discountId: '',
+                category: '',                              
+                quantity: '',
             },
             createSuccess: false,
-            buttonVisible: true,
             maxLength: 255,
-            imagePreview: null,
-            discounts: [],
-            selectedDiscountName: '',
-            selectedDiscountId: null,
-            discountIdMap: {},
-            categories: [],
-            selectedCategoryName: '',
-            selectedCategoryId: null,
-            categoryIdMap: {},
         }
     },
     computed: {
@@ -181,151 +147,64 @@ export default {
             this.product.description = this.product.description.slice(0, this.maxLength);
           }
         },
-
-        handleImageChange(event) {
-            const file = event.target.files[0];
-            if (file) {
-                this.imagePreview = URL.createObjectURL(file);
-            } else {
-                this.imagePreview = null;
-            }
-        },
-
-        async loadDiscounts() {
-            try {
-                const response = await axios.get('http://localhost:8081/discount', {
-                    headers: {
-                        'Authorization': `Bearer ${this.accessToken}`
-                    },
-                });
-                if (response.status === 200) {
-                    this.discounts = response.data.map(discount => discount.name);
-                    this.discountIdMap = response.data.reduce((map, discount) => 
-                    {map[discount.name] = discount.id;
-                    return map;}, {});
-                }
-            } catch (error) {
-                console.error('Error fetching discounts:', error);
-            }
-        },
-        handleDiscountChange() {
-            this.selectedDiscountId = this.discountIdMap[this.selectedDiscountName];
-            console.log('Selected discount id:', this.selectedDiscountId);
-        },
-
-        async loadCategory() {
-            try {
-                const response = await axios.get('http://localhost:8081/product-categories', {
-                    headers: {
-                        'Authorization': `Bearer ${this.accessToken}`
-                    },
-                });
-                if (response.status === 200) {
-                    this.categories = response.data.map(category => category.name);
-                    this.categoryIdMap = response.data.reduce((map, category) => 
-                    {map[category.name] = category.id;
-                    return map;}, {});
-                }
-            } catch (error) {
-                console.error('Error fetching categories:', error);
-            }
-        },
-        handleCategoryChange() {
-            this.selectedCategoryId = this.categoryIdMap[this.selectedCategoryName];
-            console.log('Selected category id:', this.selectedCategoryId);
-        },
-
         async createProduct() {
-            if (!this.product.name) {
-                alert("Product name is required.");
-                return;
+    if (!this.product.name) {
+        alert("Product name is required.");
+        return;
+    }
+
+    try {
+        const accessToken = localStorage.getItem('token');
+        const fileInput = this.$refs.image.files[0];
+        let photoId = null;
+
+        if (fileInput) {
+            const formData = new FormData();
+            formData.append('image', fileInput);
+
+            const uploadResponse = await axios.post('http://localhost:8081/upload', formData, {
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`,
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+
+            if (uploadResponse.status === 200) {
+                console.log('File uploaded successfully.');
+                photoId = uploadResponse.data;
             }
-
-                if (this.selectedDiscountName) {
-                    this.product.discountId = this.selectedDiscountId;
-                } else {
-                    this.product.discountId = null;
-                }
-                if (this.selectedCategoryName) {
-                    this.product.categoryId = this.selectedCategoryId;
-                } else {
-                    this.product.categoryId = null;
-                }
-
-            try {
-                const fileInput = this.$refs.image.files[0];
-                let photoId = null;
-
-                if (fileInput) {
-                    const formData = new FormData();
-                    formData.append('image', fileInput);
-
-                    const uploadResponse = await axios.post('http://localhost:8081/upload', formData, {
-                        headers: {
-                            'Authorization': `Bearer ${this.accessToken}`,
-                            'Content-Type': 'multipart/form-data',
-                        },
-                    });
-
-                    if (uploadResponse.status === 200) {
-                        console.log('File uploaded successfully.');
-                        photoId = uploadResponse.data;
-                    }
-                }
-               
-                const productData = {
-                    name: this.product.name,
-                    description: this.product.description,
-                    sku: this.product.sku,
-                    price: this.product.price,
-                    createdAt: new Date().toISOString(),
-                    modifiedAt: new Date().toISOString(),
-                    deletedAt: null,
-                    discountId: this.product.discountId,
-                    categoryId: this.product.categoryId,
-                    quantity: this.product.quantity,
-                    photoId: photoId,
-                };
-
-                const createResponse = await axios.post('http://localhost:8081/product/', productData, {
-                    headers: {
-                        'Authorization': `Bearer ${this.accessToken}`,
-                        'Content-Type': 'application/json',
-                    },
-                });
-
-                if (createResponse.status === 200) {
-                    this.createSuccess = true;
-                    this.buttonVisible = false;
-                    console.log('Data sent successfully.');
-                } else {
-                    console.error('Error sending data.');
-                }
-            } catch (error) {
-                console.error('Error sending data to /product/', error);
-            }
-        },
-        clearForm() {
-            this.product = {
-                name: '',
-                description: '',
-                sku: '',
-                price: '',
-                discountId: null,                
-                quantity: '',
-                photoId: null
-                };
-            this.selectedDiscountName = '';
-            this.selectedCategoryName = '';
-            this.createSuccess = false;
-            this.buttonVisible = true;
-            this.$refs.image.value = '';
-            this.imagePreview = null;
         }
-    },
-    mounted() {
-        this.loadDiscounts();
-        this.loadCategory();
+
+        const productData = {
+            name: this.product.name,
+            description: this.product.description,
+            sku: this.product.sku,
+            price: this.product.price,
+            createdAt: new Date().toISOString(),
+            modifiedAt: new Date().toISOString(),
+            deletedAt: null,
+            discountId: null,
+            quantity: this.product.quantity,
+            photoId: photoId,
+        };
+
+        const createResponse = await axios.post('http://localhost:8081/product/', productData, {
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (createResponse.status === 200) {
+            this.createSuccess = true;
+            console.log('Data sent successfully.');
+        } else {
+            console.error('Error sending data.');
+        }
+    } catch (error) {
+        console.error('Error sending data to /product/', error);
+    }
+}
     }
 }
 </script>
@@ -421,8 +300,16 @@ export default {
         font-size: 13px;
         margin: auto 15px;
     }
-    .submit {
-        float: right;
+    .button_group{
+       display: flex;
+       justify-content: space-between;
+       margin-top: 10px;
+    }
+    .button_group button{
+        margin: auto 0;
+    }
+    .cancel {
+        background-color: red;
     }
     .create_Success {
         text-align: center;
