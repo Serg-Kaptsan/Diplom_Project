@@ -44,7 +44,10 @@
             <!-- <p class="card-text"> <strong> discountId: </strong> {{ discount.id }}</p> -->
             <p class="card-text"> <strong> photoId: </strong> {{ product.photoId }} </p>
             <div class="button-block">
-                <button class="btn btn-secondary"> Сhange data </button>
+                <button class="btn btn-secondary"
+                    @click="$router.push('/edit-product')"
+                > 
+                    Сhange data </button>
                 <button class="btn btn-danger"
                     @click="$emit('delete', product)"
                 >

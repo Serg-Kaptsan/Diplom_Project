@@ -2,21 +2,28 @@
     <div class="head-line">
         <h1> ADMIN PAGE </h1>
         <div class="menu">
-            <div class="btn btn-dark" >Products</div>
+            <div class="btn btn-dark" 
+                @click="$router.push('/admin')">
+                Products
+            </div>
             <div class="btn btn-dark" 
                 @click="$router.push('/add-product')">
                 Add product
             </div>
             <div class="btn btn-dark" 
                 @click="$router.push('/discounts')">
-                Users
-            </div>
-            <div class="btn btn-dark" 
-                @click="$router.push('/orders')">
                 Discounts
             </div>
             <div class="btn btn-dark" 
+                @click="$router.push('/categories')">
+                Categories
+            </div>
+            <div class="btn btn-dark" 
                 @click="$router.push('/users')">
+                Users
+            </div>                       
+            <div class="btn btn-dark" 
+                @click="$router.push('/orders')">
                 Orders
             </div>
         </div>        

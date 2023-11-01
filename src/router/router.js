@@ -40,19 +40,29 @@ const routes = [
     component: () => import('@/components/AddProduct.vue')
   },
   {
+    path: '/edit-product',
+    name: 'edit-product',
+    component: () => import('@/components/EditProduct.vue')
+  },
+  {
     path: '/discounts',
     name: 'discounts',
     component: () => import('@/components/DiscountsList.vue')
   },
   {
-    path: '/orders',
-    name: 'orders',
-    component: () => import('@/components/OrdersList.vue')
+    path: '/categories',
+    name: 'categories',
+    component: () => import('@/components/CategoriesList.vue')
   },
   {
     path: '/users',
     name: 'users',
     component: () => import ('@/components/UsersList.vue')
+  },  
+  {
+    path: '/orders',
+    name: 'orders',
+    component: () => import('@/components/OrdersList.vue')
   },
 ]
 
