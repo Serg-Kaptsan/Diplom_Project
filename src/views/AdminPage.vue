@@ -151,15 +151,15 @@ export default {
             }
         },
 
-        async deleteProduct(product) {
+        async deleteProduct(productToDelete) {
             try {
-                await axios.delete(`http://localhost:8081/product/${product.id}`, {
+                await axios.delete(`http://localhost:8081/product/${productToDelete.id}`, {
                     headers:{
                         'Authorization': `Bearer ${this.accessToken}`
                     },
                 });
-                    alert('The element was deleted successfully');
-                    this.fetchProducts();
+                    alert(`The element code ${productToDelete.id} was deleted successfully`);
+                    this.products = this.products.filter(product => product.id !== productToDelete.id);
             } catch (e) {
                 console.error('Error deleting product:', e);
             }

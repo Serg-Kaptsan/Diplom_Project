@@ -323,6 +323,10 @@ export default {
             this.imagePreview = null;
         }
     },
+    mounted() {
+        this.loadDiscounts();
+        this.loadCategory();
+    }
 }
 </script>
 
