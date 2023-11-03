@@ -200,9 +200,9 @@ export default {
                 });
                 if (response.status === 200) {
                     this.discounts = response.data.map(discount => discount.name);
-                    this.discountIdMap = response.data.reduce((map, discount) => 
-                    {map[discount.name] = discount.id;
-                    return map;}, {});
+                    response.data.forEach(discount => {
+                    this.discountIdMap[discount.name] = discount.id;
+                    }); 
                 }
             } catch (error) {
                 console.error('Error fetching discounts:', error);
@@ -220,11 +220,13 @@ export default {
                         'Authorization': `Bearer ${this.accessToken}`
                     },
                 });
+                
                 if (response.status === 200) {
                     this.categories = response.data.map(category => category.name);
-                    this.categoryIdMap = response.data.reduce((map, category) => 
-                    {map[category.name] = category.id;
-                    return map;}, {});
+
+                    response.data.forEach(category => {
+                    this.categoryIdMap[category.name] = category.id;
+                    });
                 }
             } catch (error) {
                 console.error('Error fetching categories:', error);
