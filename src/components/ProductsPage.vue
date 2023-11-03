@@ -52,7 +52,7 @@
             Nothing was found for your search query
         </div>
     </div>
-    <div v-intersection="loadMorePages" class="observer"></div>
+    <div v-intersection="() => loadMorePages(selectedCategoryId)" class="observer"></div>
 
     <!-- <div class="page__wrapper">
         <div 
@@ -137,17 +137,26 @@ export default {
                 this.isProductsLoading = false; 
             }
         },
-        async loadMorePages() {
+        async loadMorePages(selectedCategoryId) {
             try {
                 if (!this.isProductsLoading) {
                     this.currentPage += 1;
-                    const response = await axios.get('http://localhost:8081/products', {
+                    let response;
+                    if (selectedCategoryId) {
+                        response = await axios.get(`http://localhost:8081/products/category/${selectedCategoryId}`, {
+                        params: {
+                            page: this.currentPage,
+                            pageSize: this.itemsPerPage
+                        }
+                    });
+                } else {
+                   response = await axios.get('http://localhost:8081/products', {
                         params: {
                             page: this.currentPage,
                             pageSize: this.itemsPerPage
                         }                    
-                    });                    
-                
+                    });                   
+                }
                 this.totalPages = Math.ceil(response.data.totalElements / this.itemsPerPage)
                 this.products.push(...response.data.content);
             console.log(response);
@@ -163,6 +172,7 @@ export default {
             console.log('Selected category id:', this.selectedCategoryId);
             console.log('Products before filter:', this.products);
             this.filterByCategory();
+            this.currentPage = 0;
         },
         async filterByCategory(){
             if (this.selectedCategoryId) {
@@ -178,7 +188,6 @@ export default {
         }
     },
     watch: {
-        // selectedCategoryId: 'filterByCategory'
     },
     computed: {
         filteredAndSortedProducts() {

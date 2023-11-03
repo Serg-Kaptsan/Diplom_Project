@@ -57,8 +57,8 @@
             :key="product.id">
         <admin-product-item 
             :product="product"
-            :discount="discount || {}"
-            :category="category || {}"
+            :discount="discount"
+            :category="category"
             @delete="deleteProduct">
         </admin-product-item>
         </div>
