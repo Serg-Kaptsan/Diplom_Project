@@ -188,6 +188,7 @@ export default {
         }
     },
     watch: {
+
     },
     computed: {
         filteredAndSortedProducts() {
@@ -203,11 +204,22 @@ export default {
             return [...filteredProducts].sort((product1, product2) => {
                 const value1 = product1[this.selectedSort];
                 const value2 = product2[this.selectedSort];
-
                 if (typeof value1 === 'number' && typeof value2 === 'number') {
                 return value1 - value2;
                 } else if (typeof value1 === 'string' && typeof value2 === 'string') {
                 return value1.localeCompare(value2);
+                }
+
+                if (this.selectedSort === 'category') {
+                const category1 = product1.category?.name || '';
+                const category2 = product2.category?.name || '';
+                return category1.localeCompare(category2);
+                }
+
+                if (this.selectedSort === 'discount') {
+                const discount1 = product1.discount?.discountPercent || 0;
+                const discount2 = product2.discount?.discountPercent || 0;
+                return discount1 - discount2;
                 }
             });
         },
