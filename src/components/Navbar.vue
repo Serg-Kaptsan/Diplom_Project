@@ -1,7 +1,7 @@
 <template>
     <div class="navbar">
       <div class="home"
-        @click="$router.push('/')">
+        @click="goHome">
         HOME
       </div>
       <div class="navbar__btns">
@@ -34,6 +34,14 @@
 
     },
     methods: {
+      goHome() {
+        if (this.$route.path !== '/') {
+          this.$router.push('/');
+        }
+        else {
+          location.reload();
+        }
+      },
       showDialog() {
         this.$emit('show-dialog');
         }

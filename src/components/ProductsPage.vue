@@ -10,14 +10,25 @@
                 placeholder="Enter the product CODE or name">
             <img src="https://cdn-icons-png.flaticon.com/512/483/483356.png" alt="Search">
         </div>
-        <div class="dropdown">
-            <my-select 
-                v-model="selectedSort"
-                :options="sortOptions"                
-                id="sortButton" class="sort_btn btn btn-light">
-                Sort by
-            </my-select>
-        </div>
+        <select class="sort_btn btn btn-light"
+            v-model="selectedCategoryName"
+            @change="handleCategoryChange"
+            :options="categories"
+            id="categorySelect" >
+            <option value="">Select a category</option>
+            <option 
+                v-for="category in categories"
+                :key="category.id"
+                :value="category.name"
+            >                            
+                {{ category.name }}
+            </option>
+        </select>
+        <my-select class="sort_btn btn btn-light"
+            v-model="selectedSort"
+            :options="sortOptions"                
+            id="sortButton" >
+        </my-select>
     </div>
 
     <!-- <button @click="fetchProducts"> Завантажити продукти</button> -->
@@ -30,7 +41,7 @@
         <product-item 
             :product="product"
             :discount="discount"
-            :category="category">
+            :category="categoryId">
         </product-item>
         </div>
       </div>
@@ -78,8 +89,13 @@ export default {
             products:[],
             isProductsLoading: false,
             selectedSort: '',
+            categories: [],            
+            selectedCategoryName: '',
+            selectedCategoryId: null,
+            categoryIdMap: {},
             searchQuery: '',
             searchResults: [],
+            categoryId: null,
             sortOptions: [
                 {value: 'name', name: 'name'},
                 {value: 'price', name: 'price'},
@@ -108,7 +124,11 @@ export default {
                 console.log(response);
 
                 this.discount = (await axios.get('http://localhost:8081/discount')).data;
-                this.category = (await axios.get('http://localhost:8081/product-categories')).data;
+                this.categories = (await axios.get('http://localhost:8081/product-categories')).data;
+
+                this.categories.forEach(category => {
+                    this.categoryIdMap[category.name] = category.id;
+                });
 
             } catch (e) {
             console.error('Error Fetching:', e);
@@ -136,9 +156,29 @@ export default {
             console.error('Error Fetching:', e);
                 this.hasErrorFetching = true;
             }
-        },      
+        },
+        handleCategoryChange() {
+            this.selectedCategoryId = this.categoryIdMap[this.selectedCategoryName];
+            console.log('Selected category name:', this.selectedCategoryName);
+            console.log('Selected category id:', this.selectedCategoryId);
+            console.log('Products before filter:', this.products);
+            this.filterByCategory();
+        },
+        async filterByCategory(){
+            if (this.selectedCategoryId) {
+                try {
+                    const response = await axios.get(`http://localhost:8081/products/category/${this.selectedCategoryId}`);
+                    this.products = response.data;
+                } catch (error) {
+                    console.error('Error filtering by category:', error);
+                } 
+            }else {
+                this.fetchProducts();
+            }                         
+        }
     },
     watch: {
+        // selectedCategoryId: 'filterByCategory'
     },
     computed: {
         filteredAndSortedProducts() {
@@ -202,6 +242,7 @@ export default {
         position: relative;
         min-width: 325px;
         left: 20px;
+        margin-right: 15px;
     }
     .serch_block input {
         width: 100%;
