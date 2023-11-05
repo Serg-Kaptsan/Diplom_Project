@@ -147,8 +147,8 @@ export default {
                 name: '',
                 description: '',
                 sku: '',
-                price: '',
-                quantity: '',                
+                price: null,
+                quantity: null,                
                 discount: '',
                 discountId: null,
                 discountIdMap: {},
@@ -223,7 +223,6 @@ export default {
                 
                 if (response.status === 200) {
                     this.categories = response.data.map(category => category.name);
-
                     response.data.forEach(category => {
                     this.categoryIdMap[category.name] = category.id;
                     });
@@ -243,16 +242,21 @@ export default {
                 return;
             }
 
-                if (this.selectedDiscountName) {
-                    this.product.discountId = this.selectedDiscountId;
-                } else {
-                    this.product.discountId = null;
-                }
-                if (this.selectedCategoryName) {
-                    this.product.categoryId = this.selectedCategoryId;
-                } else {
-                    this.product.categoryId = null;
-                }
+            this.product.price = parseFloat(this.product.price);
+            if (!isNaN(this.product.price)) {
+                this.product.price = this.product.price.toString().replace(',', '.');
+            }
+
+            if (this.selectedDiscountName) {
+                this.product.discountId = this.selectedDiscountId;
+            } else {
+                this.product.discountId = null;
+            }
+            if (this.selectedCategoryName) {
+                this.product.categoryId = this.selectedCategoryId;
+            } else {
+                this.product.categoryId = null;
+            }
 
             try {
                 const fileInput = this.$refs.image.files[0];
@@ -307,14 +311,15 @@ export default {
                 console.error('Error sending data to /product/', error);
             }
         },
+
         clearForm() {
             this.product = {
                 name: '',
                 description: '',
                 sku: '',
-                price: '',
+                price: null,
                 discountId: null,                
-                quantity: '',
+                quantity: null,
                 photoId: null
                 };
             this.selectedDiscountName = '';
@@ -420,7 +425,7 @@ export default {
         color: white;
         border: none;
         border-radius: 5px;
-        font-size: 13px;
+        font-size: 14px;
         margin: auto 15px;
     }
     .submit {
@@ -456,10 +461,6 @@ export default {
         }
         .form-group input {
             font-size: 14px;
-        }
-        .discount_button{
-            min-width: 124px;
-            padding: 6px;
         }
     }
 </style>

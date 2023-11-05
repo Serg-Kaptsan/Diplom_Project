@@ -39,15 +39,26 @@
                 placeholder="Enter the product CODE or name">
             <img src="https://cdn-icons-png.flaticon.com/512/483/483356.png" alt="Search">
         </div>
-        <div class="dropdown">
-            <my-select 
-                v-model="selectedSort"
-                :options="sortOptions"                
-                id="sortButton" 
-                class="sort_btn btn btn-light">
-                Sort by
-            </my-select>
-        </div>
+        <select class="sort_btn btn btn-light"
+            v-model="selectedCategoryName"
+            @change="handleCategoryChange"
+            :options="categories"
+            id="categorySelect" >
+                <option value="">Select a category</option>
+                <option 
+                    v-for="category in categories"
+                    :key="category.id"
+                    :value="category.name"
+                >                            
+                    {{ category.name }}
+                </option>
+        </select>
+        <my-select class="sort_btn btn btn-light"
+            v-model="selectedSort"
+            :options="sortOptions"                
+            id="sortButton" >
+            Sort by
+        </my-select>
     </div>
 
     <div class="products-grid" id="productsList">
@@ -58,7 +69,7 @@
         <admin-product-item 
             :product="product"
             :discount="discount"
-            :category="category"
+            :category="categories"
             @delete="deleteProduct">
         </admin-product-item>
         </div>
@@ -70,7 +81,7 @@
             Nothing was found for your search query
         </div>
     </div>
-    <div v-intersection="loadMorePages" class="observer"></div>
+    <div v-intersection="() => loadMorePages(selectedCategoryId)" class="observer"> </div>
 </template>
 
 <script>
@@ -90,24 +101,27 @@ export default {
             currentPage: 0,
             itemsPerPage: 10,
             totalPages: 0,
-            products:[],
             isProductsLoading: false,
-            selectedSort: '',
+            selectedSort: '',            
+            products:[],
+            categories: [],
+            selectedCategoryName: '',
+            selectedCategoryId: null,
+            categoryIdMap: {},
+            categoryId: null,
             searchQuery: '',
             searchResults: [],
             sortOptions: [
                 {value: 'sku', name: 'SKU'},
                 {value: 'name', name: 'name'},
                 {value: 'id', name: 'code'},
-                {value: 'category', name: 'category'},              
+                {value: 'category', name: 'category'},
                 {value: 'price', name: 'price'},
                 {value: 'quantity', name: 'quantity'},
                 {value: 'discount', name: 'discount'},
                 {value: 'createdAt', name: 'creation date'},
                 {value: 'modifiedAt', name: 'modification date'},
             ],
-            discount: null,
-            category: null,
         }
     },
 
@@ -125,11 +139,15 @@ export default {
                 this.products = response.data.content;
 
                 this.discount = (await axios.get('http://localhost:8081/discount')).data;
-                this.category = (await axios.get('http://localhost:8081/product-categories')).data;
+                this.categories = (await axios.get('http://localhost:8081/product-categories')).data;
 
-    console.log(this.products);
-    console.log(this.discount);
-    console.log(this.category);
+                this.categories.forEach(category => {
+                    this.categoryIdMap[category.name] = category.id;
+                });
+
+console.log('Category data:', this.category);
+console.log('Categories:', this.categories);
+console.log('CategoryIdMap:', this.categoryIdMap);
             } catch (e) {
     console.error('Error Fetching:', e);
                 this.hasErrorFetching = true;
@@ -137,16 +155,26 @@ export default {
                 this.isProductsLoading = false;
             }
         },
-        async loadMorePages() {
+        async loadMorePages(selectedCategoryId) {
             try {
                 if (!this.isProductsLoading) {
                     this.currentPage += 1;
-                    const response = await axios.get('http://localhost:8081/products', {
+                    let response;
+                    if (selectedCategoryId) {
+                        response = await axios.get(`http://localhost:8081/products/category/${selectedCategoryId}`, {
+                        params: {
+                            page: this.currentPage,
+                            pageSize: this.itemsPerPage
+                        }
+                    });
+                } else {
+                   response = await axios.get('http://localhost:8081/products', {
                         params: {
                             page: this.currentPage,
                             pageSize: this.itemsPerPage
                         }                    
-                    });                    
+                    });                   
+                }                   
                 
                 this.totalPages = Math.ceil(response.data.totalElements / this.itemsPerPage)
                 this.products.push(...response.data.content);
@@ -157,7 +185,26 @@ export default {
                 this.hasErrorFetching = true;
             }
         },
-
+        handleCategoryChange() {
+            this.selectedCategoryId = this.categoryIdMap[this.selectedCategoryName];
+            console.log('Selected category name:', this.selectedCategoryName);
+            console.log('Selected category id:', this.selectedCategoryId);
+            console.log('Products before filter:', this.products);
+            this.filterByCategory();
+            this.currentPage = 0;
+        },
+        async filterByCategory(){
+            if (this.selectedCategoryId) {
+                try {
+                    const response = await axios.get(`http://localhost:8081/products/category/${this.selectedCategoryId}`);
+                    this.products = response.data;
+                } catch (error) {
+                    console.error('Error filtering by category:', error);
+                } 
+            }else {
+                this.fetchProducts();
+            }                         
+        },
         async deleteProduct(productToDelete) {
             try {
                 await axios.delete(`http://localhost:8081/product/${productToDelete.id}`, {
@@ -179,7 +226,7 @@ export default {
             if (!Array.isArray(this.products) || this.products.length === 0) {
                 return [];
             }
-                const filteredProducts = this.products.filter(product => {
+            const filteredProducts = this.products.filter(product => {
                 const nameMatches = product.name.toLowerCase().includes(this.searchQuery.toLowerCase());
                 const codeMatches = product.id.toString().includes(this.searchQuery.toString());
                 return nameMatches || codeMatches;
@@ -188,12 +235,23 @@ export default {
             return [...filteredProducts].sort((product1, product2) => {
                 const value1 = product1[this.selectedSort];
                 const value2 = product2[this.selectedSort];
-
                 if (typeof value1 === 'number' && typeof value2 === 'number') {
                 return value1 - value2;
                 } else if (typeof value1 === 'string' && typeof value2 === 'string') {
                 return value1.localeCompare(value2);
                 }
+                
+                if (this.selectedSort === 'category') {
+                const category1 = product1.category?.name || '';
+                const category2 = product2.category?.name || '';
+                return category1.localeCompare(category2);
+                }
+
+                if (this.selectedSort === 'discount') {
+                const discount1 = product1.discount?.discountPercent || 0;
+                const discount2 = product2.discount?.discountPercent || 0;
+                return discount1 - discount2;
+                }    
             });
         },
 

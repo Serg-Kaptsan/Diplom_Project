@@ -15,14 +15,14 @@
             @change="handleCategoryChange"
             :options="categories"
             id="categorySelect" >
-            <option value="">Select a category</option>
-            <option 
-                v-for="category in categories"
-                :key="category.id"
-                :value="category.name"
-            >                            
-                {{ category.name }}
-            </option>
+                <option value="">Select a category</option>
+                <option 
+                    v-for="category in categories"
+                    :key="category.id"
+                    :value="category.name"
+                >                            
+                    {{ category.name }}
+                </option>
         </select>
         <my-select class="sort_btn btn btn-light"
             v-model="selectedSort"
@@ -36,7 +36,7 @@
     <div class="products-grid" id="productsList">
       <div v-if="!isProductsLoading" class="card-container" >
         <div 
-            v-for="(product) in filteredAndSortedProducts"
+            v-for="product in filteredAndSortedProducts"
             :key="product.id">
         <product-item 
             :product="product"
@@ -86,16 +86,16 @@ export default {
             currentPage: 0,
             // itemsPerPage: 7,
             totalPages: 0,
-            products:[],
             isProductsLoading: false,
-            selectedSort: '',
-            categories: [],            
+            selectedSort: '',            
+            products:[],
+            categories: [],     
             selectedCategoryName: '',
             selectedCategoryId: null,
             categoryIdMap: {},
+            categoryId: null,            
             searchQuery: '',
             searchResults: [],
-            categoryId: null,
             sortOptions: [
                 {value: 'name', name: 'name'},
                 {value: 'price', name: 'price'},
@@ -188,7 +188,6 @@ export default {
         }
     },
     watch: {
-
     },
     computed: {
         filteredAndSortedProducts() {
