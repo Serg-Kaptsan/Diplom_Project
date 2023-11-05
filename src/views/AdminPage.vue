@@ -3,7 +3,7 @@
         <h1> ADMIN PAGE </h1>
         <div class="menu">
             <div class="btn btn-dark" 
-                @click="$router.push('/admin')">
+                @click="goAdmin">
                 Products
             </div>
             <div class="btn btn-dark" 
@@ -126,6 +126,14 @@ export default {
     },
 
     methods:{
+        goAdmin() {
+            if (this.$route.path !== '/admin') {
+                this.$router.push('/admin');
+            }
+            else {
+                location.reload();
+            }
+        },
         async fetchProducts() {
             try {
                 this.isProductsLoading = true;
