@@ -20,7 +20,8 @@ const routes = [
   {
     path: '/admin',
     name: 'admin',
-    component: () => import('@/views/AdminPage.vue')
+    props: true,    
+    component: () => import('@/views/AdminPage.vue'),
   },
   {
     path: '/product/:id',
@@ -40,14 +41,22 @@ const routes = [
     component: () => import('@/components/AddProduct.vue')
   },
   {
-    path: '/edit-product',
+    path: '/edit-product/:id',
     name: 'edit-product',
-    component: () => import('@/components/EditProduct.vue')
+    props: true,    
+    component: () => import('@/components/EditProduct.vue'),
   },
   {
     path: '/discounts',
     name: 'discounts',
+    props: true,
     component: () => import('@/components/DiscountsList.vue')
+  },
+  {
+    path: '/discount/:id',
+    name: 'discount',
+    props: true,
+    component: () => import('@/components/DiscountIdCard.vue')
   },
   {
     path: '/categories',
@@ -55,14 +64,32 @@ const routes = [
     component: () => import('@/components/CategoriesList.vue')
   },
   {
+    path: '/category/:id',
+    name: 'category',
+    props: true,
+    component: () => import('@/components/CategoryIdCard.vue')
+  },
+  {
     path: '/users',
     name: 'users',
     component: () => import ('@/components/UsersList.vue')
-  },  
+  },
+  {
+    path: '/user/:id',
+    name: 'user',
+    props: true,
+    component: () => import ('@/components/UserIdCard.vue')
+  }, 
   {
     path: '/orders',
     name: 'orders',
     component: () => import('@/components/OrdersList.vue')
+  },
+  {
+    path: '/order/:id',
+    name: 'order',
+    props: true,
+    component: () => import('@/components/OrderIdCard.vue')
   },
 ]
 

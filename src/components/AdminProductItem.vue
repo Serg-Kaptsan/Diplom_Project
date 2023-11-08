@@ -34,6 +34,7 @@
             <p class="empty-line"></p>
             <p class="card-text"> <strong> discount name: </strong> {{ productDiscount.name }} 
                 <img 
+                    @click="$router.push('discount')"
                     title="Open discount card"
                     src="https://cdn-icons-png.flaticon.com/512/483/483356.png"
                     alt="Search">    
@@ -42,9 +43,9 @@
             <p class="card-text"> <strong> photoId: </strong> {{ product.photoId }} </p>
             <div class="button-block">
                 <button class="btn btn-secondary"
-                    @click="$router.push('/edit-product')"
+                    @click="viewEdit"
                 > 
-                    Сhange data </button>
+                    Edit data </button>
                 <button class="btn btn-danger"
                     @click="$emit('delete', product)"
                 >
@@ -91,6 +92,9 @@ export default {
     methods: {
         viewProduct() {
             this.$router.push({ name: 'product', params: { id: this.product.id } });
+        },
+        viewEdit() {
+            this.$router.push({name: 'edit-product', params: {id: this.product.id} });
         },
 
         openLargeImage() {

@@ -8,8 +8,7 @@
             </button>
         </div>
 
-        <form class="edit-form" id="edition">
-            
+        <form class="edit-form" id="edition">            
             <div class="section mb-4" id="photo_box">
                 <div>
                     <label for="image" class="form-label">Select photo:</label>
@@ -133,11 +132,11 @@
 
 <script>
 import axios from 'axios';
-import MySelect from '@/components/UI/MySelect';
+// import MySelect from '@/components/UI/MySelect';
 
 export default {
     component:{
-        MySelect,
+        // MySelect,
     },
     
     data() {
