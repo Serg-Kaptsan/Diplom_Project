@@ -30,7 +30,7 @@
                     >
                 </div>
             </div>
-            <div class="section mb-4" id="discount_box">
+            <div class="select mb-4" id="discount_box">
                 <div>
                     <label for="discount" class="form-label">Discount:</label>
                     <select class="form-group main_input"
@@ -50,7 +50,7 @@
                     </select>
                 </div>
             </div>
-            <div class="section mb-4" id="category_box">
+            <div class="select mb-4" id="category_box">
                 <div>
                     <label for="category" class="form-label">Category:</label>
                     <select class="form-group main_input"
@@ -349,7 +349,6 @@ export default {
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        min-height: 100vh;
         padding: 20px;
         box-sizing: border-box;
         overflow: auto;
@@ -383,7 +382,15 @@ export default {
         font-weight: bold;
         margin-bottom: 5px;
     }
-
+    .select{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .select label{
+        text-align: left;
+        width: 102px;
+    }
     .main_input {
         width: 100%;
         padding: 5px;

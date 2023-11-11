@@ -71,10 +71,15 @@
       border: none;
       margin-left: 20px;      
     }
-
+    @media only screen and (max-width: 768px){
+      .navbar{
+        height: 40px;
+      }
+    }
     @media only screen and (max-width: 576px) {
       .navbar{
-        font-size: 14px;    
+        font-size: 13px;
+        height: 27px;  
       }
       button {      
         margin-left: 10px;

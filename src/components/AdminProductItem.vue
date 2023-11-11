@@ -28,25 +28,29 @@
             <!-- <p class="card-title"> <strong> Name: {{ product.name }} </strong> </p>
             <p class="card-text"> <strong> ID: </strong> {{ product.id }} </p> -->
             <h6 class="card-title"> Additional information </h6>
-            <p class="card-text"> <strong> created: </strong> {{ product.createdAt }} </p>
-            <p class="card-text"> <strong> modified: </strong> {{ product.modifiedAt }} </p>
-            <p class="card-text"> <strong> deleted: </strong> {{ product.deletedAt }} </p>
-            <p class="empty-line"></p>
-            <p class="card-text"> <strong> discount name: </strong> {{ productDiscount.name }} 
+            <div class="special">
+                <p class="card-text ">
+                    <strong> discount name: </strong> {{ productDiscount.name }}
+                </p>                
                 <img 
                     @click="$router.push('discount')"
                     title="Open discount card"
                     src="https://cdn-icons-png.flaticon.com/512/483/483356.png"
-                    alt="Search">    
-            </p>
+                    alt="Search">                   
+            </div>
+            <p class="card-text"> <strong> photoId: </strong> {{ product.photoId }} </p> 
+            <p class="empty-line"></p>                                   
+            <p class="card-text"> <strong> created: </strong> {{ product.createdAt }} </p>
+            <p class="card-text"> <strong> modified: </strong> {{ product.modifiedAt }} </p>
+            <!-- <p class="card-text"> <strong> deleted: </strong> {{ product.deletedAt }} </p> -->
             <!-- <p class="card-text"> <strong> discountId: </strong> {{ discount.id }}</p> -->
-            <p class="card-text"> <strong> photoId: </strong> {{ product.photoId }} </p>
+
             <div class="button-block">
-                <button class="btn btn-secondary"
+                <button class="btn btn-secondary inside-button"
                     @click="viewEdit"
                 > 
                     Edit data </button>
-                <button class="btn btn-danger"
+                <button class="btn btn-danger inside-button"
                     @click="$emit('delete', product)"
                 >
                     Delete product
@@ -114,14 +118,14 @@ export default {
         flex-direction: row;
         flex-wrap: nowrap;
         width: 100%;
-        height: 305px;
+        max-height: 100%;
         margin: 10px auto;
         padding: 10px;
         border: 1px solid rgb(48, 48, 48);
         border-radius: 0;
     }
     h6, h5{
-        margin-bottom: 5px;
+        margin-bottom: 10px;
         text-align: center;
         font-weight: 700;
     }
@@ -131,8 +135,19 @@ export default {
     p:not(:last-child){
         margin-bottom: 5px;            
     }
-    .empty-line{
+    .special{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .special img{
+        margin: auto;
+        width: 14px;
         height: 14px;
+        cursor: pointer;
+    }
+    .empty-line{
+        height: 10px;
     }
     span {
         font-size: 12px;        
@@ -148,21 +163,14 @@ export default {
         max-height: 270px;
         padding: 2px;
     }
-    .card-body, .inform-block {
-        width: 40%;
-        max-height: 300px;
+    .card-body {
+        width: 50%;
         padding: 10px;
     }
-    .card-text img{
-        float: right;
-        width: 14px;
-        height: 14px;
-        cursor: pointer;
-        margin-right: 15px;
-    }
     .inform-block {
+        position: relative;        
         width: 30%;
-        position: relative;
+        padding: 10px;
     }
     .button-block{
         position: absolute;
@@ -186,5 +194,55 @@ export default {
         margin: 50px auto auto;
         max-width: 90%;
         max-height: 90%;
+    }
+    @media only screen and (max-width: 1200px){
+        .inside-button{
+            font-size: 14px;
+            margin-left: 10px;
+        }
+    }
+    @media only screen and (max-width: 960px){
+        h5{
+            font-size: 18px;
+        }
+        h6{
+            font-size: 16px;
+        }
+        .card-body{
+            padding: 5px 10px;
+        }
+        .inform-block{
+            padding: 5px 10px;        
+        }
+        .button-block{    
+            bottom: -1px;
+        }
+        .inside-button{
+            font-size: 12px;
+            margin-left: 5px;
+        }
+    }
+    @media only screen and (max-width: 768px) {
+        .card{
+            flex-wrap: wrap;
+        }
+        .card-img-block{
+            width: 30%;
+        }
+        h5{
+            font-size: 16px;
+        }
+        .card-body{
+            width: 70%;
+            max-height: 100%;
+        }
+        .inform-block{
+            width: 65%;
+        }
+        .button-block{
+            bottom: 10px;
+            right: -225px;
+            left: 270px;
+        }
     }
 </style>
