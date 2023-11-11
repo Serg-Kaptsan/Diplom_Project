@@ -391,7 +391,7 @@ console.log('CategoryIdMap:', this.categoryIdMap);
           margin-right: 10px;
         }
         .menu *{
-        margin-left: 13px;
+        margin-left: 12px;
     }
     }
     @media only screen and (max-width: 960px) {
