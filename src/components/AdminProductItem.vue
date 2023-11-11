@@ -245,4 +245,17 @@ export default {
             left: 270px;
         }
     }
+    @media only screen and (max-width: 575px){
+        .card-img-block{
+            width: 100%;
+        }
+        .inform-block{
+            width: 100%;
+        }
+        .button-block{
+            position: static;
+            justify-content: space-between;
+            margin: auto 30px;
+        }
+    }
 </style>
