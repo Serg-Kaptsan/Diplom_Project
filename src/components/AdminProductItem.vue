@@ -47,12 +47,10 @@
 
             <div class="button-block">
                 <button class="btn btn-secondary inside-button"
-                    @click="viewEdit"
-                > 
+                    @click="viewEdit"> 
                     Edit data </button>
                 <button class="btn btn-danger inside-button delete--button"
-                    @click="$emit('delete', product)"
-                >
+                    @click="$emit('delete', product)" >
                     Delete product
                 </button>
             </div>

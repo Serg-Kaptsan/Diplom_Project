@@ -32,10 +32,10 @@
         <div 
             v-for="user in filteredAndSortedUsers"
             :key="user.id">
-          <UserItem 
+          <user-item 
               :user="user"
               @delete="deleteUser">
-          </UserItem>
+          </user-item>
         </div>
       </div>
       <div v-else class="temporary">Loading</div>
