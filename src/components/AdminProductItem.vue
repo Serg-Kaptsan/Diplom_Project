@@ -7,7 +7,7 @@
             <img 
                 :src="largeImageSrc" :alt="product.name" 
                 @click="closeLargeImage" />
-            </div>
+        </div>
         <div class="card-img-block">
             <img class="card-img-top" 
                 :src="'data:image/jpeg;base64,' + product.imageData" :alt="product.name" 
@@ -50,7 +50,7 @@
                     @click="viewEdit"
                 > 
                     Edit data </button>
-                <button class="btn btn-danger inside-button"
+                <button class="btn btn-danger inside-button delete--button"
                     @click="$emit('delete', product)"
                 >
                     Delete product

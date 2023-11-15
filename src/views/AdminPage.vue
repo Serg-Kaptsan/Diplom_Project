@@ -1,5 +1,5 @@
 <template>
-    <admin-menu></admin-menu>
+    <admin-menu> </admin-menu>
     <div class="second-line">
         <h2>PRODUCTS LIST</h2>
         <div class="add-button-block">
@@ -24,7 +24,7 @@
             @change="handleCategoryChange"
             :options="categories"
             id="categorySelect" >
-                <option value="">Select a category</option>
+                <option value="">Select a Category</option>
                 <option 
                     v-for="category in categories"
                     :key="category.id"
@@ -208,7 +208,9 @@ console.log('CategoryIdMap:', this.categoryIdMap);
             if (!Array.isArray(this.products) || this.products.length === 0) {
                 return [];
             }
-            const filteredProducts = this.products.filter(product => {
+                const allProducts = this.currentPage > 0 ? this.products : this.products.slice(0, this.itemsPerPage);
+
+                const filteredProducts = allProducts.filter(product => {
                 const nameMatches = product.name.toLowerCase().includes(this.searchQuery.toLowerCase());
                 const codeMatches = product.id.toString().includes(this.searchQuery.toString());
                 return nameMatches || codeMatches;
@@ -237,9 +239,9 @@ console.log('CategoryIdMap:', this.categoryIdMap);
             });
         },
 
-        handleSearchResults(results) {
-            this.searchResults = results;
-        },  
+        // handleSearchResults(results) {
+        //     this.searchResults = results;
+        // },  
     },
 
     mounted() {
@@ -398,7 +400,7 @@ console.log('CategoryIdMap:', this.categoryIdMap);
         margin-top: 10px;
     }
     .observer{
-        height: 15px;
+        height: 2px;
     }
     .temporary{
         font-weight: 500;

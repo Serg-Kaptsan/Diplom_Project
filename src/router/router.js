@@ -1,13 +1,10 @@
-import ProductsPage from "@/components/ProductsPage";
-import ProductIdPage from "@/views/ProductIdPage";
-import LargeImag from "@/components/LargeImag";
 import { createRouter, createWebHistory } from 'vue-router'
 
 const routes = [
   {
     path: '/',
     name: 'home',
-    component: ProductsPage
+    component: () => import('@/components/ProductsPage')
   },
   {
     path: '/about',
@@ -27,70 +24,79 @@ const routes = [
     path: '/product/:id',
     name: 'product',
     props: true, 
-    component: ProductIdPage,
-  },
-  {
-    path: '/image/:imageData',
-    name: 'image',
-    props: true, 
-    component: LargeImag,
+    component: () => import('@/views/ProductIdPage')
   },
     {
-    path: '/add-product',
-    name: 'add-product',
-    component: () => import('@/components/AddProduct.vue')
-  },
-  {
-    path: '/edit-product/:id',
-    name: 'edit-product',
-    props: true,    
-    component: () => import('@/components/EditProduct.vue'),
-  },
+      path: '/image/:imageData',
+      name: 'image',
+      props: true, 
+      component: () => import('@/components/LargeImag')
+    },
+      {
+      path: '/add-product',
+      name: 'add-product',
+      component: () => import('@/components/AddProduct.vue')
+    },
+    {
+      path: '/edit-product/:id',
+      name: 'edit-product',
+      props: true,    
+      component: () => import('@/components/EditProduct.vue'),
+    },
+
   {
     path: '/discounts',
     name: 'discounts',
     props: true,
-    component: () => import('@/components/DiscountsList.vue')
+    component: () => import('@/views/DiscountsList.vue')
   },
-  {
-    path: '/discount/:id',
-    name: 'discount',
-    props: true,
-    component: () => import('@/components/DiscountIdCard.vue')
-  },
+    {
+      path: '/discount/:id',
+      name: 'discount',
+      props: true,
+      component: () => import('@/components/DiscountIdCard.vue')
+    },
+
   {
     path: '/categories',
     name: 'categories',
-    component: () => import('@/components/CategoriesList.vue')
+    component: () => import('@/views/CategoriesList.vue')
   },
-  {
-    path: '/category/:id',
-    name: 'category',
-    props: true,
-    component: () => import('@/components/CategoryIdCard.vue')
-  },
+    {
+      path: '/category/:id',
+      name: 'category',
+      props: true,
+      component: () => import('@/components/AddCategory.vue')
+    },
+
   {
     path: '/users',
     name: 'users',
-    component: () => import ('@/components/UsersList.vue')
+    component: () => import ('@/views/UsersList.vue')
   },
-  {
-    path: '/user/:id',
-    name: 'user',
-    props: true,
-    component: () => import ('@/components/UserIdCard.vue')
-  }, 
+    {
+      path: '/user/:id',
+      name: 'user',
+      props: true,
+      component: () => import ('@/components/EditUser.vue')
+    },
+    {
+      path: '/add-user',
+      name: 'add-user',
+      component: () => import ('@/components/AddUser.vue')
+    },
+
   {
     path: '/orders',
     name: 'orders',
-    component: () => import('@/components/OrdersList.vue')
+    component: () => import('@/views/OrdersList.vue')
   },
-  {
-    path: '/order/:id',
-    name: 'order',
-    props: true,
-    component: () => import('@/components/OrderIdCard.vue')
-  },
+    {
+      path: '/order/:id',
+      name: 'order',
+      props: true,
+      component: () => import('@/components/OrderIdCard.vue')
+    },
 ]
 
 const router = createRouter({

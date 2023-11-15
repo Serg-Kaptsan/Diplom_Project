@@ -53,8 +53,7 @@ export default {
 
 <style scoped >
     .card {
-        /* width: 200px;
-        height: 100%; */
+        height: 100%;
         padding: 10px;
         border: 1px solid rgb(233,233,233);
         border-radius: 0;

@@ -29,6 +29,12 @@ main{
   font-family: Arial, sans-serif;
   padding: 24px;
 }
+/* .inside-button{
+  background-color: gray;
+}
+.delete--button{
+  background-color: red;
+} */
 @media only screen and (max-width: 1280px) {
   main {
     padding-left: 20px;

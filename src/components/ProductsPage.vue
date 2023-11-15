@@ -84,7 +84,7 @@ export default {
     data(){
         return {
             currentPage: 0,
-            // itemsPerPage: 7,
+            itemsPerPage: 14,
             totalPages: 0,
             isProductsLoading: false,
             selectedSort: '',            
@@ -153,7 +153,7 @@ export default {
                    response = await axios.get('http://localhost:8081/products', {
                         params: {
                             page: this.currentPage,
-                            pageSize: this.itemsPerPage
+                            // pageSize: this.itemsPerPage
                         }                    
                     });                   
                 }
@@ -194,7 +194,9 @@ export default {
             if (!Array.isArray(this.products) || this.products.length === 0) {
                 return [];
             }
-            const filteredProducts = this.products.filter(product => {
+                const allProducts = this.currentPage > 0 ? this.products : this.products.slice(0, this.itemsPerPage);
+
+                const filteredProducts = allProducts.filter(product => {
                 const nameMatches = product.name.toLowerCase().includes(this.searchQuery.toLowerCase());
                 const codeMatches = product.id.toString().includes(this.searchQuery.toString());
                 return nameMatches || codeMatches;
@@ -238,10 +240,10 @@ export default {
 <style scoped>
     .card-container{
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
         grid-gap: 2px;
         margin-top: 15px;
-        margin-bottom: 15px;        
+        margin-bottom: 15px;
     }
     h1 {
         text-align: center;
@@ -343,8 +345,7 @@ export default {
         margin-top: 10px;
     }
     .observer{
-        height: 15px;
-        background: green;
+        height: 2px;
     }
     .temporary{
         font-weight: 500;

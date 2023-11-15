@@ -1,11 +1,9 @@
-<template>
+<template> 
+       <admin-menu> </admin-menu>      
+
     <div class="container">
         <div class="header">
-            <h1>Create product</h1>
-            <button class="main_button" 
-                @click="$router.push ('/admin')" >
-                Back to Products
-            </button>
+            <h2>Create product</h2>
         </div>
 
         <form class="edit-form" id="edition">            
@@ -30,7 +28,7 @@
                     >
                 </div>
             </div>
-            <div class="select mb-4" id="discount_box">
+            <div class="select mb-3" id="discount_box">
                 <div>
                     <label for="discount" class="form-label">Discount:</label>
                     <select class="form-group main_input"
@@ -50,7 +48,7 @@
                     </select>
                 </div>
             </div>
-            <div class="select mb-4" id="category_box">
+            <div class="select mb-3" id="category_box">
                 <div>
                     <label for="category" class="form-label">Category:</label>
                     <select class="form-group main_input"
@@ -132,10 +130,12 @@
 
 <script>
 import axios from 'axios';
+import AdminMenu from '@/components/UI/AdminMenu';
 // import MySelect from '@/components/UI/MySelect';
 
 export default {
-    component:{
+    components:{
+        AdminMenu,
         // MySelect,
     },
     
@@ -261,11 +261,13 @@ export default {
                 const fileInput = this.$refs.image.files[0];
                 let photoId = null;
 
-                if (fileInput) {
+                if (!fileInput) {
+                    alert ('You cannot create a product without a photo.');
+                    } else {
                     const formData = new FormData();
                     formData.append('image', fileInput);
 
-                    const uploadResponse = await axios.post('http://localhost:8081/upload', formData, {
+                    const uploadResponse = await axios.post('http://localhost:8081/photos/upload', formData, {
                         headers: {
                             'Authorization': `Bearer ${this.accessToken}`,
                             'Content-Type': 'multipart/form-data',
@@ -337,36 +339,36 @@ export default {
 </script>
 
 <style scoped>
-    .edit-form {
-        width: 100%;
-        max-width: 550px;            
-        border: 1px solid black;
-        padding: 20px;
-    }
-
     .container {
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        padding: 20px;
+        padding: 5px;
         box-sizing: border-box;
         overflow: auto;
     }
     .header {
         width: 100%;
-        max-width: 625px;
-        display: flex;
-        justify-content: space-between;
         margin-bottom: 10px;
-        margin-top: 20px;
+        margin-top: 0;
+        text-align: center;
     }
-    .header h1 {
-        margin: 0;
-        padding: 10px;
-        word-wrap: break-word;
+    .main_button {
+        padding: 8px 12px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 14px;
+        margin: auto 15px;
     }
-
+    .edit-form {
+        width: 100%;
+        max-width: 550px;            
+        border: 1px solid black;
+        padding: 20px;
+    }       
     .section {
         display: flex;
         text-align: start;
@@ -425,15 +427,6 @@ export default {
         margin-left: 5;
         margin-top: -15px;
     }
-    .main_button {
-        padding: 8px 12px;
-        background-color: #4CAF50;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        font-size: 14px;
-        margin: auto 15px;
-    }
     .submit {
         float: right;
     }
@@ -452,14 +445,14 @@ export default {
     }
 
     @media only screen and (max-width: 768px) {
-        .header h1 {
-            font-size: 24px;
+        .header h2 {
+            font-size: 20px;
         }
     }
 
     @media only screen and (max-width: 576px) {
-        .header h1 {
-            font-size: 20px;
+        .header h2 {
+            font-size: 18px;
         }
         .form-group button,
         .form-group textarea {
