@@ -1,200 +1,173 @@
 <template>
-    <div class="container">
-        <div class="header">
-            <h1>Edit product</h1>
-            <button class="main_button" 
-                @click="$router.push ('/admin')" >
-                Back to Products
-            </button>
-        </div>
-
-        <form class="edit-form" id="edition">
-            <div class="section mb-4" id="photo_box">
-                <div>
-                    <label for="image" class="form-label">Change photo:</label>
-                    <a :href="imageUrl" target="_blank">{{ fileName }}</a>
-                    <input class="form-group main_input"
-                        type="file"
-                        id="image"
-                        ref="image" 
-                        accept=".jpg, .jpeg, .png" 
-                        data-placeholder="Product photo"
-                        @change="handleImageChange"
-                    >
-                </div>
-                <div>
-                    <img
-                        id="image-preview"
-                        :src="imagePreview"
-                        alt="Preview"
-                        v-if="imagePreview"
-                    >
-                </div>
-                <button class="btn btn-secondary upload">
-                    Upload
-                </button>
-            </div>
-            <div class="section mb-4" id="discount_box">
-                <div>
-                    <label for="discount" class="form-label">Discount:</label>
-                    <select class="form-group main_input"
-                        id="discount"
-                        v-model="selectedDiscountName"
-                        @change="handleDiscountChange"
-                        @focus="loadDiscounts"
-                    >
-                        <option value="">Select a discount</option>
-                        <option 
-                            v-for="discount in discounts"
-                            :key="discount.id"
-                            :value="discount"
-                        >                            
-                            {{ discount }}
-                        </option>
-                    </select>
-                </div>
-                <button class="btn btn-secondary discount_button">
-                    Save discount
-                </button>
-            </div>
-
-            <div class="section mb-4" id="category_box">
-                <div>
-                    <label for="category" class="form-label">Category:</label>
-                    <select class="form-group main_input"
-                        id="category"
-                        v-model="selectedCategoryName"
-                        @change="handleCategoryChange"
-                        @focus="loadCategory"
-                    >
-                        <option value="">Select a category</option>
-                        <option 
-                            v-for="category in categories"
-                            :key="category.id"
-                            :value="category"
-                        >                            
-                            {{ category }}
-                        </option>
-                    </select>
-                </div>
-                <button class="btn btn-secondary category_button">
-                    Save category
-                </button>
-            </div>
-
-            <div class="information">
-                <input class="form-group product_name"
-                    type="text"
-                    id="name"
-                    v-focus
-                    v-model="product.name"    
-                    placeholder="Enter Product Name" >
-
-                <textarea class="form-group description" wrap="hard"
-                    id="description"
-                    v-model="product.description"
-                    placeholder="Enter Product Description"
-                    autocomplete="on">
-                    @input="checkDescriptionLength">
-                </textarea>
-                    <p class="form-text" id="remain">
-                        Remaining characters: {{ remainingCharacters }}
-                    </p>
-                <div class="information-input">
-                    <label for="sku" class="form-label"> SKU: </label>                    
-                    <input class="form-group sku"
-                        type="text"
-                        id="sku"
-                        v-model="product.sku"> 
-                </div>
-                <div class="information-input">
-                    <label for="price" class="form-label"> Price: </label>                    
-                    <input class="form-group price"
-                        type="number"
-                        id="price"
-                        v-model="product.price"> 
-                </div>
-                <div class="information-input">
-                    <label for="quantity" class="form-label"> Quantity: </label>                    
-                    <input class="form-group quantity"
-                        type="number"
-                        id="quantity"
-                        v-model="product.quantity">
-                </div>
-            </div>
-
-            <div class="button_group">
-                <button class="main_button cancel"
-                    type="button" 
-                    @click="createProduct"
-                    v-if="buttonVisible">
-                    Cancel changes
-                </button>
-                <button class="main_button submit"
-                    type="button" 
-                    @click="saveChanges"
-                    v-if="buttonVisible">
-                    Save changes
-                </button>
-                <div class="create_Success"
-                    id="editSuccess"
-                    v-if="editSuccess"
-                    @click="viewProduct">
-                    Data edited successfully.
-                    <br>Click for back to products.
-                </div>                
-            </div>
-        </form>
+  <admin-menu> </admin-menu>
+  <div class="container">
+    <div class="header">
+      <h2>Edit product</h2>
     </div>
+
+    <form class="edit-form" id="edition">   
+      <div class="top-section">
+        <div class="left-box">
+
+          <div class="section mb-3" id="discount_box">
+            <label for="discount" class="form-label">Discount:</label>
+            <select class="form-group main_input"
+              id="discount"
+              v-model="selectedDiscountName"
+              @change="handleDiscountChange"
+              @focus="loadDiscounts"
+            >
+              <option value="">Select a discount</option>
+              <option 
+                v-for="discount in discounts"
+                :key="discount.id"
+                :value="discount"
+              > 
+                {{ discount }}
+              </option>
+            </select>
+          </div>
+
+          <div class="section mb-3" id="category_box">
+            <label for="category" class="form-label">Category:</label>
+            <select class="form-group main_input"
+              id="category"
+              v-model="selectedCategoryName"
+              @change="handleCategoryChange"
+              @focus="loadCategory"
+            >
+              <option value="">Select a category</option>
+              <option 
+                v-for="category in categories"
+                :key="category.id"
+                :value="category"
+              >                            
+                {{ category }}
+              </option>
+            </select>
+          </div>
+        </div>            
+          <img
+            id="image-preview"
+            :src="'data:image/jpeg;base64,' + product.imageData"
+            :alt="product.name"
+          >
+      </div>
+        
+      <div class="information">
+        <input class="form-group product_name"
+            type="text"
+            id="name"
+            v-focus
+            v-model="product.name"
+            placeholder="Enter Product Name" >
+
+          <textarea class="form-group description" wrap="hard"
+            id="description"
+            v-model="product.description"
+            placeholder="Enter Product Description"
+            autocomplete="on">
+            @input="checkDescriptionLength">
+          </textarea>
+            <p class="form-text" id="remain">
+                Remaining characters: {{ remainingCharacters }}
+            </p>
+          <div class="information-input">
+            <label for="sku" class="form-label"> SKU: </label>                    
+            <input class="form-group sku"
+              type="text"
+              id="sku"
+              v-model="product.sku"> 
+          </div>
+          <div class="information-input">
+            <label for="price" class="form-label"> Price: </label>                    
+            <input class="form-group price"
+              type="number"
+              id="price"
+              v-model="product.price"> 
+          </div>
+          <div class="information-input">
+            <label for="quantity" class="form-label"> Quantity: </label>                    
+            <input class="form-group quantity"
+              type="number"
+              id="quantity"
+              v-model="product.quantity">
+          </div>
+      </div>
+
+      <div class="button_group">
+        <button class="main_button cancel"
+            type="button" 
+            @click="createProduct"
+            v-if="buttonVisible">
+            Cancel changes
+        </button>
+        <button class="main_button submit"
+            type="button" 
+            @click="saveChanges"
+            v-if="buttonVisible">
+            Save changes
+        </button>
+        <div class="create_Success"
+          id="editSuccess"
+          v-if="editSuccess"
+          @click="viewProduct">
+          Data edited successfully.
+          <br>Click for back to product.
+        </div>                
+      </div>
+    </form>
+  </div>
 </template>
 
 <script>
 import axios from 'axios';
-// import MySelect from '@/components/UI/MySelect';
+import AdminMenu from '@/components/UI/AdminMenu';
 
 export default {
-    component:{
-        // MySelect,
-    },
+  components:{
+      AdminMenu,
+  },
     
-    data() {
-        return {
-            accessToken: localStorage.getItem('token'),
-            product: {
-                name: '',
-                description: '',
-                sku: '',
-                price: null,
-                quantity: null,                
-                discount: '',
-                discountId: null,
-                discountIdMap: {},
-                category: '',
-                categoryId: null,
-                categoryIdMap: {}
-            },
-            createSuccess: false,
-            buttonVisible: true,
-            maxLength: 255,
-            imagePreview: null,
-            discounts: [],
-            selectedDiscountName: '',
-            selectedDiscountId: null,
-            discountIdMap: {},
-            categories: [],
-            selectedCategoryName: '',
-            selectedCategoryId: null,
-            categoryIdMap: {},
-        }
-    },
+  data() {
+    return {
+      accessToken: localStorage.getItem('token'),
+      product: {
+        name: '',
+        description: '',
+        sku: '',
+        price: null,
+        quantity: null,                
+        discount: '',
+        discountId: null,
+        discountIdMap: {},
+        category: '',
+        categoryId: null,
+        categoryIdMap: {},
+        photoId: null
+      },
+      createSuccess: false,
+      buttonVisible: true,
+      maxLength: 255,
+      imagePreview: null,
+      discounts: [],
+      selectedDiscountName: '',
+      selectedDiscountId: null,
+      discountIdMap: {},
+      categories: [],
+      selectedCategoryName: '',
+      selectedCategoryId: null,
+      categoryIdMap: {},
+    }
+  },
     computed: {
-        remainingCharacters() {
-            if (this.product.description){
-              return this.maxLength - this.product.description.length;  
-            } else{
-                return this.maxLength;
-            }
-        }
+      remainingCharacters() {
+          if (this.product.description){
+            return this.maxLength - this.product.description.length;  
+          } else{
+              return this.maxLength;
+          }
+      }
     },
     methods: {
         viewProduct() {
@@ -204,14 +177,6 @@ export default {
           if (this.product.description.length > this.maxLength) {
             this.product.description = this.product.description.slice(0, this.maxLength);
           }
-        },
-        handleImageChange(event) {
-            const file = event.target.files[0];
-            if (file) {
-                this.imagePreview = URL.createObjectURL(file);
-            } else {
-                this.imagePreview = null;
-            }
         },
         async loadDiscounts() {
             try {
@@ -266,37 +231,17 @@ export default {
 
                 console.log('product.discountId:', this.product.discountId);
                 console.log('product.categoryId:', this.product.categoryId);
+                console.log('product.')
 
                 if (this.product.discountId) {
                 this.selectedDiscountName = Object.keys(this.discountIdMap).find(key => this.discountIdMap[key] === this.product.discountId);
                 }
-                console.log('product.discount.name:', this.selectedDiscountName);
+                console.log('Selected discount name:', this.selectedDiscountName);
 
                 if (this.product.categoryId) {
                 this.selectedCategoryName = Object.keys(this.categoryIdMap).find(key => this.categoryIdMap[key] === this.product.categoryId);
                 }
-                console.log('product.category.name:', this.selectedCategoryName);
-
-                // if (this.product.photoId) {
-                // try {
-
-                //     const imageResponse = await axios.get(`http://localhost:8081/product/imageData/${this.product.photoId}`, {
-                //     responseType: 'blob',
-                //     headers: {
-                //         'Authorization': `Bearer ${this.accessToken}`
-                //     }
-                //     });
-
-                //     const imageBlob = new Blob([imageResponse.data]);
-                //     const imageFile = new File([imageBlob], 'image.jpg', { type: 'image/jpeg' });
-
-                //     this.$refs.image.files[0] = imageFile;
-
-                //     this.imagePreview = URL.createObjectURL(imageFile);
-                // } catch (error) {
-                //     console.error('Error fetching product image:', error);
-                // }
-                // }
+                console.log('Selected category name:', this.selectedCategoryName);
             } catch (error) {
                 console.error('Error fetching product data:', error);
             }
@@ -311,58 +256,44 @@ export default {
             if (!isNaN(this.product.price)) {
                 this.product.price = this.product.price.toString().replace(',', '.');
             }
-            if (this.selectedDiscountName) {
-                this.product.discountId = this.selectedDiscountId;
-            } else {
-                this.product.discountId = null;
+
+            this.product.discountId = this.selectedDiscountId !== null ? this.selectedDiscountId : this.product.discountId;
+            if (!this.selectedDiscountName) {
+                alert('Discount field cannot be empty');
+                return;
             }
-            if (this.selectedCategoryName) {
-                this.product.categoryId = this.selectedCategoryId;
-            } else {
-                this.product.categoryId = null;
+
+            this.product.categoryId = this.selectedCategoryId !== null ? this.selectedCategoryId : this.product.categoryId;
+            if (!this.selectedCategoryName) {
+                alert('Category field cannot be empty');
+                return;               
             }
             
             try {
-                const fileInput = this.$refs.image.files[0];
-                let photoId = null;
-            if (fileInput) {
-                    const formData = new FormData();
-                    formData.append('image', fileInput);
-
-                    const uploadResponse = await axios.put('http://localhost:8081/upload', formData, {
-                        headers: {
-                            'Authorization': `Bearer ${this.accessToken}`,
-                            'Content-Type': 'multipart/form-data',
-                        },
-                    });
-
-                    if (uploadResponse.status === 200) {
-                        console.log('File uploaded successfully.');
-                        photoId = uploadResponse.data;
-                    }
-                }
-
+                const productId = this.$route.params.id;
                 const productData = {
+                    id: `${productId}`,
                     name: this.product.name,
                     description: this.product.description,
                     sku: this.product.sku,
                     price: this.product.price,
+                    createdAt: this.product.createdAt,
                     modifiedAt: new Date().toISOString(),
                     deletedAt: null,
-                    discountId: null,
+                    discountId: this.product.discountId, 
+                    categoryId: this.product.categoryId,
                     quantity: this.product.quantity,
-                    photoId: photoId,
+                    photoId: this.product.photoId
                 };
-
-                const chengeResponse = await axios.put('http://localhost:8081/product/${productId}', productData, {
+                    console.log('Отправляем на сервер следующие данные:', productData);                
+                const changeResponse = await axios.post(`http://localhost:8081/product/${productId}`, productData, {
                     headers: {
                         'Authorization': `Bearer ${this.accessToken}`,
                         'Content-Type': 'application/json',
                     },
-                    data: productData,
                 });
 
-                if (chengeResponse.status === 200) {
+                if (changeResponse.status === 200) {
                     this.editSuccess = true;
                     this.buttonVisible = false;
                     console.log('Data sent successfully.');
@@ -374,52 +305,43 @@ export default {
             }
         }
     },
-    mounted() {
-        this.fetchData();
-        this.loadDiscounts();
-        this.loadCategory();
-    },
+  mounted() {
+    this.fetchData();
+    this.loadDiscounts();
+    this.loadCategory();
+  },
 }
 </script>
 
 <style scoped>
+    .container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 5px;
+        box-sizing: border-box;
+        overflow: auto;
+    }
+    .header {
+        width: 100%;
+        margin-bottom: 10px;
+        margin-top: 0;
+        text-align: center;
+    }
     .edit-form {
         width: 100%;
         max-width: 550px;            
         border: 1px solid black;
         padding: 20px;
     }
-
-    .container {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        /* min-height: 100vh; */
-        padding: 20px;
-        box-sizing: border-box;
-        overflow: auto;
+    .top-section{
+      display: flex;
+      margin-bottom:15px;
     }
-    .header {
-        width: 100%;
-        max-width: 625px;
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 10px;
-        margin-top: 20px;
-    }
-    .header h1 {
-        margin: 0;
-        padding: 10px;
-        word-wrap: break-word;
-    }
-
     .section {
-        display: flex;
         text-align: start;
-        justify-content: space-between;
-        align-items: flex-end;
-        margin-bottom:1rem !important;
+        margin: auto;
     }
     #photo_box{
         display: flex;
@@ -427,7 +349,7 @@ export default {
     }
     label {
         font-weight: bold;
-        margin-bottom: 5px;
+        margin-bottom: 7px;
     }
 
     .main_input {
@@ -435,9 +357,9 @@ export default {
         padding: 5px;
     }
     #image-preview{
-        max-width: 65px;
-        max-height: 100px;
-        margin-right: 15px;
+        max-width: 200px;
+        max-height: 150px;
+        margin: auto;
     }
     #discount, #category {
         text-align: center;
@@ -493,14 +415,15 @@ export default {
         background-color: red;
     }
     .create_Success {
-        text-align: center;
-        font-weight: bold;
-        color: #4CAF50;
-        padding: 10px;
-        border: 1px solid #4CAF50;
-        background-color: #f0f8f0;
-        margin-top: 10px;
-        cursor: pointer;
+      width: 100%;
+      text-align: center;
+      font-weight: bold;
+      color: #4CAF50;
+      padding: 10px;
+      border: 1px solid #4CAF50;
+      background-color: #f0f8f0;
+      margin: 10px auto;
+      cursor: pointer;
     }
     textarea {
         margin-top: 14px; 
@@ -510,13 +433,13 @@ export default {
     }
 
     @media only screen and (max-width: 768px) {
-        .header h1 {
+        .header h2 {
             font-size: 24px;
         }
     }
 
     @media only screen and (max-width: 576px) {
-        .header h1 {
+        .header h2 {
             font-size: 20px;
         }
         .form-group button,

@@ -50,6 +50,12 @@ const routes = [
     props: true,
     component: () => import('@/views/DiscountsList.vue')
   },
+  {
+    path: '/edit-discount',
+    name: 'edit-discount',
+    props: true,
+    component: () => import('@/components/EditDiscount.vue')
+  },
     {
       path: '/discount/:id',
       name: 'discount',

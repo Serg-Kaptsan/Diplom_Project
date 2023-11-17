@@ -2,48 +2,46 @@
     <admin-menu> </admin-menu>
     <div class="container">
         <div class="header">
-            <h2>Edit user</h2>
+            <h2>Edit discount</h2>
         </div>
         <form class="edit-form" id="edition">
             
             <div class="information">
                 <div class="information-input">
                     <label for="name" class="form-label">Name:</label>
-                    <input class="form-group user_name"
+                    <input class="form-group discount_name"
                         type="text"
                         id="name"
                         v-focus
-                        v-model="user.name"    
-                        placeholder="Enter User Name" >                    
-                </div>             
+                        v-model="discount.name"    
+                        placeholder="Enter Discount Name" >                    
+                </div>
+
+                <label for="description" class="form-label">Description:</label>
+                <textarea class="form-group description" wrap="hard"
+                    id="description"
+                    v-model="discount.description"
+                    placeholder="Enter Discount Description"
+                    autocomplete="on">
+                    @input="checkDescriptionLength">
+                </textarea>
+                    <p class="form-text" id="remain">
+                        Remaining characters: {{ remainingCharacters }}
+                    </p>
 
                 <div class="information-input">
-                    <label for="sku" class="form-label"> SKU: </label>                    
-                    <input class="form-group sku"
+                    <label for="percent" class="form-label"> Discount percent: </label>                    
+                    <input class="form-group percent"
                         type="text"
-                        id="sku"
-                        v-model="product.sku"> 
-                </div>
-                <div class="information-input">
-                    <label for="price" class="form-label"> Price: </label>                    
-                    <input class="form-group price"
-                        type="number"
-                        id="price"
-                        v-model="product.price"> 
-                </div>
-                <div class="information-input">
-                    <label for="quantity" class="form-label"> Quantity: </label>                    
-                    <input class="form-group quantity"
-                        type="number"
-                        id="quantity"
-                        v-model="product.quantity">
+                        id="percent"
+                        v-model="discountPercent"> 
                 </div>
             </div>
 
             <div class="button_group">
                 <button class="main_button cancel"
                     type="button" 
-                    @click="createProduct"
+                    @click="editDiscount"
                     v-if="buttonVisible">
                     Cancel changes
                 </button>
@@ -56,10 +54,10 @@
                 <div class="create_Success"
                     id="editSuccess"
                     v-if="editSuccess"
-                    @click="viewProduct">
+                    @click="viewDiscount">
                     Data edited successfully.
-                    <br>Click for back to product.
-                </div>                
+                    <br>Click for back to discount.
+                </div>
             </div>
         </form>
     </div>
@@ -77,96 +75,37 @@ export default {
     data() {
         return {
             accessToken: localStorage.getItem('token'),
-            product: {
+            discount: {
                 name: '',
                 description: '',
-                sku: '',
-                price: null,
-                quantity: null,                
-                discount: '',
-                discountId: null,
-                discountIdMap: {},
-                category: '',
-                categoryId: null,
-                categoryIdMap: {}
+                discountPercent: '',
             },
-            createSuccess: false,
+            editSuccess: false,
             buttonVisible: true,
             maxLength: 255,
-            imagePreview: null,
-            discounts: [],
-            selectedDiscountName: '',
-            selectedDiscountId: null,
-            discountIdMap: {},
-            categories: [],
-            selectedCategoryName: '',
-            selectedCategoryId: null,
-            categoryIdMap: {},
         }
     },
     computed: {
         remainingCharacters() {
-            if (this.product.description){
-              return this.maxLength - this.product.description.length;  
+            if (this.discount.description){
+              return this.maxLength - this.discount.description.length;  
             } else{
                 return this.maxLength;
             }
         }
     },
     methods: {
-        viewProduct() {
-            this.$router.push({ name: 'product', params: { id: this.product.id } });
+        viewDiscount() {
+            this.$router.push({ name: 'discount', params: { id: this.discount.id } });
         },
         checkDescriptionLength() {
-          if (this.product.description.length > this.maxLength) {
-            this.product.description = this.product.description.slice(0, this.maxLength);
+          if (this.discount.description.length > this.maxLength) {
+            this.discount.description = this.discount.description.slice(0, this.maxLength);
           }
         },
-        async loadDiscounts() {
-            try {
-                const response = await axios.get('http://localhost:8081/discount', {
-                    headers: {
-                        'Authorization': `Bearer ${this.accessToken}`
-                    },
-                });
-                if (response.status === 200) {
-                    this.discounts = response.data.map(discount => {
-                this.discountIdMap[discount.name] = discount.id;
-                return discount.name;
-            });
-                }
-            } catch (error) {
-                console.error('Error fetching discounts:', error);
-            }
-        },
-        handleDiscountChange() {
-            this.selectedDiscountId = this.discountIdMap[this.selectedDiscountName];
-            console.log('Selected discount id:', this.selectedDiscountId);
-        },
-        async loadCategory() {
-            try {
-                const response = await axios.get('http://localhost:8081/product-categories', {
-                    headers: {
-                        'Authorization': `Bearer ${this.accessToken}`
-                    },
-                });
-                
-                if (response.status === 200) {
-                    this.categories = response.data.map(category => category.name);
-                    response.data.forEach(category => {
-                    this.categoryIdMap[category.name] = category.id;
-                    });
-                }
-            } catch (error) {
-                console.error('Error fetching categories:', error);
-            }
-        },
-        handleCategoryChange() {
-            this.selectedCategoryId = this.categoryIdMap[this.selectedCategoryName];
-            console.log('Selected category id:', this.selectedCategoryId);
-        },
+    
         async fetchData() {
-            const productId = this.$route.params.id;
+            const discountId = this.$route.params.id;
             try {
                 await this.loadDiscounts();
                 await this.loadCategory();

@@ -4,7 +4,7 @@
       <h2>CATEGORIES LIST</h2>
       <div class="add-button-block">
           <div class="btn btn-secondary add-button" 
-              @click="$router.push('/add-category')">
+              @click="$router.push ('/add-category')" > 
               Add category
           </div>             
       </div>
@@ -28,8 +28,8 @@
   </div>
 
   <div class="categories-grid" id="categoriesList">
-    <div v-if="!isCategoriesLoading
-    " class="card-container" >
+    <div v-if="!isCategoriesLoading"
+      class="card-container" >
       <div 
           v-for="category in filteredAndSortedCategories"
           :key="category.id">
@@ -130,8 +130,8 @@ console.error('Error Fetching:', e);
       return [...filteredCategories].sort((element1, element2) => {
         const value1 = element1[this.selectedSort];
         const value2 = element2[this.selectedSort];
-        const date1 = new Date(value1).getTime();
-        const date2 = new Date(value2).getTime();
+        const date1 = new Date(value1);
+        const date2 = new Date(value2);
 
         if (typeof value1 === 'number' && typeof value2 === 'number') {
           return value1 - value2;
