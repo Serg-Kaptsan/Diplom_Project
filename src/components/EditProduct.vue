@@ -98,7 +98,7 @@
       <div class="button_group">
         <button class="main_button cancel"
             type="button" 
-            @click="createProduct"
+            @click="viewProduct"
             v-if="buttonVisible">
             Cancel changes
         </button>
@@ -236,73 +236,71 @@ export default {
                 if (this.product.discountId) {
                 this.selectedDiscountName = Object.keys(this.discountIdMap).find(key => this.discountIdMap[key] === this.product.discountId);
                 }
-                console.log('Selected discount name:', this.selectedDiscountName);
 
                 if (this.product.categoryId) {
                 this.selectedCategoryName = Object.keys(this.categoryIdMap).find(key => this.categoryIdMap[key] === this.product.categoryId);
                 }
-                console.log('Selected category name:', this.selectedCategoryName);
             } catch (error) {
                 console.error('Error fetching product data:', error);
             }
         },
 
         async saveChanges() {
-            if (!this.product.name) {
-                alert("Product name is required.");
-                return;
-            }
-            this.product.price = parseFloat(this.product.price);
-            if (!isNaN(this.product.price)) {
-                this.product.price = this.product.price.toString().replace(',', '.');
-            }
+          if (!this.product.name) {
+              alert("Product name is required.");
+              return;
+          }
+          this.product.price = parseFloat(this.product.price);
+          if (!isNaN(this.product.price)) {
+              this.product.price = this.product.price.toString().replace(',', '.');
+          }
 
-            this.product.discountId = this.selectedDiscountId !== null ? this.selectedDiscountId : this.product.discountId;
-            if (!this.selectedDiscountName) {
-                alert('Discount field cannot be empty');
-                return;
-            }
+          this.product.discountId = this.selectedDiscountId !== null ? this.selectedDiscountId : this.product.discountId;
+          if (!this.selectedDiscountName) {
+              alert('Discount field cannot be empty');
+              return;
+          }
 
-            this.product.categoryId = this.selectedCategoryId !== null ? this.selectedCategoryId : this.product.categoryId;
-            if (!this.selectedCategoryName) {
-                alert('Category field cannot be empty');
-                return;               
-            }
-            
-            try {
-                const productId = this.$route.params.id;
-                const productData = {
-                    id: `${productId}`,
-                    name: this.product.name,
-                    description: this.product.description,
-                    sku: this.product.sku,
-                    price: this.product.price,
-                    createdAt: this.product.createdAt,
-                    modifiedAt: new Date().toISOString(),
-                    deletedAt: null,
-                    discountId: this.product.discountId, 
-                    categoryId: this.product.categoryId,
-                    quantity: this.product.quantity,
-                    photoId: this.product.photoId
-                };
-                    console.log('Отправляем на сервер следующие данные:', productData);                
-                const changeResponse = await axios.post(`http://localhost:8081/product/${productId}`, productData, {
-                    headers: {
-                        'Authorization': `Bearer ${this.accessToken}`,
-                        'Content-Type': 'application/json',
-                    },
-                });
+          this.product.categoryId = this.selectedCategoryId !== null ? this.selectedCategoryId : this.product.categoryId;
+          if (!this.selectedCategoryName) {
+              alert('Category field cannot be empty');
+              return;               
+          }
+          
+          try {
+            const productId = this.$route.params.id;
+            const productData = {
+              id: `${productId}`,
+              name: this.product.name,
+              description: this.product.description,
+              sku: this.product.sku,
+              price: this.product.price,
+              createdAt: this.product.createdAt,
+              modifiedAt: new Date().toISOString(),
+              deletedAt: null,
+              discountId: this.product.discountId, 
+              categoryId: this.product.categoryId,
+              quantity: this.product.quantity,
+              photoId: this.product.photoId
+            };
+              
+              const changeResponse = await axios.post(`http://localhost:8081/product/${productId}`, productData, {
+                  headers: {
+                    'Authorization': `Bearer ${this.accessToken}`,
+                    'Content-Type': 'application/json',
+                  },
+              });
 
-                if (changeResponse.status === 200) {
-                    this.editSuccess = true;
-                    this.buttonVisible = false;
-                    console.log('Data sent successfully.');
-                } else {
-                    console.error('Error sending data.');
-                }
-            } catch (error) {
-                console.error('Error sending data to /product/', error);
-            }
+              if (changeResponse.status === 200) {
+                this.editSuccess = true;
+                this.buttonVisible = false;
+                console.log('Data sent successfully.');
+              } else {
+                console.error('Error sending data.');
+              }
+          } catch (error) {
+            console.error('Error sending data to /product/', error);
+          }
         }
     },
   mounted() {

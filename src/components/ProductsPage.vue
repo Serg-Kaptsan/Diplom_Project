@@ -217,11 +217,11 @@ export default {
                 return category1.localeCompare(category2);
                 }
 
-                if (this.selectedSort === 'discount') {
-                const discount1 = product1.discount?.discountPercent || 0;
-                const discount2 = product2.discount?.discountPercent || 0;
-                return discount1 - discount2;
-                }
+                // if (this.selectedSort === 'discount') {
+                // const discount1 = product1.discount?.discountPercent || 0;
+                // const discount2 = product2.discount?.discountPercent || 0;
+                // return discount1 - discount2;
+                // }
             });
         },
 

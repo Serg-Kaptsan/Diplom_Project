@@ -51,7 +51,7 @@ export default {
             product: null,
             isLargeImageVisible: false,
             largeImageSrc: ''
-        };
+        }
     },
 
     created() {
@@ -72,7 +72,7 @@ export default {
         closeLargeImage() {
             this.isLargeImageVisible = false;
         }
-    },      
+    }
 };
 </script>
 

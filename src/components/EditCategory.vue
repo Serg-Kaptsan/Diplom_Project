@@ -2,7 +2,7 @@
     <admin-menu> </admin-menu>
     <div class="container">
         <div class="header">
-            <h2>Edit Discount</h2>
+            <h2>Edit Category</h2>
         </div>
         <form class="edit-form" id="edition">
             
@@ -13,13 +13,13 @@
                         type="text"
                         id="name"
                         v-focus
-                        v-model="discount.name"    
+                        v-model="category.name"    
                         placeholder="Enter Discount Name" >                    
                 </div>
                 <div class="description">
                     <label for="description" class="form-label label_description">Description:</label>
                     <textarea class="form-group description" wrap="hard"
-                        v-model="discount.description"
+                        v-model="category.description"
                         placeholder="Enter Discount Description"
                         autocomplete="on">
                         @input="checkDescriptionLength">
@@ -28,20 +28,12 @@
                             Remaining characters: {{ remainingCharacters }}
                         </p>
                 </div>
-
-                <div class="information-input">
-                    <label for="percent" class="form-label"> Discount percent: </label>                    
-                    <input class="form-group percent"
-                        type="text"
-                        id="percent"
-                        v-model="discount.discountPercent"> 
-                </div>
             </div>
 
             <div class="button_group">
                 <button class="main_button cancel"
                     type="button" 
-                    @click="viewDiscount"
+                    @click="viewCategory"
                     v-if="buttonVisible">
                     Cancel changes
                 </button>
@@ -54,7 +46,7 @@
                 <div class="create_Success"
                     id="editSuccess"
                     v-if="editSuccess"
-                    @click="viewDiscount">
+                    @click="viewCategory">
                     Data edited successfully.
                     <br>Click for back to discount.
                 </div>
@@ -75,10 +67,9 @@ export default {
     data() {
         return {
             accessToken: localStorage.getItem('token'),
-            discount: {
+            category: {
                 name: '',
                 description: '',
-                discountPercent: '',
             },
             editSuccess: false,
             buttonVisible: true,
@@ -87,8 +78,8 @@ export default {
     },
     computed: {
         remainingCharacters() {
-            if (this.discount.description){
-              return this.maxLength - this.discount.description.length;  
+            if (this.category.description){
+              return this.maxLength - this.category.description.length;  
             } else{
                 return this.maxLength;
             }
@@ -96,56 +87,50 @@ export default {
     },
     methods: {
         checkDescriptionLength() {
-          if (this.discount.description.length > this.maxLength) {
-            this.discount.description = this.discount.description.slice(0, this.maxLength);
+          if (this.category.description.length > this.maxLength) {
+            this.category.description = this.category.description.slice(0, this.maxLength);
           }
         },        
-        viewDiscount() {
-            this.$router.push({ name: 'discounts' });
+        viewCategory() {
+            this.$router.push({ name: 'categories' });
         },
 
         async fetchData() {
             try {
-                const discountId = this.$route.params.id;                
-                const response = await axios.get(`http://localhost:8081/discount/${discountId}`, {
+                const categoryId = this.$route.params.id;                
+                const response = await axios.get(`http://localhost:8081/product-categories/${categoryId}`, {
                     headers: {
                         'Authorization': `Bearer ${this.accessToken}`,
                         'Content-Type': 'application/json'
                     }
                 }); 
-                this.discount = response.data;
+                this.category = response.data;
 
-                console.log('discountId:', discountId);
+                console.log('categoryId:', categoryId);
             } catch (error) {
-                console.error('Error fetching discount data:', error);
+                console.error('Error fetching category data:', error);
             }                                    
         },
 
         async saveChanges() {
-            if (!this.discount.name) {
-                alert("Discount name is required.");
-                return;
-            }
-            const discountPercent = this.discount.discountPercent;
-            if (!discountPercent) {
-                alert("Discount Percent is required.");
+            if (!this.category.name) {
+                alert("Category name is required.");
                 return;
             }
             
             try {
-                const discountId = this.$route.params.id;
+                const categoryId = this.$route.params.id;
 
-                const discountData = {
-                    id: this.discount.id,
-                    name: this.discount.name,
-                    description: this.discount.description,
-                    discountPercent: discountPercent,
+                const categoryData = {
+                    id: this.category.id,
+                    name: this.category.name,
+                    description: this.category.description,
                     modifiedAt: new Date().toISOString(),
                     deletedAt: null,
                 };
-                console.log('Sending data:', discountData);
+                console.log('Sending data:', categoryData);
 
-                const changeResponse = await axios.put(`http://localhost:8081/discount/${discountId}`, discountData, {
+                const changeResponse = await axios.put(`http://localhost:8081/category/${categoryId}`, categoryData, {
                     headers: {
                         'Authorization': `Bearer ${this.accessToken}`,
                         'Content-Type': 'application/json',
@@ -160,7 +145,7 @@ export default {
                     console.error('Error sending data.');
                 }
             } catch (error) {
-                console.error('Error sending data to /discount/', error);
+                console.error('Error sending data to /category/', error);
             }
         }
     },

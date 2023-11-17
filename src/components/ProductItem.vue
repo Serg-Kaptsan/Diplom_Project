@@ -39,9 +39,16 @@ export default {
     },
     computed:{
         productDiscount() {
+
+        if (this.product.discountId != null) {
             const matchingDiscount = this.discount.find(discount => discount.id === this.product.discountId);
-            return matchingDiscount || { discountPercent: "" };
-        },
+
+            if (matchingDiscount && matchingDiscount.discountPercent !== "0") {
+                return matchingDiscount;
+            }
+        }
+        return { discountPercent: "" };
+    }
     },
     methods: {
     viewProduct() {
