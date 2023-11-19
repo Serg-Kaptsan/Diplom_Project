@@ -40,21 +40,21 @@ export default {
     computed:{
         productDiscount() {
 
-        if (this.product.discountId != null) {
-            const matchingDiscount = this.discount.find(discount => discount.id === this.product.discountId);
+            if (this.product.discountId != null) {
+                const matchingDiscount = this.discount.find(discount => discount.id === this.product.discountId);
 
-            if (matchingDiscount && matchingDiscount.discountPercent !== "0") {
-                return matchingDiscount;
+                if (matchingDiscount && matchingDiscount.discountPercent !== "0") {
+                    return matchingDiscount;
+                }
             }
+            return { discountPercent: "" };
         }
-        return { discountPercent: "" };
-    }
     },
     methods: {
-    viewProduct() {
-      this.$router.push({ name: 'product', params: { id: this.product.id } });
+      viewProduct() {
+        this.$router.push({ name: 'product', params: { id: this.product.id } });
+      },
     },
-  },
 }
 </script>
 

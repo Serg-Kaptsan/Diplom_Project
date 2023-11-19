@@ -3,7 +3,7 @@
 
     <div class="container">
         <div class="header">
-            <h2>Create product</h2>
+            <h2>Create Product</h2>
         </div>
 
         <form class="edit-form" id="edition">            
@@ -107,7 +107,14 @@
                     v-model="product.quantity"
                     placeholder="Enter quantity of products" >
             </div>
-            <div class="form-group">
+            <div class="button_group">
+                <button class="main_button cancel"
+                    title="Back to Admin Page"
+                    type="button" 
+                    @click="$router.push('/admin')"
+                    v-if="buttonVisible">
+                    Cancel changes
+                </button>
                 <button class="main_button submit"
                     type="button" 
                     @click="createProduct"
@@ -131,12 +138,10 @@
 <script>
 import axios from 'axios';
 import AdminMenu from '@/components/UI/AdminMenu';
-// import MySelect from '@/components/UI/MySelect';
 
 export default {
     components:{
         AdminMenu,
-        // MySelect,
     },
     
     data() {
@@ -197,7 +202,7 @@ export default {
                         'Authorization': `Bearer ${this.accessToken}`
                     },
                 });
-                if (response.status === 200) {
+                if (response.status >= 200 && response.status < 300) {
                     this.discounts = response.data.map(discount => discount.name);
                     response.data.forEach(discount => {
                     this.discountIdMap[discount.name] = discount.id;
@@ -220,7 +225,7 @@ export default {
                     },
                 });
                 
-                if (response.status === 200) {
+                if (response.status >= 200 && response.status < 300) {
                     this.categories = response.data.map(category => category.name);
                     response.data.forEach(category => {
                     this.categoryIdMap[category.name] = category.id;
@@ -274,7 +279,7 @@ export default {
                         },
                     });
 
-                    if (uploadResponse.status === 200) {
+                    if (uploadResponse.status >= 200 && uploadResponse.status < 300) {
                         console.log('File uploaded successfully.');
                         photoId = uploadResponse.data;
                     }
@@ -301,7 +306,7 @@ export default {
                     },
                 });
 
-                if (createResponse.status === 200) {
+                if (createResponse.status >= 200 && createResponse.status < 300) {
                     this.createSuccess = true;
                     this.buttonVisible = false;
                     console.log('Data sent successfully.');
@@ -329,7 +334,7 @@ export default {
             this.buttonVisible = true;
             this.$refs.image.value = '';
             this.imagePreview = null;
-        }
+        },
     },
     mounted() {
         this.loadDiscounts();
@@ -362,6 +367,17 @@ export default {
         border-radius: 5px;
         font-size: 14px;
         margin: auto 15px;
+    }
+    .button_group{
+       display: flex;
+       margin: 0;
+       margin-top: 20px;
+    }
+    .button_group button{
+        margin: auto;
+    }
+    .cancel {
+        background-color: red;
     }
     .edit-form {
         width: 100%;

@@ -286,16 +286,8 @@ export default {
         .header h2 {
             font-size: 20px;
         }
-        .form-group button,
-        .form-group textarea {
-            font-size: 14px;
-        }
-        .form-group input {
-            font-size: 14px;
-        }
-        .discount_button{
-            min-width: 124px;
-            padding: 6px;
+        .button_group button{
+            font-size: 14px
         }
     }
 </style>

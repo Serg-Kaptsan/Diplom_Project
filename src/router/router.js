@@ -4,7 +4,7 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    component: () => import('@/components/ProductsPage')
+    component: () => import('@/views/ProductsPage')
   },
   {
     path: '/about',
@@ -24,7 +24,7 @@ const routes = [
     path: '/product/:id',
     name: 'product',
     props: true, 
-    component: () => import('@/views/ProductIdPage')
+    component: () => import('@/components/ProductIdPage')
   },
     {
       path: '/image/:imageData',
@@ -62,15 +62,21 @@ const routes = [
       props: true,
       component: () => import('@/components/DiscountIdCard.vue')
     },
-
+        {
+      path: '/add-discount/',
+      name: 'add-discount',
+      props: true,
+      component: () => import('@/components/AddDiscount.vue')
+    },
+    
   {
     path: '/categories',
     name: 'categories',
     component: () => import('@/views/CategoriesList.vue')
   },
     {
-      path: '/category/:id',
-      name: 'category',
+      path: '/add-category',
+      name: 'add-category',
       props: true,
       component: () => import('@/components/AddCategory.vue')
     },

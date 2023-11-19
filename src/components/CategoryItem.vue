@@ -12,10 +12,10 @@
             <p class="card-text"> <strong> modified date: </strong> {{ category.modifiedAt }} </p>
         </div>
         <div class="button-block">
-            <button class="btn btn-secondary inside-button"
+            <!-- <button class="btn btn-secondary inside-button"
                 @click="viewEdit">
                 Edit category 
-            </button>
+            </button> -->
             <button class="btn btn-danger inside-button delete--button"
                 @click="$emit('delete', category)">
                 Delete category
@@ -37,9 +37,9 @@ export default {
     },
 
     methods: {
-        viewEdit() {
-            this.$router.push({name: 'edit-category', params: {id: this.category.id} });
-        },
+        // viewEdit() {
+        //     this.$router.push({name: 'edit-category', params: {id: this.category.id} });
+        // },
     },
 }
 </script>

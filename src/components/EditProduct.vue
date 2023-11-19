@@ -46,12 +46,14 @@
               </option>
             </select>
           </div>
-        </div>            
+        </div>
+        <div class="preview">
           <img
             id="image-preview"
             :src="'data:image/jpeg;base64,' + product.imageData"
             :alt="product.name"
-          >
+          >          
+        </div>
       </div>
         
       <div class="information">
@@ -351,23 +353,26 @@ export default {
     }
 
     .main_input {
-        width: 100%;
-        padding: 5px;
+      width: 100%;
+      padding: 5px;
+    }
+    .preview{
+      text-align: center;
+      margin: auto;      
     }
     #image-preview{
-        max-width: 200px;
-        max-height: 150px;
-        margin: auto;
+      max-width: 200px;
+      max-height: 150px;
     }
     #discount, #category {
-        text-align: center;
+      text-align: center;
     }
     .information {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        height: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: auto;
     }
     .information *{
         text-align: center;
@@ -440,6 +445,9 @@ export default {
         .header h2 {
             font-size: 20px;
         }
+        #image-preview{
+          margin-left: 20px;
+        }
         .form-group button,
         .form-group textarea {
             font-size: 14px;
@@ -447,9 +455,8 @@ export default {
         .form-group input {
             font-size: 14px;
         }
-        .discount_button{
-            min-width: 124px;
-            padding: 6px;
+        .button_group button{
+          font-size: 14px;
         }
     }
 </style>

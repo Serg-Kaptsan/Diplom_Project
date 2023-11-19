@@ -42,8 +42,6 @@
             <p class="empty-line"></p>                                   
             <p class="card-text"> <strong> created: </strong> {{ product.createdAt }} </p>
             <p class="card-text"> <strong> modified: </strong> {{ product.modifiedAt }} </p>
-            <!-- <p class="card-text"> <strong> deleted: </strong> {{ product.deletedAt }} </p> -->
-            <!-- <p class="card-text"> <strong> discountId: </strong> {{ discount.id }}</p> -->
 
             <div class="button-block">
                 <button class="btn btn-secondary inside-button"
@@ -83,8 +81,14 @@ export default {
     },
     computed: {
         productDiscount() {
-            const matchingDiscount = this.discount.find(discount => discount.id === this.product.discountId);
-            return matchingDiscount || { name: "", discountPercent: "" };
+            if (this.product.discountId != null) {
+                const matchingDiscount = this.discount.find(discount => discount.id === this.product.discountId);
+
+                if (matchingDiscount && matchingDiscount.discountPercent !== "0") {
+                    return matchingDiscount;
+                }
+            }
+            return { discountPercent: "" };
         },
         productCategory() {
             const matchingCategory = this.category.find(category => category.id === this.product.categoryId);

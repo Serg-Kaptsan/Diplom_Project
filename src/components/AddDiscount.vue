@@ -2,7 +2,7 @@
     <admin-menu> </admin-menu>
     <div class="container">
         <div class="header">
-            <h2>Edit Category</h2>
+            <h2>Create Discount</h2>
         </div>
         <form class="edit-form" id="edition">
             
@@ -13,13 +13,13 @@
                         type="text"
                         id="name"
                         v-focus
-                        v-model="category.name"    
+                        v-model="discount.name"    
                         placeholder="Enter Discount Name" >                    
                 </div>
                 <div class="description">
                     <label for="description" class="form-label label_description">Description:</label>
                     <textarea class="form-group description" wrap="hard"
-                        v-model="category.description"
+                        v-model="discount.description"
                         placeholder="Enter Discount Description"
                         autocomplete="on">
                         @input="checkDescriptionLength">
@@ -28,27 +28,37 @@
                             Remaining characters: {{ remainingCharacters }}
                         </p>
                 </div>
+
+                <div class="information-input">
+                    <label for="percent" class="form-label"> Discount percent: </label>                    
+                    <input class="form-group percent"
+                        type="text"
+                        id="percent"
+                        v-model="discount.discountPercent"
+                        placeholder="Enter Discount Percent" > 
+                </div>
             </div>
 
             <div class="button_group">
                 <button class="main_button cancel"
-                    type="button" 
-                    @click="viewCategory"
+                    title="Back to Discounts"
+                    type="button"
+                    @click="$router.push('/discounts')"
                     v-if="buttonVisible">
                     Cancel changes
                 </button>
                 <button class="main_button submit"
                     type="button" 
-                    @click="saveChanges"
+                    @click="createDiscount"
                     v-if="buttonVisible">
-                    Save changes
+                    Save data
                 </button>
                 <div class="create_Success"
                     id="editSuccess"
-                    v-if="editSuccess"
-                    @click="viewCategory">
+                    v-if="createSuccess"
+                    @click="clearForm">
                     Data edited successfully.
-                    <br>Click for back to discount.
+                    <br>Click for create next discount.
                 </div>
             </div>
         </form>
@@ -67,90 +77,79 @@ export default {
     data() {
         return {
             accessToken: localStorage.getItem('token'),
-            category: {
+            discount: {
                 name: '',
                 description: '',
+                discountPercent: '',
             },
-            editSuccess: false,
+            createSuccess: false,
             buttonVisible: true,
             maxLength: 255,
         }
     },
     computed: {
         remainingCharacters() {
-            if (this.category.description){
-              return this.maxLength - this.category.description.length;  
-            } else{
-                return this.maxLength;
-            }
+            return this.maxLength - this.discount.description.length;
         }
     },
     methods: {
         checkDescriptionLength() {
-          if (this.category.description.length > this.maxLength) {
-            this.category.description = this.category.description.slice(0, this.maxLength);
+          if (this.discount.description.length > this.maxLength) {
+            this.discount.description = this.discount.description.slice(0, this.maxLength);
           }
         },        
-        viewCategory() {
-            this.$router.push({ name: 'categories' });
-        },
 
-        async fetchData() {
-            try {
-                const categoryId = this.$route.params.id;                
-                const response = await axios.get(`http://localhost:8081/product-categories/${categoryId}`, {
-                    headers: {
-                        'Authorization': `Bearer ${this.accessToken}`,
-                        'Content-Type': 'application/json'
-                    }
-                }); 
-                this.category = response.data;
-
-                console.log('categoryId:', categoryId);
-            } catch (error) {
-                console.error('Error fetching category data:', error);
-            }                                    
-        },
-
-        async saveChanges() {
-            if (!this.category.name) {
-                alert("Category name is required.");
+        async createDiscount() {
+            if (!this.discount.name) {
+                alert("Discount name is required.");
                 return;
             }
             
-            try {
-                const categoryId = this.$route.params.id;
+            const discountPercent = this.discount.discountPercent;
+            if (!discountPercent) {
+                alert("Discount Percent is required.");
+                return;
+            }
 
-                const categoryData = {
-                    id: this.category.id,
-                    name: this.category.name,
-                    description: this.category.description,
+            try {
+                const discountData = {
+                    id: this.discount.id,
+                    name: this.discount.name,
+                    description: this.discount.description,
+                    discountPercent: discountPercent,
+                    createdAt: new Date().toISOString(),
                     modifiedAt: new Date().toISOString(),
                     deletedAt: null,
                 };
-                console.log('Sending data:', categoryData);
-
-                const changeResponse = await axios.put(`http://localhost:8081/category/${categoryId}`, categoryData, {
+                const createResponse = await axios.post('http://localhost:8081/discount/', discountData, {
                     headers: {
                         'Authorization': `Bearer ${this.accessToken}`,
                         'Content-Type': 'application/json',
                     },
                 });
 
-                if (changeResponse.status === 200) {
-                    this.editSuccess = true;
+                if (createResponse.status >= 200 && createResponse.status < 300) {
+                    this.createSuccess = true;
                     this.buttonVisible = false;
                     console.log('Data sent successfully.');
                 } else {
                     console.error('Error sending data.');
                 }
             } catch (error) {
-                console.error('Error sending data to /category/', error);
+                console.error('Error sending data to /discount/', error);
             }
-        }
+        },
+        clearForm() {
+            this.discount = {
+                name: '',
+                description: '',
+                discountPercent: '',
+                };
+            this.createSuccess = false;
+            this.buttonVisible = true;
+        },
     },
     mounted() {
-        this.fetchData();
     },
 }
 </script>
@@ -240,11 +239,11 @@ export default {
     }
     .button_group{
        display: flex;
-       justify-content: space-between;
-       margin-top: 10px;
+       margin: 0;
+       margin-top: 20px;
     }
     .button_group button{
-        margin: auto 0;
+        margin: auto;
     }
     .cancel {
         background-color: red;
@@ -271,16 +270,14 @@ export default {
         .header h2 {
             font-size: 20px;
         }
-        .form-group button,
-        .form-group textarea {
+        .information *{
             font-size: 14px;
         }
-        .form-group input {
-            font-size: 14px;
+        .form-label{
+            width: 70%;
         }
-        .discount_button{
-            min-width: 124px;
-            padding: 6px;
+        .button_group button{
+            font-size: 14px;
         }
     }
 </style>

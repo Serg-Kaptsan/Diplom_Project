@@ -22,7 +22,7 @@
 
 <script>
 import Navbar from "@/components/Navbar";
-import ProductsPage from "@/components/ProductsPage";
+import ProductsPage from "@/views/ProductsPage";
 import MyDialog from "@/components/UI/MyDialog";
 import LoginPage from "@/components/LoginPage";
 import RegistrPage from "@/components/RegistrPage";
