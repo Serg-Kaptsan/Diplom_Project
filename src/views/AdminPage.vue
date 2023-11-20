@@ -97,10 +97,10 @@ export default {
             {value: 'sku', name: 'SKU'},
             {value: 'name', name: 'name'},
             {value: 'id', name: 'code'},
-            {value: 'category', name: 'category'},
-            {value: 'price', name: 'price'},
-            {value: 'quantity', name: 'quantity'},
-            {value: 'discount', name: 'discount'},
+            {value: 'price', name: 'price'},            
+            // {value: 'category', name: 'category'},
+            // {value: 'quantity', name: 'quantity'},
+            // {value: 'discount', name: 'discount'},
             {value: 'createdAt', name: 'creation date'},
             {value: 'modifiedAt', name: 'modification date'},
           ],
@@ -127,9 +127,6 @@ export default {
                     this.categoryIdMap[category.name] = category.id;
                 });
 
-console.log('Category data:', this.category);
-console.log('Categories:', this.categories);
-console.log('CategoryIdMap:', this.categoryIdMap);
             } catch (e) {
     console.error('Error Fetching:', e);
                 this.hasErrorFetching = true;
@@ -171,7 +168,6 @@ console.log('CategoryIdMap:', this.categoryIdMap);
             this.selectedCategoryId = this.categoryIdMap[this.selectedCategoryName];
             console.log('Selected category name:', this.selectedCategoryName);
             console.log('Selected category id:', this.selectedCategoryId);
-            console.log('Products before filter:', this.products);
             this.filterByCategory();
             this.currentPage = 0;
         },
@@ -225,17 +221,25 @@ console.log('CategoryIdMap:', this.categoryIdMap);
                 return value1.localeCompare(value2);
                 }
                 
-                if (this.selectedSort === 'category') {
-                const category1 = product1.category?.name || '';
-                const category2 = product2.category?.name || '';
-                return category1.localeCompare(category2);
-                }
+    //             if (this.selectedSort === 'category') {
+    //                 const category1 = (product1.productCategory.name || "").toLowerCase();
+    //                 const category2 = (product2.productCategory.name || "").toLowerCase();
+    // console.log('Category 1:', category1);
+    // console.log('Category 2:', category2);
+    //                 return category1.localeCompare(category2);
+    //             }
 
-                if (this.selectedSort === 'discount') {
-                const discount1 = product1.discount?.discountPercent || 0;
-                const discount2 = product2.discount?.discountPercent || 0;
-                return discount1 - discount2;
-                }    
+    //             if (this.selectedSort === 'discount') {
+    //                 const parseDiscount = (discount) => {
+    //                     if (discount && discount.discountPercent) {
+    //                         return parseInt(discount.discountPercent.replace("%", ""), 10) || 0;
+    //                     }
+    //                     return 0;
+    //                 }
+    //             const discount1 = parseDiscount(product1.discount?.discountPercent) || 0;
+    //             const discount2 = parseDiscount(product2.discount?.discountPercent) || 0;
+    //             return discount1 - discount2;
+    //             }   
             });
         },
 

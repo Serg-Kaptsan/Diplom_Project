@@ -250,7 +250,6 @@ export default {
         color: white;
         border: none;
         border-radius: 5px;
-        font-size: 13px;
         margin: auto 15px;
     }
     .button_group{

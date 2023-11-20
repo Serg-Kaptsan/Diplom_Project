@@ -81,7 +81,7 @@ export default {
         MySelect,
     },
 
-    data(){
+    data() {
         return {
             currentPage: 0,
             itemsPerPage: 14,
@@ -100,8 +100,8 @@ export default {
                 {value: 'name', name: 'name'},
                 {value: 'price', name: 'price'},
                 {value: 'id', name: 'code'},
-                {value: 'category', name: 'category'},
-                {value: 'discount', name: 'discount'},
+                // {value: 'category', name: 'category'},
+                // {value: 'discount', name: 'discount'},
             ],      
         }
     },
@@ -141,25 +141,25 @@ export default {
             try {
                 if (!this.isProductsLoading) {
                     this.currentPage += 1;
-                    let response;
-                    if (selectedCategoryId) {
-                        response = await axios.get(`http://localhost:8081/products/category/${selectedCategoryId}`, {
-                        params: {
-                            page: this.currentPage,
-                            pageSize: this.itemsPerPage
-                        }
-                    });
-                } else {
-                   response = await axios.get('http://localhost:8081/products', {
-                        params: {
-                            page: this.currentPage,
-                            // pageSize: this.itemsPerPage
-                        }                    
-                    });                   
-                }
-                this.totalPages = Math.ceil(response.data.totalElements / this.itemsPerPage)
-                this.products.push(...response.data.content);
-            console.log(response);
+
+                    const response = selectedCategoryId
+                       ? response = await axios.get(`http://localhost:8081/products/category/${selectedCategoryId}`, {
+                            params: {
+                                page: this.currentPage,
+                                pageSize: this.itemsPerPage
+                            }
+                        })
+                        : await axios.get('http://localhost:8081/products', {
+                                params: {
+                                    page: this.currentPage,
+                                    pageSize: this.itemsPerPage
+                                }                    
+                            });                   
+
+                        this.totalPages = Math.ceil(response.data.totalElements / this.itemsPerPage);
+                        this.products.push(...response.data.content);
+                        
+                        console.log(response);
                 }
             } catch (e) {
             console.error('Error Fetching:', e);
@@ -174,7 +174,7 @@ export default {
             this.filterByCategory();
             this.currentPage = 0;
         },
-        async filterByCategory(){
+        async filterByCategory() {
             if (this.selectedCategoryId) {
                 try {
                     const response = await axios.get(`http://localhost:8081/products/category/${this.selectedCategoryId}`);
@@ -182,7 +182,7 @@ export default {
                 } catch (error) {
                     console.error('Error filtering by category:', error);
                 } 
-            }else {
+            } else {
                 this.fetchProducts();
             }                         
         }
@@ -211,15 +211,21 @@ export default {
                 return value1.localeCompare(value2);
                 }
 
-                if (this.selectedSort === 'category') {
-                const category1 = product1.category?.name || '';
-                const category2 = product2.category?.name || '';
-                return category1.localeCompare(category2);
-                }
+                // if (this.selectedSort === 'category') {
+                // const category1 = product1.category?.name || '';
+                // const category2 = product2.category?.name || '';
+                // return category1.localeCompare(category2);
+                // }
 
                 // if (this.selectedSort === 'discount') {
-                // const discount1 = product1.discount?.discountPercent || 0;
-                // const discount2 = product2.discount?.discountPercent || 0;
+                //     const parseDiscount = (discount) => {
+                //         if (discount && discount.discountPercent) {
+                //             return parseInt(discount.discountPercent.replace("%", ""), 10) || 0;
+                //         }
+                //         return 0;
+                //     }
+                // const discount1 = parseDiscount(product1.discount?.discountPercent) || 0;
+                // const discount2 = parseDiscount(product2.discount?.discountPercent) || 0;
                 // return discount1 - discount2;
                 // }
             });

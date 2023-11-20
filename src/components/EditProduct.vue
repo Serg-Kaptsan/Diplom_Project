@@ -100,7 +100,7 @@
       <div class="button_group">
         <button class="main_button cancel"
             type="button" 
-            @click="viewProduct"
+            @click="$router.push('/admin')"
             v-if="buttonVisible">
             Cancel changes
         </button>
@@ -113,7 +113,7 @@
         <div class="create_Success"
           id="editSuccess"
           v-if="editSuccess"
-          @click="viewProduct">
+          @click="$router.push('/admin')">
           Data edited successfully.
           <br>Click for back to product.
         </div>                
@@ -172,9 +172,6 @@ export default {
       }
     },
     methods: {
-        viewProduct() {
-            this.$router.push({ name: 'product', params: { id: this.product.id } });
-        },
         checkDescriptionLength() {
           if (this.product.description.length > this.maxLength) {
             this.product.description = this.product.description.slice(0, this.maxLength);
@@ -293,7 +290,7 @@ export default {
                   },
               });
 
-              if (changeResponse.status === 200) {
+              if (changeResponse.status >= 200 && changeResponse.status < 300) {
                 this.editSuccess = true;
                 this.buttonVisible = false;
                 console.log('Data sent successfully.');
@@ -396,14 +393,12 @@ export default {
         text-align: left;
         width: 102px;
     }
-
     .main_button {
         padding: 8px 12px;
         background-color: #4CAF50;
         color: white;
         border: none;
         border-radius: 5px;
-        font-size: 13px;
         margin: auto 15px;
     }
     .button_group{
@@ -412,7 +407,7 @@ export default {
        margin-top: 10px;
     }
     .button_group button{
-        margin: auto 0;
+        margin: auto;
     }
     .cancel {
         background-color: red;

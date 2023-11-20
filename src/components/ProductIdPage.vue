@@ -25,12 +25,16 @@
             <div class="card-body">
                 <h5 class="card-title"> {{ product.name }} </h5>
                 <p class="card-text"> <strong> Code: </strong> {{ product.id }}</p>
-                <p class="card-text"> <strong> Category: </strong> {{ product.category }}</p>
+                <p class="card-text"
+                v-if="productCategory"
+                > <strong> Category: </strong> {{ productCategory.name }}</p>
                 <p class="card-text"> <strong> Product Description: </strong>
                     <br> <span> {{ product.description }} </span>
                 </p>
                 <p class="card-text"> <strong> Price: </strong> {{ product.price }} $</p>
-                <p class="card-text discount"> <strong> Discount: </strong> {{ product.discountPercent }} </p>
+                <p class="card-text discount"
+                v-if="productDiscount"
+                > <strong> Discount: </strong> {{ productDiscount.discountPercent }} </p>
                 <p class="card-text last"> <strong> Quantity in stock: </strong> {{ product.quantity }} </p>
                 <img class="cart" title="add to cart" src='/trolley.png' alt="cart">   
             </div>
@@ -45,22 +49,56 @@ export default {
     components: {
       CloseForm,
     },
-
     data() {
         return {
+            accessToken: localStorage.getItem('token'),
             product: null,
             isLargeImageVisible: false,
-            largeImageSrc: ''
+            largeImageSrc: '',
+            productCategory: null,
+            productDiscount: null,
         }
     },
 
-    created() {
+    mounted() {
         const productId = this.$route.params.id;
+
         axios.get(`http://localhost:8081/product/${productId}`)
+        .then(response => {
+            this.product = response.data;
+            const discountId = this.product.discountId;            
+            const categoryId = this.product.categoryId;
+console.log(`productId: ${productId}`);         
+console.log(`discountId: ${discountId}`);
+console.log(`categoryId: ${categoryId}`);
+
+            axios.get(`http://localhost:8081/discount/${discountId}`, {
+                headers:{
+                    'Authorization': `Bearer ${this.accessToken}`,
+                    'Content-Type': 'application/json'
+                }
+            })
             .then(response => {
-                this.product = response.data;
+                this.productDiscount = response.data;
             })
             .catch(error => {
+                console.error('Error fetching discount:', error);
+            });
+
+            axios.get(`http://localhost:8081/product-categories/${categoryId}`, {
+                headers:{
+                    'Authorization': `Bearer ${this.accessToken}`,
+                    'Content-Type': 'application/json'
+                }                
+            })
+            .then(response => {
+                this.productCategory = response.data;
+            })
+            .catch(error => {
+                console.error('Error fetching category:', error);
+            });            
+        })
+        .catch(error => {
             console.error('Error fetching product:', error);
         });
     },
