@@ -83,7 +83,7 @@ export default{
                         Authorization: `Bearer ${accessToken}`
                     }
                 });
-                if (userResponse.status === 200) {
+                if (userResponse.status >= 200 && userResponse.status < 300) {
                     const user = userResponse.data;
                     localStorage.setItem('userId', user.id);
 
@@ -91,6 +91,7 @@ export default{
                         alert('Successful authorization. Welcome to our store.');                        
                         this.$router.push('/');
                         this.$emit('close-dialog');
+                        await this.createSession();
                     } else if (user.roles.includes('ROLE_ADMIN')) {
                        this.$router.push('/admin');
                        this.$emit('close-dialog');
@@ -102,7 +103,24 @@ export default{
                 alert('Login failed. Please check your credentials and try again.');
             }
         },
-        
+        async createSession() {
+            try {
+                const shoppingSession = await axios.post('http://localhost:8081/create', {
+                    userId: localStorage.getItem('userId'),
+                    createdAt: new Date().toISOString(),
+                });
+console.log('Request:', shoppingSession.config);
+console.log('Response:', shoppingSession.data);
+                if (shoppingSession.status >= 200 && shoppingSession.status < 300) {
+                    const session = shoppingSession.data;
+                    localStorage.setItem('sessionId', session.id);
+console.log(`sessionId: ${session.id}`);
+console.log(`userId: ${userId}`);
+                }
+            } catch (error) {
+            console.error('Error creating shopping session:', error);               
+            }
+        }
     },
     emits: ['update:show'],
     mixins: [showMixin],

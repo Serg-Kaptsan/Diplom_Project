@@ -11,6 +11,9 @@ export default {
         },
         isOpenRegistr() {
             this.$emit('update:show', false)
+        },
+        showDialog() {
+            this.$emit('update:show', tr)
         }
     },
     mounted() {

@@ -1,27 +1,23 @@
 <template>
     <div class="navbar">
-      <div class="home"
-        @click="goHome">
+      <div class="home" @click="goHome"> 
         HOME
       </div>
+
       <div class="navbar__btns">
-        <button 
-          @click="$router.push('/composition')" >
-          CART
+        <button @click="$router.push('/cart')">
+          CART 
         </button>
-        <button 
-          @click="$router.push('/about')"> CONTACT US
+        <button @click="$router.push ('/about')">
+          CONTACT US 
         </button>
-        <button
-          @click="showDialog">
+        <button @click="showDialog"> 
           LOG IN
         </button>
-        <button
-          @click="$router.push('/admin')">
-          ADMIN
+        <button @click="$router.push('/admin')"> 
+          ADMIN 
         </button>
-        <button
-          @click="$router.push('/')">
+        <button @click="logout"> 
           GO OUT
         </button>
       </div>
@@ -34,6 +30,11 @@
 
     },
     methods: {
+      logout() {
+        localStorage.removeItem('token');
+          alert('You have successfully logged out of your account. \nWould you like to log in under a different name?');
+          this.showDialog();
+      },
       goHome() {
         if (this.$route.path !== '/') {
           this.$router.push('/');
@@ -44,7 +45,7 @@
       },
       showDialog() {
         this.$emit('show-dialog');
-        }
+      }
     },
   }
   </script>

@@ -1,8 +1,7 @@
 <template>
     <navbar class="navbar" @show-dialog="showDialog"/>
     <main>
-      <!-- <div class="app_container">
-      </div>    -->
+      
       <router-view></router-view>
         
         <my-dialog v-model:show="dialogVisible">

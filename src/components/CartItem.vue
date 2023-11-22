@@ -1,63 +1,85 @@
 <template>
-        <div class="card-item" v-if="product" >
-            <close-form title="back to product list"
-                @click="$router.push('/')" >
-            </close-form>
+    <div class="card-item" v-if="product" >
 
-            <div class="large-image"
-                v-if="isLargeImageVisible" 
-                @click.stop="closeLargeImage"
-            >
-                <img 
-                    :src="largeImageSrc" :alt="product.name" 
-                    @click="closeLargeImage" />
-            </div>
+        <div class="large-image"
+            v-if="isLargeImageVisible" 
+            @click.stop="closeLargeImage"
+        >
+            <img 
+                :src="largeImageSrc" :alt="product.name" 
+                @click="closeLargeImage" />
+        </div>
 
-            <div class="card-img-block"
-                @click="openLargeImage"
-            >
-                <img class="card-img-top" 
-                    :src="'data:image/jpeg;base64,' + product.imageData" 
-                    :alt="product.name"
-                    v-focus
+        <div class="card-img-block"
+            @click="openLargeImage"
+        >
+            <img class="card-img" 
+                :src="'data:image/jpeg;base64,' + product.imageData" 
+                :alt="product.name"
+                v-focus
+            />
+        </div>
+        <div class="card-body">
+            <h5 class="card-title"> {{ product.name }} </h5>
+            <p class="card-text"> <strong> Code: </strong> {{ product.id }}</p>
+            <p class="card-text" v-if="productCategory"> <strong> Category: </strong> 
+                {{ productCategory.name }}
+            </p>
+            <p class="card-text"> <strong> Price: </strong> {{ product.price }} $</p>       
+            <p class="card-text" v-if="productDiscount"> <strong> Discount percent: </strong> 
+                {{ productDiscount.discountPercent }}
+            </p> 
+        </div>
+        <div class="item-count-block">
+
+            <div class="count">
+               <div class="count-text"> Select quantity </div> 
+                <input class="form-controle item-calculation"
+                    type="number"
+                    v-model="selectedNumber"
+                    min="1"
                 />
             </div>
-            <div class="card-body">
-                <h5 class="card-title"> {{ product.name }} </h5>
-                <p class="card-text"> <strong> Code: </strong> {{ product.id }}</p>
-                <p class="card-text"
-                v-if="productCategory"
-                > <strong> Category: </strong> {{ productCategory.name }}</p>
-                <p class="card-text"> <strong> Product Description: </strong>
-                    <br> <span> {{ product.description }} </span>
-                </p>
-                <p class="card-text"> <strong> Price: </strong> {{ product.price }} $</p>
-                <p class="card-text discount"
-                v-if="productDiscount"
-                > <strong> Discount: </strong> {{ productDiscount.discountPercent }} </p>
-                <p class="card-text last"> <strong> Quantity in stock: </strong> {{ product.quantity }} </p>
-                <img class="cart" title="add to cart" src='/trolley.png' alt="cart">   
+
+            <div class="count">
+               <div class="item-text"> Price:</div>
+               <div class="item-calculation"> {{ product.price }} $</div>
             </div>
+
+            <div class="count">
+               <div class="item-text"> Price including discount: </div>
+               <div class="item-calculation"> {{ discountPrice }} </div>
+            </div>
+
+            <div class="count">
+               <div class="item-text"> Sum: </div>
+               <div class="item-calculation"> {{ itemAmount }} $</div>
+            </div>
+            <button @click="removeFromCart">Remove</button>
         </div>
+    </div>
 </template>
 
 <script>
 import axios from 'axios';
-import CloseForm from "@/components/UI/CloseForm"
 
 export default {
     components: {
-      CloseForm,
     },
     data() {
         return {
+
             accessToken: localStorage.getItem('token'),
-            product: null,
+            product: Object,
             isLargeImageVisible: false,
             largeImageSrc: '',
             productCategory: null,
             productDiscount: null,
+            selectedNumber: Number,
+            itemAmount: Number,
+            removeFromCart: Function,            
         }
+        
     },
 
     mounted() {
@@ -68,9 +90,9 @@ export default {
             this.product = response.data;
             const discountId = this.product.discountId;            
             const categoryId = this.product.categoryId;
-console.log(`productId: ${productId}`);         
-console.log(`discountId: ${discountId}`);
-console.log(`categoryId: ${categoryId}`);
+    console.log(`productId: ${productId}`);         
+    console.log(`discountId: ${discountId}`);
+    console.log(`categoryId: ${categoryId}`);
 
             axios.get(`http://localhost:8081/discount/${discountId}`, {
                 headers:{
@@ -102,6 +124,14 @@ console.log(`categoryId: ${categoryId}`);
             console.error('Error fetching product:', error);
         });
     },
+    computed: {
+        discountPrice() {
+
+        },
+        itemAmount() {
+
+        },
+    },
     methods:{
         openLargeImage() {
             this.isLargeImageVisible = true;
@@ -116,61 +146,59 @@ console.log(`categoryId: ${categoryId}`);
 
 <style scoped>
     h1{
-        margin-top: 40px;
-        margin-left: 20px;
+        margin: 40px 25px;
     }
-     .card-item {
-        position: relative;
-        width: 85%;
+    .card-item {
+        width:95%;
         display: flex;
-        justify-content: space-between;
-        flex-direction: row;
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
+        justify-content: space-between;        
         margin: auto;
-        margin-top: 50px;
-        padding: 25px;
-        border: 1px solid rgb(120, 116, 116);
-        border-radius: 10px;
+        margin-top: 20px;
+        padding: 10px;
         background-color: white;
     }
     .card-img-block{
-        width: 40%;
+        width: 20%;
         height: 100%;
+        padding: 10px;    
         cursor: pointer;
     }
-    .card-img-top {
-        width: 100%;
-        padding: 10px;
-        max-height: 550px;
-        object-fit: contain;      
-        vertical-align: middle;
+    .card-img {
+        margin: auto;
+        max-height: 160px;
     }
     .card-body{
-        width: 40%;
+        max-width: 40%;
         padding: 10px;
-        padding-left: 50px;
+        margin-left: 50px;
     }
     h5 {
         text-align: center;
         font-size: 24px;
         font-weight: 700;
-        margin-bottom: 25px; 
+        margin-bottom: 15px; 
     }
     p {
         font-size: 20px;
     }
-    .last {
-        margin-bottom: 5px;            
+    .item-count-block{
+        padding: 10px;
+        margin-right: 10px;
     }
-    span {
-        font-size: 16px;
+    .count{
+        display: flex;
+        justify-content: end;
+        font-size: 20px;
+        padding: 5px;
     }
-    .cart{
-        width: 36px;
-        height: 36px;
-        float: right;
-        cursor: pointer;
+    .item-calculation{
+        width: 100px;
+        margin-left: 20px;
+        font-weight: 500;
+        text-align: center;
     }
+
     @media only screen and (max-width: 768px) {
         .card-img-block{
             width: 100%;

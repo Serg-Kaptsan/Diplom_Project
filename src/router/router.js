@@ -24,7 +24,7 @@ const routes = [
     path: '/product/:id',
     name: 'product',
     props: true, 
-    component: () => import('@/components/ProductIdPage')
+    component: () => import('@/views/ProductIdPage')
   },
     {
       path: '/image/:imageData',
@@ -99,9 +99,9 @@ const routes = [
     },
 
   {
-    path: '/orders',
-    name: 'orders',
-    component: () => import('@/views/OrdersList.vue')
+    path: '/cart',
+    name: 'cart',
+    component: () => import('@/views/UsersProductCart.vue')
   },
     {
       path: '/order/:id',

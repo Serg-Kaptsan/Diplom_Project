@@ -184,7 +184,7 @@ export default {
                         'Authorization': `Bearer ${this.accessToken}`
                     },
                 });
-                if (response.status === 200) {
+                if (response.status >= 200 && response.status <300) {
                     this.discounts = response.data.map(discount => {
                 this.discountIdMap[discount.name] = discount.id;
                 return discount.name;
@@ -206,7 +206,7 @@ export default {
                     },
                 });
                 
-                if (response.status === 200) {
+                if (response.status >= 200 && response.status < 300) {
                     this.categories = response.data.map(category => category.name);
                     response.data.forEach(category => {
                     this.categoryIdMap[category.name] = category.id;

@@ -152,7 +152,7 @@ export default {
                     },
                 });
 
-                if (changeResponse.status === 200) {
+                if (changeResponse.status >= 200 && changeResponse.status < 300) {
                     this.editSuccess = true;
                     this.buttonVisible = false;
                     console.log('Data sent successfully.');
