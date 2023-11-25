@@ -5,11 +5,9 @@
       <textarea
         :id="fieldId"
         v-model="localValue"
-        :value="modelValue" 
-        @input="checkLength"
+        @input="habdleInput"
         placeholder="Enter Description text"
-      >
-      </textarea>
+      ></textarea>
       <p class="form-text" id="remain">
         Remaining characters: {{ remainingCharacters }}
       </p>
@@ -19,9 +17,7 @@
   <script>
   export default {
     name: 'textarea-description',
-    props: {
-      modelValue: [String, Number]
-    },
+
     data() {
       return {
         localValue: "",
@@ -34,11 +30,11 @@
       },
     },
     methods: {
-      checkLength() {
+      habdleInput() {
         if (this.localValue.length > this.maxLength) {
           this.localValue = this.localValue.slice(0, this.maxLength);
         }
-        this.$emit("update:modelValue", this.localValue);
+        this.$emit("inpute", this.localValue);
       },
     },
   };

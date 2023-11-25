@@ -33,10 +33,12 @@
       <div 
           v-for="category in filteredAndSortedCategories"
           :key="category.id">
-        <category-item 
-            :category="category"
-            @delete="deleteCategory">
-        </category-item>
+          <transition-group name="flip-list">
+            <category-item 
+                :category="category"
+                @delete="deleteCategory">
+            </category-item>          
+          </transition-group>
       </div>
     </div>
     <div v-else class="temporary">Loading</div>
@@ -197,7 +199,9 @@ console.error('Error Fetching:', e);
   .sort_btn:last-child {
       margin-right: 250px;   
   }
-
+  .flip-list-move {
+      transition: transform 0.5s ease;
+  }
   @media only screen and (max-width: 960px) {
       .btn_container {
           padding: 7px 10px;

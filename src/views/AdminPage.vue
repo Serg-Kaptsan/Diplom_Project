@@ -46,12 +46,14 @@
         <div 
             v-for="product in filteredAndSortedProducts"
             :key="product.id">
-        <admin-product-item 
-            :product="product"
-            :discount="discount"
-            :category="categories"
-            @delete="deleteProduct">
-        </admin-product-item>
+            <transition-group name="flip-list">
+                <admin-product-item 
+                    :product="product"
+                    :discount="discount"
+                    :category="categories"
+                    @delete="deleteProduct">
+                </admin-product-item>                
+            </transition-group>
         </div>
       </div>
       <div v-else class="temporary">Loading</div>
@@ -300,6 +302,10 @@ export default {
     .sort_btn:last-child {
         margin-right: 100px;   
     }
+    .flip-list-move {
+       transition: transform 0.5s ease;
+    }
+
 
     @media only screen and (max-width: 960px) {
         .btn_container {

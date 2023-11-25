@@ -38,11 +38,14 @@
         <div 
             v-for="product in filteredAndSortedProducts"
             :key="product.id">
-        <product-item 
-            :product="product"
-            :discount="discount"
-            :category="categoryId">
-        </product-item>
+            <transition-group name="flip-list">
+                <product-item 
+                    :product="product"
+                    :discount="discount"
+                    :category="categoryId">
+                </product-item>                
+            </transition-group>
+
         </div>
       </div>
       <div v-else class="temporary">Loading</div>
@@ -289,6 +292,10 @@ export default {
         margin-right: 100px;
         border: 2px solid #ccc;
     }
+    .flip-list-move {
+       transition: transform 0.5s ease;
+    }
+
     @media only screen and (max-width: 900px) {
         .serch_block {
             min-width: 350px;

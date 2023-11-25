@@ -33,10 +33,12 @@
         <div
             v-for="discount in filteredAndSortedDiscounts"
             :key="discount.id">
-          <discount-item 
-              :discount="discount"
-              @delete="deleteDiscount">
-          </discount-item>
+            <transition-group name="flip-list">
+              <discount-item 
+                  :discount="discount"
+                  @delete="deleteDiscount">
+              </discount-item>            
+            </transition-group>
         </div>
       </div>
       <div v-else class="temporary">Loading</div>
@@ -198,7 +200,10 @@
     .sort_btn:last-child {
         margin-right: 250px;   
     }
-  
+    .flip-list-move {
+      transition: transform 0.5s ease;
+    }
+
     @media only screen and (max-width: 960px) {
         .btn_container {
             padding: 7px 10px;
@@ -303,9 +308,6 @@
         border: 1px solid red;
         background-color: #f0f8f0;
         margin-top: 10px;
-    }
-    .observer{
-        height: 2px;
     }
     .temporary{
         font-weight: 500;

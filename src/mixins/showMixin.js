@@ -13,7 +13,7 @@ export default {
             this.$emit('update:show', false)
         },
         showDialog() {
-            this.$emit('update:show', tr)
+            this.$emit('update:show', true)
         }
     },
     mounted() {

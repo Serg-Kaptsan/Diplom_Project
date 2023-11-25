@@ -4,6 +4,7 @@ import MyDialog from "@/components/UI/MyDialog";
 import AdminMenu from "@/components/UI/AdminMenu";
 import CloseForm from "@/components/UI/CloseForm";
 import MySelect from "@/components/UI/MySelect";
+import TextareaDescription from "@/components/UI/TextareaDescription";
 
 export default [
     MyButton,
@@ -12,4 +13,5 @@ export default [
     AdminMenu,
     CloseForm,
     MySelect,
+    TextareaDescription,
 ];
