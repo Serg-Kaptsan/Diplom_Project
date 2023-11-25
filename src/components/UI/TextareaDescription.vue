@@ -1,11 +1,13 @@
 <template>
     <div>
-      <label :for="fieldId" class="form-label" id="label-text">Description:</label>
+      <label :for="fieldId" 
+      class="form-label" id="label-text">Description:</label>
       <textarea
         :id="fieldId"
         v-model="localValue"
+        :value="modelValue" 
         @input="checkLength"
-        placeholder="Enter text..."
+        placeholder="Enter Description text"
       >
       </textarea>
       <p class="form-text" id="remain">
@@ -17,6 +19,9 @@
   <script>
   export default {
     name: 'textarea-description',
+    props: {
+      modelValue: [String, Number]
+    },
     data() {
       return {
         localValue: "",

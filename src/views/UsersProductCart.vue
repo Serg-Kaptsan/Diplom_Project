@@ -18,11 +18,12 @@
       <div class="product-list">
 
          <cart-item
-            v-for="(cartItem, index) in cartItem"
+            v-for="(cartItem, index) in cartItems"
             :key="index"
             :product="cartItem.product"
             :selectedNumber="cartItem.selectedNumber"
             :itemAmount="cartItem.itemAmount"
+            v-bind="cartItem"
             @removeFromCart="removeFromCart(index)"
          >
          </cart-item>
@@ -57,29 +58,45 @@
       components: {
          CartItem
       },
+      props: {
+         cartItem: {
+            type: Object,
+            default: () => ({}),
+         }
+      },
       data() {
          return {
             accessToken:localStorage.getItem('token'),
             cartItems: [],
             product: null,
             productDiscount: null,
-            // totalNumber: 1,
-            // totalAmount: 1,
+            totalNumber: Number,
+            totalAmount: Number,
          }
       },
 
-      computed: {
-         totalNumber() {
-            return this.cartItems.reduce((total, cartItem) => total + cartItem.selectedNumber, 0);
-         },
-         totalAmount() {
-            return this.cartItems.reduce((total, cartItem) => total + cartItem.itemAmount, 0);
-         }
-      },
+      // computed: {
+      //    totalNumber() {
+      //       return this.cartItems.reduce((total, cartItem) => total + cartItem.selectedNumber, 0);
+      //    },
+      //    totalAmount() {
+      //       return this.cartItems.reduce((total, cartItem) => total + cartItem.itemAmount, 0);
+      //    }
+      // },
       methods: {
          removeFromCart() {
-            this.cartItems.splice(index, 1);
+            const index = this.cartItems.findIndex(item => item.product.id === productId);
+   if (index !== -1) {
+      this.cartItems.splice(index, 1);
+   }
          }
+      },
+      mounted() {
+        // Теперь вы можете использовать this.cartItem, чтобы получить объект корзины
+        console.log('CartItem in UsersProductCart:', this.cartItem);
+      },
+      created () {
+         console.log('cartItem in UsersProductCart:', this.$route.params.cartItem);
       }
    }
 </script>
@@ -118,7 +135,7 @@
       padding: 5px;
    }
    .calculation{
-      width: 100px;
+      width: 150px;
       font-weight: 500;
       text-align: center;
    }

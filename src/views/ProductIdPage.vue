@@ -38,9 +38,9 @@
                 <p class="card-text" v-if="productDiscount"> <strong> Discount percent: </strong> 
                     {{ productDiscount.discountPercent }}
                 </p>
-                <p class="card-text last"> <strong> Quantity in stock: </strong> 
+                <!-- <p class="card-text last"> <strong> Quantity in stock: </strong> 
                     {{ product.quantity }}
-                </p>
+                </p> -->
                 <img class="cart" 
                     title="add to cart"
                     src='/trolley.png' 
@@ -53,14 +53,13 @@
 
 <script>
 import axios from 'axios';
-import CloseForm from "@/components/UI/CloseForm";
 
 export default {
     components: {
-      CloseForm,
     },
     data() {
         return {
+            token: localStorage.getItem('token'),
             product: null,
             isLargeImageVisible: false,
             largeImageSrc: '',
@@ -106,13 +105,62 @@ console.log(`categoryId: ${categoryId}`);
             if (!this.isAuthorization) {
                 alert('To add an item to your cart, you must log in.');
             } else {
+                this.createSession();
+            }
+        },
 
-            const cartItem = {
-                product: this.product,
-                selectedNumder: 1,
-                itemAmount: this.product.price
-            };
-                this.$emit('addToCart', cartItem);
+        async createSession() {
+            try {
+                const userId = localStorage.getItem('userId');
+                const sessionId = localStorage.getItem('sessionId');
+
+                if (!sessionId) {
+                    const shoppingSession = await axios.post('http://localhost:8081/create', {
+                        userId: userId,
+                        createdAt: new Date().toISOString(),
+                    });
+
+                if (shoppingSession.status >= 200 && shoppingSession.status < 300) {
+                    const session = shoppingSession.data;
+                    localStorage.setItem('sessionId', session.id);
+                    this.createUserProductCart();                                       
+                }
+                } else {
+                    this.createUserProductCart();
+                    console.log(`sessionId: ${sessionId}`);
+                    console.log(`userId: ${userId}`);
+                }
+            } catch (error) {
+            console.error('Error creating shopping session:', error);               
+            }
+        },
+
+        async createUserProductCart() {
+            try {
+                const sessionId = localStorage.getItem('sessionId');
+                const cartItem = {
+                    quantity: 1,
+                    shoppingSessionId: sessionId,
+                    productId: this.product.id
+                };
+
+                const response = await axios.post(`http://localhost:8081/cart/${sessionId}/items`, cartItem, { 
+                    headers: {
+                        'Authorization': `Bearer ${this.token}`,
+                    }
+                });
+
+console.log('Request for cart:', response.config);
+console.log('Response for cart:', response.data);
+
+                if (response.status >= 200 && response.status < 300) {
+                    console.log('CartItem created succeccfully');
+                    alert('Product successfully added to cart');
+                    this.$router.push({ name: 'cart', params: { cartItem: {...cartItem} } });
+                    console.log('cartItem:', cartItem);
+                }
+            } catch (error) {
+                console.error('Error creating user product cart:', error);
             }
         },
 

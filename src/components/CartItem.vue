@@ -68,13 +68,12 @@ export default {
     },
     data() {
         return {
-
-            accessToken: localStorage.getItem('token'),
+            accessToken: String,
             product: Object,
-            isLargeImageVisible: false,
-            largeImageSrc: '',
-            productCategory: null,
-            productDiscount: null,
+            isLargeImageVisible: Boolean,
+            largeImageSrc: String,
+            productCategory: Object,
+            productDiscount: Object,
             selectedNumber: Number,
             itemAmount: Number,
             removeFromCart: Function,            
@@ -124,15 +123,19 @@ export default {
             console.error('Error fetching product:', error);
         });
     },
-    computed: {
-        discountPrice() {
+    // computed: {
+    //     discountPrice() {
 
-        },
-        itemAmount() {
+    //     },
+    //     itemAmount() {
 
-        },
-    },
+    //     },
+    // },
     methods:{
+        removeFromCart() {
+            this.$emit('removeFromCart', this.product.id);            
+        },
+
         openLargeImage() {
             this.isLargeImageVisible = true;
             this.largeImageSrc = `data:image/jpeg;base64, ${this.product.imageData}`;
@@ -193,7 +196,7 @@ export default {
         padding: 5px;
     }
     .item-calculation{
-        width: 100px;
+        width: 120px;
         margin-left: 20px;
         font-weight: 500;
         text-align: center;

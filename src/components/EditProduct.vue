@@ -124,11 +124,9 @@
 
 <script>
 import axios from 'axios';
-import AdminMenu from '@/components/UI/AdminMenu';
 
 export default {
   components:{
-      AdminMenu,
   },
     
   data() {

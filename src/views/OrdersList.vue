@@ -66,14 +66,10 @@
 <script>
 import axios from 'axios';
 import AdminProductItem from "@/components/AdminProductItem";
-import MySelect from '@/components/UI/MySelect';
-import AdminMenu from '@/components/UI/AdminMenu';
 
 export default {
     components: {
         AdminProductItem,
-        AdminMenu,
-        MySelect,
     },
 
     data(){

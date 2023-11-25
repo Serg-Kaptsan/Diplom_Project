@@ -73,12 +73,10 @@
 <script>
 import axios from 'axios';
 import ProductItem from "@/components/ProductItem";
-import MySelect from '@/components/UI/MySelect';
 
 export default {
     components: {
         ProductItem,
-        MySelect,
     },
 
     data() {
@@ -238,7 +236,7 @@ export default {
 
     mounted() {
         this.fetchProducts();
-        console.log(this.$refs.observer);
+        console.log('observer point', this.$refs.observer);
     },
 }
 </script>

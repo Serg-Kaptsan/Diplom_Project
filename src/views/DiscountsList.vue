@@ -52,14 +52,10 @@
   <script>
   import axios from 'axios';
   import DiscountItem from "@/components/DiscountItem";
-  import MySelect from '@/components/UI/MySelect';
-  import AdminMenu from '@/components/UI/AdminMenu';
   
   export default {
     components: {
       DiscountItem,
-      AdminMenu,
-      MySelect,
     },
   
     data(){

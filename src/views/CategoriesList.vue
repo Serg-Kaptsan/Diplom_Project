@@ -52,14 +52,10 @@
 <script>
 import axios from 'axios';
 import CategoryItem from "@/components/CategoryItem";
-import MySelect from '@/components/UI/MySelect';
-import AdminMenu from '@/components/UI/AdminMenu';
 
 export default {
   components: {
     CategoryItem,
-    AdminMenu,
-    MySelect,
   },
 
   data(){

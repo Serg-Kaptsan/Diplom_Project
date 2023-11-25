@@ -27,7 +27,6 @@
   <script>
   export default {
     props: {
-
     },
     methods: {
       logout() {

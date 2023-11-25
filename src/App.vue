@@ -22,7 +22,6 @@
 <script>
 import Navbar from "@/components/Navbar";
 import ProductsPage from "@/views/ProductsPage";
-import MyDialog from "@/components/UI/MyDialog";
 import LoginPage from "@/components/LoginPage";
 import RegistrPage from "@/components/RegistrPage";
 import showMixin from "@/mixins/showMixin";
@@ -31,7 +30,6 @@ export default {
   components: {
     Navbar,
     ProductsPage,
-    MyDialog,
     LoginPage,
     RegistrPage,
   },

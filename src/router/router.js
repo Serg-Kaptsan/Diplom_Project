@@ -56,12 +56,12 @@ const routes = [
       props: true,
       component: () => import('@/components/EditDiscount.vue')
     },
-    {
-      path: '/discount/:id',
-      name: 'discount',
-      props: true,
-      component: () => import('@/components/DiscountIdCard.vue')
-    },
+    // {
+    //   path: '/discount/:id',
+    //   name: 'discount',
+    //   props: true,
+    //   component: () => import('@/components/DiscountIdCard.vue')
+    // },
         {
       path: '/add-discount/',
       name: 'add-discount',
@@ -101,6 +101,7 @@ const routes = [
   {
     path: '/cart',
     name: 'cart',
+    props: true,
     component: () => import('@/views/UsersProductCart.vue')
   },
     {
