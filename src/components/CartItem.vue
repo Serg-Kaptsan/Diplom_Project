@@ -1,5 +1,5 @@
-<template>
-    <div class="card-item" v-if="product" >
+<template >
+    <div class="card-item" v-if="getCartItem.productId" >
 
         <div class="large-image"
             v-if="isLargeImageVisible" 
@@ -58,6 +58,9 @@
             <button @click="removeFromCart">Remove</button>
         </div>
     </div>
+    <div v-else class="alter-head">
+       Your grocery cart is empty
+    </div>
 </template>
 
 <script>
@@ -65,6 +68,16 @@ import axios from 'axios';
 
 export default {
     components: {
+    },
+    props: {
+        getCartItem: {
+            type: Object,
+            default: () => ({}),
+        },
+        productId: {
+            type: Number,
+            required: true,
+        },
     },
     data() {
         return {
@@ -75,14 +88,12 @@ export default {
             productCategory: Object,
             productDiscount: Object,
             selectedNumber: Number,
-            itemAmount: Number,
-            removeFromCart: Function,            
+            itemAmount: Number,         
         }
-        
     },
 
     mounted() {
-        const productId = this.$route.params.id;
+        const productId = this.product.id;
 
         axios.get(`http://localhost:8081/product/${productId}`)
         .then(response => {

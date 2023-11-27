@@ -25,8 +25,6 @@
             <p class="card-text last"> <strong> Quantity: </strong> {{ product.quantity }} </p> 
         </div>
         <div class="inform-block">
-            <!-- <p class="card-title"> <strong> Name: {{ product.name }} </strong> </p>
-            <p class="card-text"> <strong> ID: </strong> {{ product.id }} </p> -->
             <h6 class="card-title"> Additional information </h6>
             <div class="special">
                 <p class="card-text ">

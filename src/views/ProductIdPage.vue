@@ -53,9 +53,13 @@
 
 <script>
 import axios from 'axios';
+import { mapActions } from 'vuex';
+import MyDialog from '@/components/UI/MyDialog';
+// import showMixin from "@/mixins/showMixin";
 
 export default {
     components: {
+        // MyDialog
     },
     data() {
         return {
@@ -101,9 +105,12 @@ console.log(`categoryId: ${categoryId}`);
         });
     },
     methods:{
+        ...mapActions('cart',['addProductToCart']),
+
         addToCart() {
             if (!this.isAuthorization) {
                 alert('To add an item to your cart, you must log in.');
+                // this.showDialog();
             } else {
                 this.createSession();
             }
@@ -156,7 +163,8 @@ console.log('Response for cart:', response.data);
                 if (response.status >= 200 && response.status < 300) {
                     console.log('CartItem created succeccfully');
                     alert('Product successfully added to cart');
-                    this.$router.push({ name: 'cart', params: { cartItem: {...cartItem} } });
+                    this.$store.dispatch('addProductToCart', cartItem);
+                    this.$router.push('/cart');
                     console.log('cartItem:', cartItem);
                 }
             } catch (error) {
@@ -177,7 +185,8 @@ console.log('Response for cart:', response.data);
             return !!localStorage.getItem('token');
         }
     },
-};
+    // mixins: [showMixin]
+}
 </script>
 
 <style scoped>

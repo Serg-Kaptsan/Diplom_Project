@@ -1,5 +1,5 @@
 <template>
-   <h1>
+   <h1> 
       Your shopping cart
    </h1>
    <div class="cart-container">
@@ -15,18 +15,17 @@
          </button>
       </header>
 
-      <div class="product-list">
-
+      <div class="list-body">
+      <div class="product-list"
+         v-for="(getCartItem, productId) in getCartItems"
+         :key="productId">
          <cart-item
-            v-for="(cartItem, index) in cartItems"
-            :key="index"
-            :product="cartItem.product"
-            :selectedNumber="cartItem.selectedNumber"
-            :itemAmount="cartItem.itemAmount"
-            v-bind="cartItem"
-            @removeFromCart="removeFromCart(index)"
+            :getCartItem="getCartItem"
+            @removeFromCart="removeFromCart(productId)"
          >
-         </cart-item>
+         </cart-item>         
+      </div>
+
 
          <hr class="border border-primary border-3 opacity-75 line">
          <div class="count-block">
@@ -53,51 +52,58 @@
 <script>
    import axios from 'axios';
    import CartItem from '@/components/CartItem';
-   
+   import { mapGetters } from 'vuex';
+
    export default{
       components: {
-         CartItem
+         CartItem,
       },
-      props: {
-         cartItem: {
-            type: Object,
-            default: () => ({}),
-         }
-      },
+      // props: {
+      //    cartItem: {
+      //       type: Object,
+      //       default: () => ({}),
+      //    }
+      // },
       data() {
          return {
             accessToken:localStorage.getItem('token'),
-            cartItems: [],
-            product: null,
-            productDiscount: null,
+            // cartItems: [],
+            // getCartItem: {
+            //    quantity: 1,
+            //    productId: Number,
+            // },
+            // product: null,
+            // productDiscount: null,
             totalNumber: Number,
             totalAmount: Number,
          }
       },
 
-      // computed: {
+      computed: {
+         ...mapGetters(['getCartItems']),
       //    totalNumber() {
       //       return this.cartItems.reduce((total, cartItem) => total + cartItem.selectedNumber, 0);
       //    },
       //    totalAmount() {
       //       return this.cartItems.reduce((total, cartItem) => total + cartItem.itemAmount, 0);
       //    }
-      // },
-      methods: {
-         removeFromCart() {
-            const index = this.cartItems.findIndex(item => item.product.id === productId);
-   if (index !== -1) {
-      this.cartItems.splice(index, 1);
-   }
-         }
       },
-      mounted() {
-        // Теперь вы можете использовать this.cartItem, чтобы получить объект корзины
-        console.log('CartItem in UsersProductCart:', this.cartItem);
+      methods: {
+         removeFromCart(productId) {
+            this.$store.dispatch('removeProductFromCart', productId);
+            alert(`The product code ${productId} was successfully removed from the cart`)
+         },
+
+         addToCart(cartItem) {
+            this.$store.dispatch('addProductToCart', cartItem);
+         },
       },
       created () {
-         console.log('cartItem in UsersProductCart:', this.$route.params.cartItem);
-      }
+         console.log('getCartItems in UsersProductCart:', this.getCartItems);
+      },
+      mounted() {
+        console.log('CartItem in UsersProductCart:', this.getCartItem);
+      },
    }
 </script>
 

@@ -97,7 +97,6 @@ export default {
             {value: 'id', name: 'code'},
             {value: 'price', name: 'price'},            
             // {value: 'category', name: 'category'},
-            // {value: 'quantity', name: 'quantity'},
             // {value: 'discount', name: 'discount'},
             {value: 'createdAt', name: 'creation date'},
             {value: 'modifiedAt', name: 'modification date'},
@@ -239,11 +238,7 @@ export default {
     //             return discount1 - discount2;
     //             }   
             });
-        },
-
-        // handleSearchResults(results) {
-        //     this.searchResults = results;
-        // },  
+        }, 
     },
 
     mounted() {
