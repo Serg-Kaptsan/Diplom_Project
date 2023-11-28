@@ -21,7 +21,8 @@
          :key="productId">
          <cart-item
             :getCartItem="getCartItem"
-            @removeFromCart="removeFromCart(productId)"
+            :productId="productId"
+            @removeFromCart="removeFromCart"
          >
          </cart-item>         
       </div>

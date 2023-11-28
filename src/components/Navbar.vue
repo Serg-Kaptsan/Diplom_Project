@@ -96,7 +96,7 @@
   button{
     background: transparent;
     border: none;
-    margin-left: 20px;      
+    margin-left: 25px;      
   }
   @media only screen and (max-width: 768px){
     .navbar{

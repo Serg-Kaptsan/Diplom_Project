@@ -1,5 +1,6 @@
 <template >
-    <div class="card-item" v-if="getCartItem.productId" >
+    <div class="card-item" 
+        v-if="getCartItem">
 
         <div class="large-image"
             v-if="isLargeImageVisible" 
@@ -88,13 +89,13 @@ export default {
             productCategory: Object,
             productDiscount: Object,
             selectedNumber: Number,
-            itemAmount: Number,         
+            itemAmount: Number,
         }
     },
 
     mounted() {
-        const productId = this.product.id;
-
+        const productId = this.productId;
+console.log(`productId: ${productId}`)
         axios.get(`http://localhost:8081/product/${productId}`)
         .then(response => {
             this.product = response.data;
@@ -252,6 +253,14 @@ export default {
         margin: 50px auto auto;
         max-width: 90%;
         max-height: 90%;
+    }
+    .alter-head{
+        width:100%;
+        height: 50px;
+        align-items: center;
+        text-align: center;
+        color: red;
+        font-weight: 600;
     }
 
 </style>
