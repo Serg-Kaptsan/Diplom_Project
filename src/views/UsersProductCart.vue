@@ -16,17 +16,20 @@
       </header>
 
       <div class="list-body">
-      <div class="product-list"
-         v-for="(getCartItem, productId) in getCartItems"
-         :key="productId">
-         <cart-item
-            :getCartItem="getCartItem"
-            :productId="productId"
-            @removeFromCart="removeFromCart"
-         >
-         </cart-item>         
-      </div>
-
+         <div class="product-list"
+            v-if="getCartItems.length">
+            <cart-item
+               v-for="(getCartItem, productId) in getCartItems"
+               :key="productId"
+               :getCartItem="getCartItem"
+               :productId="productId"
+               @removeFromCart="removeFromCart"
+            >
+            </cart-item>
+         </div>
+         <div v-else class="alter-head">
+            <h3> Your grocery cart is empty </h3>
+         </div>
 
          <hr class="border border-primary border-3 opacity-75 line">
          <div class="count-block">
@@ -68,11 +71,11 @@
       data() {
          return {
             accessToken:localStorage.getItem('token'),
-            // cartItems: [],
-            // getCartItem: {
-            //    quantity: 1,
-            //    productId: Number,
-            // },
+            cartItems: [],
+            getCartItem: {
+               quantity: 1,
+               productId: Number,
+            },
             // product: null,
             // productDiscount: null,
             totalNumber: Number,
@@ -91,10 +94,12 @@
       },
       methods: {
          removeFromCart(productId) {
-            this.$store.dispatch('removeProductFromCart', productId);
-            alert(`The product code ${productId} was successfully removed from the cart`)
+            const index = this.cartItems.findIndex(item => item.productId === productId);
+            if (index !== -1) {
+               this.cartItems.splice(index, 1);
+            alert (`The product code ${productId} was successfully removed from the cart`)
+            }
          },
-
          addToCart(cartItem) {
             this.$store.dispatch('addProductToCart', cartItem);
          },
@@ -113,6 +118,11 @@
       text-align: center;
       margin-top: 50px;
    }
+   .cart-container{
+      background-color: beige;
+      margin: 25px 40px;
+      padding: 10px;
+   }   
    header{
       display: flex;
       justify-content: space-between;
@@ -120,11 +130,6 @@
    }
    .right-button{
       float: right;
-   }
-   .cart-container{
-      background-color: beige;
-      margin: 25px 40px;
-      padding: 10px;
    }
    .line {
       display: flex;
@@ -146,4 +151,14 @@
       font-weight: 500;
       text-align: center;
    }
+   .alter-head{
+        width:95%;
+        height: 50px;
+        margin: 20px auto;
+        padding-top: 8px;
+        text-align: center;
+        color: red;
+        background-color: white;
+        font-weight: 600;
+    }
 </style>

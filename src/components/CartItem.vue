@@ -1,6 +1,5 @@
 <template >
-    <div class="card-item" 
-        v-if="getCartItem">
+    <div class="card-item">
 
         <div class="large-image"
             v-if="isLargeImageVisible" 
@@ -27,7 +26,7 @@
                 {{ productCategory.name }}
             </p>
             <p class="card-text"> <strong> Price: </strong> {{ product.price }} $</p>       
-            <p class="card-text" v-if="productDiscount"> <strong> Discount percent: </strong> 
+            <p class="card-text"> <strong> Discount percent: </strong> 
                 {{ productDiscount.discountPercent }}
             </p> 
         </div>
@@ -37,7 +36,7 @@
                <div class="count-text"> Select quantity </div> 
                 <input class="form-controle item-calculation"
                     type="number"
-                    v-model="selectedNumber"
+                    :value="selectedNumber"
                     min="1"
                 />
             </div>
@@ -47,20 +46,21 @@
                <div class="item-calculation"> {{ product.price }} $</div>
             </div>
 
-            <div class="count">
+            <div class="count" v-if="productDiscount && productDiscount.discountPercent !== undefined">
                <div class="item-text"> Price including discount: </div>
-               <div class="item-calculation"> {{ discountPrice }} </div>
+               <div class="item-calculation"
+                   
+               > {{ discountPrice }} $</div>
             </div>
 
             <div class="count">
                <div class="item-text"> Sum: </div>
-               <div class="item-calculation"> {{ itemAmount }} $</div>
+               <div class="item-calculation"
+               v-if="discountPrice"
+               > {{ itemAmount }} $</div>
             </div>
             <button @click="removeFromCart">Remove</button>
         </div>
-    </div>
-    <div v-else class="alter-head">
-       Your grocery cart is empty
     </div>
 </template>
 
@@ -75,26 +75,22 @@ export default {
             type: Object,
             default: () => ({}),
         },
-        productId: {
-            type: Number,
-            required: true,
-        },
     },
     data() {
         return {
-            accessToken: String,
+            accessToken:localStorage.getItem('token'),
             product: Object,
             isLargeImageVisible: Boolean,
             largeImageSrc: String,
             productCategory: Object,
             productDiscount: Object,
-            selectedNumber: Number,
+            selectedNumber: 1,
             itemAmount: Number,
         }
     },
 
     mounted() {
-        const productId = this.productId;
+        const productId = this.getCartItem.productId;
 console.log(`productId: ${productId}`)
         axios.get(`http://localhost:8081/product/${productId}`)
         .then(response => {
@@ -113,6 +109,8 @@ console.log(`productId: ${productId}`)
             })
             .then(response => {
                 this.productDiscount = response.data;
+                const discount = this.productDiscount.discountPercent;
+    console.log(`discountPercent: ${discount}`)
             })
             .catch(error => {
                 console.error('Error fetching discount:', error);
@@ -135,14 +133,21 @@ console.log(`productId: ${productId}`)
             console.error('Error fetching product:', error);
         });
     },
-    // computed: {
-    //     discountPrice() {
-
-    //     },
-    //     itemAmount() {
-
-    //     },
-    // },
+    computed: {
+        // discountPrice() {
+        //     const price = this.product.price;
+        //    const discount = parseFloat(this.productDiscount.discountPercent.replace('%', '')) || 0;
+        //     if (discountPercent !== undefined ) {
+        //         return (price - (price * discount / 100)).toFixed(2);
+        //     } else {
+        //         return 0;
+        //     }
+        // },
+        // itemAmount() {
+        //     this.itemAmount = (this.discountPrice * this.selectedNumber);
+        //     return this.itemAmount;
+        // },
+    },
     methods:{
         removeFromCart() {
             this.$emit('removeFromCart', this.product.id);            
@@ -156,7 +161,7 @@ console.log(`productId: ${productId}`)
             this.isLargeImageVisible = false;
         }
     }
-};
+}
 </script>
 
 <style scoped>
@@ -176,17 +181,19 @@ console.log(`productId: ${productId}`)
     .card-img-block{
         width: 20%;
         height: 100%;
-        padding: 10px;    
+        padding: 10px;
+        text-align: center;  
         cursor: pointer;
     }
     .card-img {
         margin: auto;
-        max-height: 160px;
+        max-height: 200px;
+        width: auto;
     }
     .card-body{
         max-width: 40%;
         padding: 10px;
-        margin-left: 50px;
+        margin-left: 10px;
     }
     h5 {
         text-align: center;
@@ -199,7 +206,7 @@ console.log(`productId: ${productId}`)
     }
     .item-count-block{
         padding: 10px;
-        margin-right: 10px;
+        /* margin-right: 10px; */
     }
     .count{
         display: flex;
@@ -254,13 +261,4 @@ console.log(`productId: ${productId}`)
         max-width: 90%;
         max-height: 90%;
     }
-    .alter-head{
-        width:100%;
-        height: 50px;
-        align-items: center;
-        text-align: center;
-        color: red;
-        font-weight: 600;
-    }
-
 </style>

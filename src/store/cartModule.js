@@ -1,9 +1,6 @@
 export default {
     state: () => ({
       cartItems: [],
-    //   quantity: 1,
-    //   shoppingSessionId: sessionId,
-    //   productId: product.id
     }),
     mutations: {
       addToCart(state, cartItem) {
