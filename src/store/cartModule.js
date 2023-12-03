@@ -37,9 +37,11 @@ export default {
         state.totalNumber = stateTotalNumber;
         state.totalAmount = stateTotalAmount;
       },
-      setSelectedNumber(state, value) {
-        console.log('Setting selectedNumber to:', value);
-        state.selectedNumber = value;
+      setSelectedNumber(state, { productId, value }) {
+        const cartItem = state.cartItems.find(item => item.productId === productId);
+        if (cartItem) {
+          cartItem.selectedNumber = value;
+        }
       },
       setItemAmount(state, value) {
         state.itemAmount = value;

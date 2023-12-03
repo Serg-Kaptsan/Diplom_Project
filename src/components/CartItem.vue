@@ -127,7 +127,7 @@ console.log(`discountPercent: ${this.productDiscount.discountPercent}`);
             })
             .then(response => {
                 this.productCategory = response.data;
-                this.selectedNumber = this.getCartItem.selectedNumber;
+                this.selectedNumber = this.getCartItem.selectedNumber || this.getSelectedNumber;
             })
             .catch(error => {
                 console.error('Error fetching category:', error);
@@ -156,10 +156,9 @@ console.log(`discountPercent: ${this.productDiscount.discountPercent}`);
     methods:{
         updateSelectedNumber(newValue) {
             const numericValue = Number(newValue);
-            this.$store.commit('setSelectedNumber', numericValue);
-            this.$store.commit('updateCartItemQuantity', {
+            this.$store.commit('setSelectedNumber', {
                 productId: this.getCartItem.productId,
-                quantity: numericValue,
+                value: numericValue,
             });
             this.recalculateTotals();
         },
