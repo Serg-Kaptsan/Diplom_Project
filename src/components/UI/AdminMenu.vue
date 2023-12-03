@@ -26,14 +26,16 @@
       :class="{ show: isMenuActive }"
     >
       <div class="menu-container">
-        <div class="btn btn-dark menu-button" 
+
+        <!-- <div class="btn btn-dark menu-button" 
           @click="goPosts">
           Posts
-        </div>
-        <div class="btn btn-dark menu-button" 
+        </div> -->
+        <!-- <div class="btn btn-dark menu-button" 
           @click="goOrders">
           Orders
-        </div>
+        </div> -->
+
         <div class="btn btn-dark menu-button" 
           @click="goUsers">
           Users
@@ -101,22 +103,22 @@
           location.reload();
         }
       },
-      goOrders() {
-        if (this.$route.path !== '/orders') {
-          this.$router.push('/orders');
-        }
-        else {
-          location.reload();
-        }
-      },
-      goPosts() {
-        if (this.$route.path !== '/posts') {
-          this.$router.push('/posts');
-        }
-        else {
-          location.reload();
-        }
-      },
+      // goOrders() {
+      //   if (this.$route.path !== '/orders') {
+      //     this.$router.push('/orders');
+      //   }
+      //   else {
+      //     location.reload();
+      //   }
+      // },
+      // goPosts() {
+      //   if (this.$route.path !== '/posts') {
+      //     this.$router.push('/posts');
+      //   }
+      //   else {
+      //     location.reload();
+      //   }
+      // },
     }
   }
 </script>

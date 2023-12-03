@@ -19,6 +19,9 @@
         > 
         ADMIN 
       </button>
+      <button @click="goAccaunt"> 
+        ACCAUNT
+      </button>
       <button @click="logout"> 
         GO OUT
       </button>
@@ -52,15 +55,25 @@
       },
 
       goCart() {
-        if (!this.isAuthorization) {
-            alert('To add an item to your cart, you must log in.');
-            this.showDialog();
+        if (this.isAuthorization) {
+        if (this.$route.path !== '/cart') {
+          this.$router.push('/cart');
+          this.$store.dispatch('recalculateTotals');          
         } else {
-          if (this.$route.path !== 'cart') {
-            this.$router.push('/cart');
-          } else {
-            location.reload();
-          }
+          this.$forceUpdate();
+        }
+      } else {
+        alert('To add an item to your cart, you must be logged in.');
+        this.showDialog();
+      }
+      },
+
+      goAccaunt() {
+        if (this.isAuthorization) {
+          this.$router.push('/accaunt');
+        } else {
+            alert('To open your account, you must be logged in.'),
+            this.showDialog();          
         }
       },
 
@@ -68,6 +81,7 @@
         this.$emit('show-dialog');
       }
     },
+
     computed: {
       isAuthorization() {
         return !!localStorage.getItem('token');

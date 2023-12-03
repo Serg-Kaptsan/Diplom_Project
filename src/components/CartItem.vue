@@ -34,10 +34,11 @@
 
             <div class="count">
                <div class="count-text"> Select quantity </div> 
-                <input class="form-controle item-calculation"
+                <input class="form-controle input-calculation"
                     type="number"
-                    :value="selectedNumber"
-                    min="1"
+                    min="1" 
+                    v-model="selectedNumber"
+                    @input="updateSelectedNumber($event.target.value)"
                 />
             </div>
 
@@ -46,26 +47,28 @@
                <div class="item-calculation"> {{ product.price }} $</div>
             </div>
 
-            <div class="count" v-if="productDiscount && productDiscount.discountPercent !== undefined">
+            <div class="count">
                <div class="item-text"> Price including discount: </div>
-               <div class="item-calculation"
-                   
-               > {{ discountPrice }} $</div>
+               <div class="item-calculation"> {{ discountPrice }} $</div>
             </div>
 
             <div class="count">
                <div class="item-text"> Sum: </div>
-               <div class="item-calculation"
-               v-if="discountPrice"
-               > {{ itemAmount }} $</div>
+               <div class="item-calculation"> {{ itemAmount }} $</div>
             </div>
-            <button @click="removeFromCart">Remove</button>
+            <div class="button-block">
+                <button class="btn btn-primary"
+                    @click="toBuy"> Buy the product </button>
+                <button class="btn btn-danger"
+                @click="() => removeFromCart(getCartItem.productId)"> Remove </button>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
 import axios from 'axios';
+import { mapGetters, mapState, mapMutations } from 'vuex';
 
 export default {
     components: {
@@ -80,7 +83,7 @@ export default {
         return {
             accessToken:localStorage.getItem('token'),
             product: Object,
-            isLargeImageVisible: Boolean,
+            isLargeImageVisible: false,
             largeImageSrc: String,
             productCategory: Object,
             productDiscount: Object,
@@ -109,8 +112,8 @@ console.log(`productId: ${productId}`)
             })
             .then(response => {
                 this.productDiscount = response.data;
-                const discount = this.productDiscount.discountPercent;
-    console.log(`discountPercent: ${discount}`)
+console.log(`discountPercent: ${this.productDiscount.discountPercent}`);
+                this.discountPrice;
             })
             .catch(error => {
                 console.error('Error fetching discount:', error);
@@ -124,6 +127,7 @@ console.log(`productId: ${productId}`)
             })
             .then(response => {
                 this.productCategory = response.data;
+                this.selectedNumber = this.getCartItem.selectedNumber;
             })
             .catch(error => {
                 console.error('Error fetching category:', error);
@@ -134,25 +138,39 @@ console.log(`productId: ${productId}`)
         });
     },
     computed: {
-        // discountPrice() {
-        //     const price = this.product.price;
-        //    const discount = parseFloat(this.productDiscount.discountPercent.replace('%', '')) || 0;
-        //     if (discountPercent !== undefined ) {
-        //         return (price - (price * discount / 100)).toFixed(2);
-        //     } else {
-        //         return 0;
-        //     }
-        // },
-        // itemAmount() {
-        //     this.itemAmount = (this.discountPrice * this.selectedNumber);
-        //     return this.itemAmount;
-        // },
+         ...mapGetters(['getCartItems', 'getSelectedNumber']),
+
+        discountPrice() {            
+            const price = this.product.price;
+            if (this.productDiscount && this.productDiscount.discountPercent !== undefined) {
+          const discount = parseFloat(this.productDiscount.discountPercent.replace('%', ''));
+                return (price - (price * discount / 100)).toFixed(2);
+            } else {
+                return 0;
+            }
+        },
+        itemAmount() {
+            return (this.discountPrice * this.selectedNumber).toFixed(2);
+        },
     },
     methods:{
-        removeFromCart() {
-            this.$emit('removeFromCart', this.product.id);            
+        updateSelectedNumber(newValue) {
+            const numericValue = Number(newValue);
+            this.$store.commit('setSelectedNumber', numericValue);
+            this.$store.commit('updateCartItemQuantity', {
+                productId: this.getCartItem.productId,
+                quantity: numericValue,
+            });
+            this.recalculateTotals();
         },
-
+        removeFromCart(productId) {
+            this.$store.commit('removeFromCart', productId);
+            this.recalculateTotals(); 
+            alert (`The product code ${productId} was successfully removed from the cart`)
+        },
+        recalculateTotals() {
+            this.$store.dispatch('recalculateTotals');
+        },
         openLargeImage() {
             this.isLargeImageVisible = true;
             this.largeImageSrc = `data:image/jpeg;base64, ${this.product.imageData}`;
@@ -197,28 +215,41 @@ console.log(`productId: ${productId}`)
     }
     h5 {
         text-align: center;
-        font-size: 24px;
-        font-weight: 700;
+        font-size: 20px;
+        font-weight: 600;
         margin-bottom: 15px; 
     }
     p {
-        font-size: 20px;
+        font-size: 18px;
     }
     .item-count-block{
         padding: 10px;
-        /* margin-right: 10px; */
     }
     .count{
         display: flex;
         justify-content: end;
-        font-size: 20px;
+        font-size: 18px;
         padding: 5px;
     }
-    .item-calculation{
-        width: 120px;
-        margin-left: 20px;
+    .item-calculation, .input-calculation{
+        width: 80px;
+        margin-left: 12px;
         font-weight: 500;
+        text-align: end;
+    }
+    .input-calculation{
         text-align: center;
+    }
+    .button-block {
+        display: flex;
+        justify-content: space-between;
+        padding: 5px;
+    }
+    .button-block *{
+        padding: 4px 12px;
+    }
+    .cansel{
+        background-color: red;
     }
 
     @media only screen and (max-width: 768px) {
@@ -247,6 +278,7 @@ console.log(`productId: ${productId}`)
             font-size: 12px;
         }        
     }
+
     .large-image{
         position: fixed;
         display: flex;
@@ -255,6 +287,7 @@ console.log(`productId: ${productId}`)
         right: 0;
         left: 0;
         background: rgba(0, 0, 0, 0.7);
+        z-index: 2;
     }
     .large-image img{
         margin: 50px auto auto;

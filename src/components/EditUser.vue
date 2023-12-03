@@ -15,7 +15,7 @@
                         v-focus
                         v-model="user.name"    
                         placeholder="Enter User Name" >                    
-                </div>             
+                </div>
 
                 <div class="information-input">
                     <label for="sku" class="form-label"> SKU: </label>                    

@@ -21,7 +21,7 @@
             <cart-item
                v-for="(getCartItem, productId) in getCartItems"
                :key="productId"
-               :getCartItem="getCartItem"
+               :getCartItem="{ ...getCartItem, selectedNumber: getCartItem.quantity }"
                :productId="productId"
                @removeFromCart="removeFromCart"
             >
@@ -38,14 +38,14 @@
                <div class="count-text">
                   Number of selected products            
                </div>
-               <div class="calculation"> {{ totalNumber }} </div>
+               <div class="calculation"> {{ stateTotalNumber  }} </div>
             </div>
 
             <div class="count">
                <div class="count-text">
                   Total purchase amount            
                </div>
-               <div class="calculation"> {{ totalAmount }} $ </div>
+               <div class="calculation"> {{ stateTotalAmount  }} $ </div>
             </div>
 
          </div>
@@ -73,42 +73,41 @@
             accessToken:localStorage.getItem('token'),
             cartItems: [],
             getCartItem: {
-               quantity: 1,
+               quantity: Number,
                productId: Number,
             },
-            // product: null,
-            // productDiscount: null,
-            totalNumber: Number,
-            totalAmount: Number,
+            // totalNumber: 0,
+            // totalAmount: 0,
          }
       },
 
       computed: {
-         ...mapGetters(['getCartItems']),
-      //    totalNumber() {
-      //       return this.cartItems.reduce((total, cartItem) => total + cartItem.selectedNumber, 0);
-      //    },
-      //    totalAmount() {
-      //       return this.cartItems.reduce((total, cartItem) => total + cartItem.itemAmount, 0);
-      //    }
+         ...mapGetters(['getCartItems', 'stateTotalNumber', 'stateTotalAmount']),
+         // totalNumber() {
+         //    return this.getCartItems.reduce((total, cartItem) => total + cartItem.selectedNumber, 0);
+         // },
+         // totalAmount() {
+         //    return this.getCartItems.reduce((total, cartItem) => total + cartItem.itemAmount, 0);
+         // }
       },
       methods: {
-         removeFromCart(productId) {
-            const index = this.cartItems.findIndex(item => item.productId === productId);
-            if (index !== -1) {
-               this.cartItems.splice(index, 1);
-            alert (`The product code ${productId} was successfully removed from the cart`)
-            }
-         },
          addToCart(cartItem) {
             this.$store.dispatch('addProductToCart', cartItem);
+            this.$store.dispatch('recalculateTotals');
+         },
+         removeFromCart(productId) {
+            this.$store.dispatch('removeFromCart', productId);
          },
       },
       created () {
+         // this.cartItems = this.getCartItems;
          console.log('getCartItems in UsersProductCart:', this.getCartItems);
       },
       mounted() {
+         // this.cartItems = this.getCartItems;
         console.log('CartItem in UsersProductCart:', this.getCartItem);
+        console.log('this.stateTotalNumber in Component:', this.stateTotalNumber);
+        console.log('this.stateTotalAmount in Component:', this.stateTotalAmount);
       },
    }
 </script>

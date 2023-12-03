@@ -12,9 +12,9 @@ export default {
         isOpenRegistr() {
             this.$emit('update:show', false)
         },
-        showDialog() {
-            this.$emit('update:show', true)
-        }
+        // showDialog() {
+        //     this.$emit('update:show', true)
+        // }
     },
     mounted() {
         // console.log('mixin mounted')
