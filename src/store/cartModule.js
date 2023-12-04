@@ -2,9 +2,9 @@ export default {
     state: () => ({
       cartItems: [],
       totalNumber: 0,
-      totalAmount: 0,
+      // totalAmount: 0,
       selectedNumber: Number,
-      itemAmount: 0,
+      // itemAmount: 0,
     }),
     mutations: {
       addToCart(state, cartItem) {
@@ -31,25 +31,25 @@ export default {
           console.log('CartItem selectedNumber:', cartItem.selectedNumber);
           return total + cartItem.selectedNumber;
         }, 0);
-        const stateTotalAmount = state.cartItems.reduce((total, cartItem) => total + cartItem.itemAmount, 0);
+        // const stateTotalAmount = state.cartItems.reduce((total, cartItem) => total + cartItem.itemAmount, 0);
         console.log('Total Number:', stateTotalNumber);
-        console.log('Total Amount:', stateTotalAmount);
+        // console.log('Total Amount:', stateTotalAmount);
         state.totalNumber = stateTotalNumber;
-        state.totalAmount = stateTotalAmount;
+        // state.totalAmount = stateTotalAmount;
       },
       setSelectedNumber(state, value) {
         console.log('Setting selectedNumber to:', value);
         state.selectedNumber = value;
       },
-      setItemAmount(state, value) {
-        state.itemAmount = value;
-      },
+      // setItemAmount(state, value) {
+      //   state.itemAmount = value;
+      // },
       setTotalNumber(state, totalNumber) {
         state.totalNumber = totalNumber;
       },
-      setTotalAmount(state, totalAmount) {
-        state.totalAmount = totalAmount;
-      }
+      // setTotalAmount(state, totalAmount) {
+      //   state.totalAmount = totalAmount;
+      // }
     },
     actions: {
       addProductToCart({ commit }, cartItem) {
@@ -68,7 +68,7 @@ export default {
     getters: {
       getCartItems: (state) => state.cartItems,
       stateTotalNumber: (state) => state.totalNumber,
-      stateTotalAmount: (state) => state.totalAmount,
+      // stateTotalAmount: (state) => state.totalAmount,
       getSelectedNumber: (state) => state.selectedNumber,
     },
   }

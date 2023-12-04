@@ -23,6 +23,7 @@
                :key="productId"
                :getCartItem="{ ...getCartItem}"
                :productId="productId"
+               @itemAmount="handleItemAmount"
                @removeFromCart="removeFromCart"
             >
             </cart-item>
@@ -45,7 +46,7 @@
                <div class="count-text">
                   Total purchase amount            
                </div>
-               <div class="calculation"> {{ stateTotalAmount  }} $ </div>
+               <div class="calculation"> {{ totalAmount }} $ </div>
             </div>
 
          </div>
@@ -62,12 +63,7 @@
       components: {
          CartItem,
       },
-      // props: {
-      //    cartItem: {
-      //       type: Object,
-      //       default: () => ({}),
-      //    }
-      // },
+
       data() {
          return {
             accessToken:localStorage.getItem('token'),
@@ -76,21 +72,45 @@
                quantity: Number,
                productId: Number,
             },
-            // totalNumber: 0,
-            // totalAmount: 0,
+            totalAmount: 0,
          }
       },
 
       computed: {
-         ...mapGetters(['getCartItems', 'stateTotalNumber', 'stateTotalAmount']),
-         // totalNumber() {
-         //    return this.getCartItems.reduce((total, cartItem) => total + cartItem.selectedNumber, 0);
+         ...mapGetters(['getCartItems', 'stateTotalNumber']),
+
+   //       totalAmount(amount) {
+   //          if (!isNaN(parseFloat(amount))) {
+   //      console.log('Received itemAmount:', amount);
+   //      this.itemAmount += parseFloat(amount) || 0;
+      // }
+            // return this.getCartItems.reduce((total, cartItem) => {
+            //    if (cartItem.itemAmount !== undefined && !isNaN(cartItem.itemAmount)) {
+            //       return total + parseFloat(cartItem.itemAmount);
+            //    } else {
+            //       return total;
+            //    }
+            // }, 0);
          // },
-         // totalAmount() {
-         //    return this.getCartItems.reduce((total, cartItem) => total + cartItem.itemAmount, 0);
-         // }
       },
+
       methods: {
+         handleItemAmount(amount) {
+            console.log(`Received amount:, ${amount}`);
+            this.totalAmount += parseFloat(amount) || 0;
+   //  if (!isNaN(parseFloat(amount)) && isFinite(amount)) {
+
+   //    this.totalAmount = this.getCartItems.reduce((total, cartItem) => {
+   //      const itemAmount = (parseFloat(cartItem.selectedNumber) * parseFloat(cartItem.price)).toFixed(2);
+   //      return isNaN(itemAmount) ? total : total + parseFloat(itemAmount);
+   //    }, 0).toFixed(2);
+   //  } else {
+   //    console.warn('Invalid amount:', amount);
+   //  }            
+         },
+
+
+
          addToCart(cartItem) {
             this.$store.dispatch('addProductToCart', cartItem);
             this.$store.dispatch('recalculateTotals');
@@ -100,12 +120,9 @@
          },
       },
       created () {
-         // this.cartItems = this.getCartItems;
          console.log('getCartItems in UsersProductCart:', this.getCartItems);
       },
       mounted() {
-         // this.cartItems = this.getCartItems;
-        console.log('CartItem in UsersProductCart:', this.getCartItem);
         console.log('this.stateTotalNumber in Component:', this.stateTotalNumber);
         console.log('this.stateTotalAmount in Component:', this.stateTotalAmount);
       },

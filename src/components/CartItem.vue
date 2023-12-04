@@ -139,22 +139,6 @@ console.log(`discountPercent: ${this.productDiscount.discountPercent}`);
     },
     computed: {
          ...mapGetters(['getCartItems', 'getSelectedNumber']),
-    //     quantity: {
-    //   get() {
-    //     // Получаем значение quantity из объекта в зависимости от selectedNumber
-    //     const selectedObject = this.$store.state.cartModule.myArray[this.selectedNumber];
-    //     return selectedObject.quantity;
-    //   },
-    //   set(value) {
-    //     // Устанавливаем новое значение quantity объекта в зависимости от selectedNumber
-    //     const selectedObject = this.$store.state.cartModule.myArray[this.selectedNumber];
-    //     if (selectedObject) {
-    //       selectedObject.quantity = value;
-    //       // Можно также использовать мутацию Vuex для более правильного обновления состояния
-    //       // this.$store.commit('UPDATE_QUANTITY', { index: this.selectedNumber, quantity: value });
-    //     }
-    //   },
-    // },
 
         discountPrice() {            
             const price = this.product.price;
@@ -166,8 +150,12 @@ console.log(`discountPercent: ${this.productDiscount.discountPercent}`);
             }
         },
         itemAmount() {
-            return (this.discountPrice * this.selectedNumber).toFixed(2);
+            const amount = (this.discountPrice * this.selectedNumber).toFixed(2);
+            this.$emit('itemAmount', amount);
+        console.log(`Send amount:, ${amount}`);         
+            return amount;
         },
+
     },
     methods:{
         updateSelectedNumber(newValue) {
