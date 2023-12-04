@@ -1,67 +1,71 @@
 <template>
     <admin-menu> </admin-menu>
-    <div class="container">
-        <div class="header">
-            <h2>Edit user</h2>
+    <div class="registr-form">
+            <h4>Sign up</h4>
+
+        <div class="form-group">
+            <label for="input_name">name:</label>
+            <input
+                v-model.trim="name"
+                v-focus
+                type="text" class="form-control" 
+                id="input_name" 
+                placeholder="Enter your name"
+                @blur="validateName"
+                required>
+            <label for="input_surname">surname:</label>
+            <input
+                v-model.trim="surname"
+                type="text" 
+                class="form-control" 
+                id="input_surname"
+                placeholder="Enter your surname">
+            <label for="input_phone">phone:</label>
+            <input
+                v-model.trim="phone"
+                type="text" 
+                class="form-control" 
+                id="input_phone"  
+                aria-describedby="phonHelp" 
+                placeholder="Your phone number"
+                @blur="validatePhone"
+                required >
+            <div class="form-text" id="phonHelp">
+                phone number in the format +380XXXXXXXXX
+            </div>
+            <label for="email">email:</label>
+            <input
+                v-model.trim="email"
+                type="email" 
+                class="form-control" 
+                id="regEmail" 
+                placeholder="Enter your email address"
+                @blur="validateEmail"
+                required>
+            <!-- <label for="password">password:</label>
+            <input
+                v-model.trim="password"
+                type="password" 
+                class="form-control" 
+                id="regPassword" 
+                placeholder="Create a password"
+                @blur = "validatePassword"
+                autocomplete="off"
+                required> -->
         </div>
-        <form class="edit-form" id="edition">
-            
-            <div class="information">
-                <div class="information-input">
-                    <label for="name" class="form-label">Name:</label>
-                    <input class="form-group user_name"
-                        type="text"
-                        id="name"
-                        v-focus
-                        v-model="user.name"    
-                        placeholder="Enter User Name" >                    
-                </div>
+            <button type="submit" class="btn btn-success submit"
+                v-if="submitButtonHide"
+                @click="register"
+            >    
+                Register
+            </button>
 
-                <div class="information-input">
-                    <label for="sku" class="form-label"> SKU: </label>                    
-                    <input class="form-group sku"
-                        type="text"
-                        id="sku"
-                        v-model="product.sku"> 
-                </div>
-                <div class="information-input">
-                    <label for="price" class="form-label"> Price: </label>                    
-                    <input class="form-group price"
-                        type="number"
-                        id="price"
-                        v-model="product.price"> 
-                </div>
-                <div class="information-input">
-                    <label for="quantity" class="form-label"> Quantity: </label>                    
-                    <input class="form-group quantity"
-                        type="number"
-                        id="quantity"
-                        v-model="product.quantity">
-                </div>
+            <div class="registration-success"
+                v-if="registrationSuccess"
+                @click="redirectToLoginPage"
+            >   You have successfully registered.
+                <br> Please log in to your account.
             </div>
-
-            <div class="button_group">
-                <button class="main_button cancel"
-                    type="button" 
-                    @click="createProduct"
-                    v-if="buttonVisible">
-                    Cancel changes
-                </button>
-                <button class="main_button submit"
-                    type="button" 
-                    @click="saveChanges"
-                    v-if="buttonVisible">
-                    Save changes
-                </button>
-                <div class="create_Success"
-                    id="editSuccess"
-                    v-if="editSuccess"
-                    @click="viewProduct">
-                    Data edited successfully.
-                    <br>Click for back to product.
-                </div>                
-            </div>
-        </form>
     </div>
 </template>
 
@@ -255,106 +259,29 @@ export default {
 </script>
 
 <style scoped>
-    .container {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        padding: 5px;
-        box-sizing: border-box;
-        overflow: auto;
+    input{
+        padding: 3px 12px;
     }
-    .header {
-        width: 100%;
-        margin-bottom: 10px;
-        margin-top: 0;
-        text-align: center;
+    label{
+        font-weight: 500;
     }
-    .edit-form {
-        width: 100%;
-        max-width: 550px;            
-        border: 1px solid black;
-        padding: 20px;
+    label + label{
+        margin-top: 10px;        
     }
-    .section {
-        display: flex;
-        text-align: start;
-        justify-content: space-between;
-        align-items: flex-end;
-        margin-bottom:1rem !important;
-    }
-    #photo_box{
-        display: flex;
-        align-items: center;
-    }
-    label {
-        font-weight: bold;
-        margin-bottom: 5px;
-    }
-
-    .main_input {
-        width: 100%;
-        padding: 5px;
-    }
-    #image-preview{
-        max-width: 65px;
-        max-height: 100px;
-        margin-right: 15px;
-    }
-    #discount, #category {
-        text-align: center;
-    }
-    .information {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        height: auto;
-    }
-    .information *{
-        text-align: center;
-        padding: 5px;
-        width: 100%;
-    }
-    .description {
-        text-align: left;
-        white-space: pre-line;
-    }
-    #remain {
-        text-align: left;
-        margin: -5px auto 5px 5px;
-    }
-    .information-input{
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-    .information-input label{
-        text-align: left;
-        width: 102px;
-    }
-
-    .main_button {
-        padding: 8px 12px;
-        background-color: #4CAF50;
+    .submit{
+        /* display: none; */
         color: white;
-        border: none;
-        border-radius: 5px;
-        font-size: 13px;
-        margin: auto 15px;
+        background-color: #00a046;
+        transition: background-color 0.3s;
+        float: right;
+        width: 200px;
+        margin-top: 15px;
     }
-    .button_group{
-       display: flex;
-       justify-content: space-between;
-       margin-top: 10px;
+    .submit:hover{
+        background-color: #00bc52;        
     }
-    .button_group button{
-        margin: auto 0;
-    }
-    .cancel {
-        background-color: red;
-    }
-    .create_Success {
+    .registration-success {
+        /* display: none; */
         text-align: center;
         font-weight: bold;
         color: #4CAF50;
@@ -363,34 +290,5 @@ export default {
         background-color: #f0f8f0;
         margin-top: 10px;
         cursor: pointer;
-    }
-    textarea {
-        margin-top: 14px; 
-    }
-    textarea:hover {
-        background-color: transparent;
-    }
-
-    @media only screen and (max-width: 768px) {
-        .header h2 {
-            font-size: 24px;
-        }
-    }
-
-    @media only screen and (max-width: 576px) {
-        .header h2 {
-            font-size: 20px;
-        }
-        .form-group button,
-        .form-group textarea {
-            font-size: 14px;
-        }
-        .form-group input {
-            font-size: 14px;
-        }
-        .discount_button{
-            min-width: 124px;
-            padding: 6px;
-        }
     }
 </style>

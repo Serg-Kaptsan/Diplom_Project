@@ -68,7 +68,7 @@
 
 <script>
 import axios from 'axios';
-import { mapGetters, mapState, mapMutations } from 'vuex';
+import { mapGetters } from 'vuex';
 
 export default {
     components: {
@@ -87,7 +87,7 @@ export default {
             largeImageSrc: String,
             productCategory: Object,
             productDiscount: Object,
-            selectedNumber: 1,
+            selectedNumber: Number,
             itemAmount: Number,
         }
     },
@@ -127,7 +127,7 @@ console.log(`discountPercent: ${this.productDiscount.discountPercent}`);
             })
             .then(response => {
                 this.productCategory = response.data;
-                this.selectedNumber = this.getCartItem.selectedNumber || this.getSelectedNumber;
+                this.selectedNumber = this.getCartItem.selectedNumber;
             })
             .catch(error => {
                 console.error('Error fetching category:', error);
@@ -139,6 +139,22 @@ console.log(`discountPercent: ${this.productDiscount.discountPercent}`);
     },
     computed: {
          ...mapGetters(['getCartItems', 'getSelectedNumber']),
+    //     quantity: {
+    //   get() {
+    //     // Получаем значение quantity из объекта в зависимости от selectedNumber
+    //     const selectedObject = this.$store.state.cartModule.myArray[this.selectedNumber];
+    //     return selectedObject.quantity;
+    //   },
+    //   set(value) {
+    //     // Устанавливаем новое значение quantity объекта в зависимости от selectedNumber
+    //     const selectedObject = this.$store.state.cartModule.myArray[this.selectedNumber];
+    //     if (selectedObject) {
+    //       selectedObject.quantity = value;
+    //       // Можно также использовать мутацию Vuex для более правильного обновления состояния
+    //       // this.$store.commit('UPDATE_QUANTITY', { index: this.selectedNumber, quantity: value });
+    //     }
+    //   },
+    // },
 
         discountPrice() {            
             const price = this.product.price;
@@ -156,12 +172,14 @@ console.log(`discountPercent: ${this.productDiscount.discountPercent}`);
     methods:{
         updateSelectedNumber(newValue) {
             const numericValue = Number(newValue);
-            this.$store.commit('setSelectedNumber', {
+            this.$store.commit('setSelectedNumber', numericValue);
+            this.$store.commit('updateCartItemQuantity', {
                 productId: this.getCartItem.productId,
-                value: numericValue,
+                quantity: numericValue,
             });
             this.recalculateTotals();
         },
+
         removeFromCart(productId) {
             this.$store.commit('removeFromCart', productId);
             this.recalculateTotals(); 

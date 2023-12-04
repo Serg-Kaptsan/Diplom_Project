@@ -110,7 +110,7 @@ console.log(`categoryId: ${categoryId}`);
         addToCart() {
             if (!this.isAuthorization) {
                 alert('To add an item to your cart, you must log in.');
-                // this.showDialog();
+                this.showDialog();
             } else {
                 this.createSession();
             }

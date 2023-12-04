@@ -21,7 +21,7 @@
             <cart-item
                v-for="(getCartItem, productId) in getCartItems"
                :key="productId"
-               :getCartItem="{ ...getCartItem, selectedNumber: getCartItem.quantity }"
+               :getCartItem="{ ...getCartItem}"
                :productId="productId"
                @removeFromCart="removeFromCart"
             >

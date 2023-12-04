@@ -58,7 +58,7 @@
         if (this.isAuthorization) {
         if (this.$route.path !== '/cart') {
           this.$router.push('/cart');
-          this.$store.dispatch('recalculateTotals');          
+          // this.$store.dispatch('recalculateTotals');          
         } else {
           this.$forceUpdate();
         }

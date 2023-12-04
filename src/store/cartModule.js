@@ -3,7 +3,7 @@ export default {
       cartItems: [],
       totalNumber: 0,
       totalAmount: 0,
-      selectedNumber: 1,
+      selectedNumber: Number,
       itemAmount: 0,
     }),
     mutations: {
@@ -37,11 +37,9 @@ export default {
         state.totalNumber = stateTotalNumber;
         state.totalAmount = stateTotalAmount;
       },
-      setSelectedNumber(state, { productId, value }) {
-        const cartItem = state.cartItems.find(item => item.productId === productId);
-        if (cartItem) {
-          cartItem.selectedNumber = value;
-        }
+      setSelectedNumber(state, value) {
+        console.log('Setting selectedNumber to:', value);
+        state.selectedNumber = value;
       },
       setItemAmount(state, value) {
         state.itemAmount = value;
@@ -53,7 +51,6 @@ export default {
         state.totalAmount = totalAmount;
       }
     },
-    
     actions: {
       addProductToCart({ commit }, cartItem) {
         commit('addToCart', cartItem);
@@ -66,8 +63,8 @@ export default {
       recalculateTotals({ commit }) {
         commit('recalculateTotals');
       },
-    },
 
+    },
     getters: {
       getCartItems: (state) => state.cartItems,
       stateTotalNumber: (state) => state.totalNumber,
