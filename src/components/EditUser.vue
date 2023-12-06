@@ -1,71 +1,81 @@
 <template>
     <admin-menu> </admin-menu>
-    <div class="registr-form">
-            <h4>Sign up</h4>
-
-        <div class="form-group">
-            <label for="input_name">name:</label>
-            <input
-                v-model.trim="name"
-                v-focus
-                type="text" class="form-control" 
-                id="input_name" 
-                placeholder="Enter your name"
-                @blur="validateName"
-                required>
-            <label for="input_surname">surname:</label>
-            <input
-                v-model.trim="surname"
-                type="text" 
-                class="form-control" 
-                id="input_surname"
-                placeholder="Enter your surname">
-            <label for="input_phone">phone:</label>
-            <input
-                v-model.trim="phone"
-                type="text" 
-                class="form-control" 
-                id="input_phone"  
-                aria-describedby="phonHelp" 
-                placeholder="Your phone number"
-                @blur="validatePhone"
-                required >
-            <div class="form-text" id="phonHelp">
-                phone number in the format +380XXXXXXXXX
+    <div class="container">
+        <div class="header">
+            <h2>Edit Users Data</h2>
+        </div>    
+        <div class="edit-form">
+            <div class="form-group">
+                <label for="input_name">name:</label>
+                <input
+                    v-model.trim="name"
+                    v-focus
+                    type="text" class="form-control" 
+                    id="input_name" 
+                    placeholder="Enter your name"
+                    @blur="validateName"
+                    required>
+                <label for="input_surname">surname:</label>
+                <input
+                    v-model.trim="surname"
+                    type="text" 
+                    class="form-control" 
+                    id="input_surname"
+                    placeholder="Enter your surname">
+                <label for="input_phone">phone:</label>
+                <input
+                    v-model.trim="phone"
+                    type="text" 
+                    class="form-control" 
+                    id="input_phone"  
+                    aria-describedby="phonHelp" 
+                    placeholder="Your phone number"
+                    @blur="validatePhone"
+                    required >
+                <div class="form-text" id="phonHelp">
+                    phone number in the format +380XXXXXXXXX
+                </div>
+                <label for="email">email:</label>
+                <input
+                    v-model.trim="email"
+                    type="email" 
+                    class="form-control" 
+                    id="regEmail" 
+                    placeholder="Enter your email address"
+                    @blur="validateEmail"
+                    required>
+                <!-- <label for="password">password:</label>
+                <input
+                    v-model.trim="password"
+                    type="password" 
+                    class="form-control" 
+                    id="regPassword" 
+                    placeholder="Create a password"
+                    @blur = "validatePassword"
+                    autocomplete="off"
+                    required> -->
             </div>
-            <label for="email">email:</label>
-            <input
-                v-model.trim="email"
-                type="email" 
-                class="form-control" 
-                id="regEmail" 
-                placeholder="Enter your email address"
-                @blur="validateEmail"
-                required>
-            <!-- <label for="password">password:</label>
-            <input
-                v-model.trim="password"
-                type="password" 
-                class="form-control" 
-                id="regPassword" 
-                placeholder="Create a password"
-                @blur = "validatePassword"
-                autocomplete="off"
-                required> -->
+            <div class="button_group">
+                <button class="main_button cancel"
+                    type="button" 
+                    @click="viewDiscount"
+                    v-if="buttonVisible">
+                    Cancel changes
+                </button>
+                <button class="main_button submit"
+                    type="button" 
+                    @click="saveChanges"
+                    v-if="buttonVisible">
+                    Save changes
+                </button>
+                <div class="create_Success"
+                    id="editSuccess"
+                    v-if="editSuccess"
+                    @click="viewDiscount">
+                    Data edited successfully.
+                </div>
+            </div>
         </div>
-            <button type="submit" class="btn btn-success submit"
-                v-if="submitButtonHide"
-                @click="register"
-            >    
-                Register
-            </button>
-
-            <div class="registration-success"
-                v-if="registrationSuccess"
-                @click="redirectToLoginPage"
-            >   You have successfully registered.
-                <br> Please log in to your account.
-            </div>
     </div>
 </template>
 
@@ -259,6 +269,22 @@ export default {
 </script>
 
 <style scoped>
+    .container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 5px;
+        box-sizing: border-box;
+        overflow: auto;
+    }
+    .edit-form {
+        width: 100%;
+        max-width: 550px;            
+        border: 1px solid black;
+        padding: 20px;
+        margin: auto;
+    }
     input{
         padding: 3px 12px;
     }
@@ -280,8 +306,27 @@ export default {
     .submit:hover{
         background-color: #00bc52;        
     }
-    .registration-success {
-        /* display: none; */
+    .button_group{
+       display: flex;
+       justify-content: space-between;
+       margin-top: 10px;
+    }
+    .main_button {
+        padding: 8px 12px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        margin: auto 15px;
+    }
+    .button_group button{
+        margin: auto 0;
+    }
+    .cancel {
+        background-color: red;
+    }
+    .create_Success {
+        width:100%;
         text-align: center;
         font-weight: bold;
         color: #4CAF50;
@@ -291,4 +336,5 @@ export default {
         margin-top: 10px;
         cursor: pointer;
     }
+
 </style>

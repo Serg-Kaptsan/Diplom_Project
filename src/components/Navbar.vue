@@ -60,7 +60,7 @@
           this.$router.push('/cart');
           // this.$store.dispatch('recalculateTotals');          
         } else {
-          this.$forceUpdate();
+          location.reload();
         }
       } else {
         alert('To add an item to your cart, you must be logged in.');

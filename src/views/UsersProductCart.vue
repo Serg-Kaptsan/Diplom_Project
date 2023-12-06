@@ -46,7 +46,7 @@
                <div class="count-text">
                   Total purchase amount            
                </div>
-               <div class="calculation"> {{ totalAmount }} $ </div>
+               <div class="calculation"> {{ stateTotalAmount.toFixed(2) }} $ </div>
             </div>
 
          </div>
@@ -77,7 +77,7 @@
       },
 
       computed: {
-         ...mapGetters(['getCartItems', 'stateTotalNumber']),
+         ...mapGetters(['getCartItems', 'stateTotalNumber', 'stateTotalAmount']),
 
    //       totalAmount(amount) {
    //          if (!isNaN(parseFloat(amount))) {
@@ -95,9 +95,16 @@
       },
 
       methods: {
+
+         // addToCart(cartItem) {
+         //    this.$store.dispatch('addProductToCart', cartItem);
+         //    this.$store.dispatch('recalculateTotals');
+         // },
+
          handleItemAmount(amount) {
-            console.log(`Received amount:, ${amount}`);
-            this.totalAmount += parseFloat(amount) || 0;
+            console.log(`Received amount: ${amount}`);
+            // this.totalAmount += parseFloat(amount) || 0;
+            // this.$store.commit('setSelectedNumber', selectedNumber);
    //  if (!isNaN(parseFloat(amount)) && isFinite(amount)) {
 
    //    this.totalAmount = this.getCartItems.reduce((total, cartItem) => {
@@ -108,16 +115,10 @@
    //    console.warn('Invalid amount:', amount);
    //  }            
          },
-
-
-
-         addToCart(cartItem) {
-            this.$store.dispatch('addProductToCart', cartItem);
-            this.$store.dispatch('recalculateTotals');
-         },
-         removeFromCart(productId) {
-            this.$store.dispatch('removeFromCart', productId);
-         },
+      },
+      
+      removeFromCart(productId) {
+         this.$store.dispatch('removeFromCart', productId);
       },
       created () {
          console.log('getCartItems in UsersProductCart:', this.getCartItems);

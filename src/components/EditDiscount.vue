@@ -190,13 +190,6 @@ export default {
         border: 1px solid black;
         padding: 20px;
     }
-    .section {
-        display: flex;
-        text-align: start;
-        justify-content: space-between;
-        align-items: flex-end;
-        margin-bottom:1rem !important;
-    }
     label {
         font-weight: bold;
         margin-bottom: 5px;

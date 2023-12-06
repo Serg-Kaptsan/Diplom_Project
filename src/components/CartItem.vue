@@ -38,7 +38,7 @@
                     type="number"
                     min="1" 
                     v-model="selectedNumber"
-                    @input="updateSelectedNumber($event.target.value)"
+                    @input="updateSelectedNumber"
                 />
             </div>
 
@@ -60,7 +60,7 @@
                 <button class="btn btn-primary"
                     @click="toBuy"> Buy the product </button>
                 <button class="btn btn-danger"
-                @click="() => removeFromCart(getCartItem.productId)"> Remove </button>
+               @click="removeFromCart(getCartItem.productId)"> Remove </button>
             </div>
         </div>
     </div>
@@ -87,9 +87,11 @@ export default {
             largeImageSrc: String,
             productCategory: Object,
             productDiscount: Object,
-            selectedNumber: Number,
-            itemAmount: Number,
+            selectedNumber: 1,
         }
+    },
+    created() {
+        this.itemAmount = (this.discountPrice * this.selectedNumber).toFixed(2);        
     },
 
     mounted() {
@@ -127,7 +129,7 @@ console.log(`discountPercent: ${this.productDiscount.discountPercent}`);
             })
             .then(response => {
                 this.productCategory = response.data;
-                this.selectedNumber = this.getCartItem.selectedNumber;
+                this.selectedNumber = this.getCartItem.selectedNumber || 1;
             })
             .catch(error => {
                 console.error('Error fetching category:', error);
@@ -138,9 +140,14 @@ console.log(`discountPercent: ${this.productDiscount.discountPercent}`);
         });
     },
     computed: {
-         ...mapGetters(['getCartItems', 'getSelectedNumber']),
+        ...mapGetters(['getCartItems', 'stateTotalAmount', 'getItemAmount']),
 
-        discountPrice() {            
+        itemAmount() {
+            const productId = this.getCartItem.productId;
+            return this.getItemAmount(productId);
+        },
+
+        discountPrice() {
             const price = this.product.price;
             if (this.productDiscount && this.productDiscount.discountPercent !== undefined) {
           const discount = parseFloat(this.productDiscount.discountPercent.replace('%', ''));
@@ -149,28 +156,46 @@ console.log(`discountPercent: ${this.productDiscount.discountPercent}`);
                 return 0;
             }
         },
-        itemAmount() {
-            const amount = (this.discountPrice * this.selectedNumber).toFixed(2);
-            this.$emit('itemAmount', amount);
-        console.log(`Send amount:, ${amount}`);         
-            return amount;
-        },
-
+        // itemAmount() {
+        //     return (this.discountPrice * this.selectedNumber).toFixed(2);
+        //     const amount = (this.discountPrice * this.selectedNumber).toFixed(2);
+        //     this.$emit('itemAmount', amount);
+        // console.log(`Send amount:, ${amount}`);         
+        //     return amount;
+        // },
     },
+
     methods:{
-        updateSelectedNumber(newValue) {
-            const numericValue = Number(newValue);
-            this.$store.commit('setSelectedNumber', numericValue);
+        updateSelectedNumber() {
             this.$store.commit('updateCartItemQuantity', {
                 productId: this.getCartItem.productId,
-                quantity: numericValue,
+                quantity: this.selectedNumber,
             });
-            this.recalculateTotals();
+
+            this.$store.dispatch('recalculateItemAmount', {
+                productId: this.getCartItem.productId,
+                discountPrice: this.discountPrice,
+                selectedNumber: this.selectedNumber,
+            });
         },
+        // updateSelectedNumber() {
+        //     const itemAmount = parseFloat((this.discountPrice * this.selectedNumber).toFixed(2));    
+        //     this.itemAmount = itemAmount;                 
+        //     this.$store.commit('updateCartItemQuantity', {
+        //         productId: this.getCartItem.productId,
+        //         quantity: this.selectedNumber,
+        //     });
+
+        //     this.$store.commit('setItemAmount', {
+        //         productId: this.getCartItem.productId,
+        //         itemAmount: itemAmount,
+        //     });
+        //     this.$store.dispatch('recalculateTotals');
+        // },
 
         removeFromCart(productId) {
             this.$store.commit('removeFromCart', productId);
-            this.recalculateTotals(); 
+            this.$store.dispatch('recalculateTotals');
             alert (`The product code ${productId} was successfully removed from the cart`)
         },
         recalculateTotals() {

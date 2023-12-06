@@ -1,7 +1,7 @@
 <template>
         <div class="card-item" v-if="product" >
             <close-form title="back to product list"
-                @click="$router.push('/')" >
+                @click="$router.push('/')">
             </close-form>
 
             <div class="large-image"
@@ -53,7 +53,7 @@
 
 <script>
 import axios from 'axios';
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 import MyDialog from '@/components/UI/MyDialog';
 // import showMixin from "@/mixins/showMixin";
 
@@ -69,6 +69,7 @@ export default {
             largeImageSrc: '',
             productCategory: null,
             productDiscount: null,
+            itemAmount: 0,
         }
     },
 
@@ -87,6 +88,8 @@ console.log(`categoryId: ${categoryId}`);
             axios.get(`http://localhost:8081/discount/${discountId}`)
             .then(response => {
                 this.productDiscount = response.data;
+                const discountPercent = this.productDiscount.discountPercent;
+                console.log(`discountPercent: ${discountPercent}`);  
             })
             .catch(error => {
                 console.error('Error fetching discount:', error);
@@ -145,14 +148,12 @@ console.log(`categoryId: ${categoryId}`);
         async createUserProductCart() {
             try {
                 const sessionId = localStorage.getItem('sessionId');
-                const cartItem = {
+
+                const response = await axios.post(`http://localhost:8081/cart/${sessionId}/items`, { 
                     quantity: 1,
                     shoppingSessionId: sessionId,
                     productId: this.product.id
-                };
-
-                const response = await axios.post(`http://localhost:8081/cart/${sessionId}/items`, cartItem, { 
-                    headers: {
+                }, {headers: {
                         'Authorization': `Bearer ${this.token}`,
                     }
                 });
@@ -161,16 +162,37 @@ console.log('Request for cart:', response.config);
 console.log('Response for cart:', response.data);
 
                 if (response.status >= 200 && response.status < 300) {
+                    const cartItem = {
+                        ...response.data, 
+                        discountPrice: this.calculateDiscountPrice(this.product.price, this.productDiscount.discountPercent,
+                    )};
                     console.log('CartItem created succeccfully');
                     alert('Product successfully added to cart');
+
                     this.$store.dispatch('addProductToCart', cartItem);
+                    this.$store.dispatch('recalculateItemAmount', {
+                        productId: cartItem.productId,
+                        discountPrice: cartItem.discountPrice,
+                        selectedNumber: cartItem.selectedNumber,
+                    });
+                    this.$store.dispatch('recalculateTotals');
                     this.$router.push('/cart');
                     console.log('cartItem:', cartItem);
+                    // console.log('discountPrice in createUserProductCart:', `${cartItem.discountPrice}`);
+                    // console.log('itemAmount in createUserProductCart:', `${itemAmount}`);
                 }
             } catch (error) {
                 console.error('Error creating user product cart:', error);
             }
         },
+        calculateDiscountPrice(price, discountPercent) {
+        if (discountPercent !== undefined) {
+            const discount = parseFloat(discountPercent.replace('%', ''));
+            return (price - (price * discount / 100)).toFixed(2);
+        } else {
+            return 0;
+        }
+    },
 
         openLargeImage() {
             this.isLargeImageVisible = true;
@@ -183,7 +205,11 @@ console.log('Response for cart:', response.data);
     computed: {
         isAuthorization() {
             return !!localStorage.getItem('token');
-        }
+        },
+        ...mapGetters(['getCartItems', 'stateTotalNumber', 'stateTotalAmount']),
+        selectedNumber() {
+            return this.$store.getters.getSelectedNumber;
+        },
     },
     // mixins: [showMixin]
 }
