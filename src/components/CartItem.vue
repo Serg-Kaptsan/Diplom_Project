@@ -5,7 +5,7 @@
             v-if="isLargeImageVisible" 
             @click.stop="closeLargeImage"
         >
-            <img 
+            <img
                 :src="largeImageSrc" :alt="product.name" 
                 @click="closeLargeImage" />
         </div>
@@ -57,21 +57,38 @@
                <div class="item-calculation"> {{ itemAmount }} $</div>
             </div>
             <div class="button-block">
-                <button class="btn btn-primary"
-                    @click="toBuy"> Buy the product </button>
+                <!-- <button class="btn btn-primary"
+                    @click="openWindow"> Buy the product 
+                </button> -->
                 <button class="btn btn-danger"
-               @click="removeFromCart(getCartItem.productId)"> Remove </button>
+                    @click="removeFromCart(getCartItem.productId)"> Remove
+                </button>
             </div>
         </div>
     </div>
+    <!-- <div class="dialog-window"
+      v-if="isWindowVisible"
+      @click.stop="closeWindow"
+   >
+    <div class="window__content">
+         <dialogue-payment
+            @click.stop 
+            :stateTotalNumber="stateTotalNumber"
+            :stateTotalAmount="stateTotalAmount"
+         >
+         </dialogue-payment>      
+      </div>
+    </div>   -->
 </template>
 
 <script>
 import axios from 'axios';
+import DialoguePayment from '@/components/DialoguePayment';
 import { mapGetters } from 'vuex';
 
 export default {
     components: {
+        DialoguePayment,
     },
     props: {
         getCartItem: {
@@ -88,6 +105,7 @@ export default {
             productCategory: Object,
             productDiscount: Object,
             selectedNumber: 1,
+            // isWindowVisible: false,
         }
     },
     created() {
@@ -156,13 +174,6 @@ console.log(`discountPercent: ${this.productDiscount.discountPercent}`);
                 return 0;
             }
         },
-        // itemAmount() {
-        //     return (this.discountPrice * this.selectedNumber).toFixed(2);
-        //     const amount = (this.discountPrice * this.selectedNumber).toFixed(2);
-        //     this.$emit('itemAmount', amount);
-        // console.log(`Send amount:, ${amount}`);         
-        //     return amount;
-        // },
     },
 
     methods:{
@@ -178,25 +189,11 @@ console.log(`discountPercent: ${this.productDiscount.discountPercent}`);
                 selectedNumber: this.selectedNumber,
             });
         },
-        // updateSelectedNumber() {
-        //     const itemAmount = parseFloat((this.discountPrice * this.selectedNumber).toFixed(2));    
-        //     this.itemAmount = itemAmount;                 
-        //     this.$store.commit('updateCartItemQuantity', {
-        //         productId: this.getCartItem.productId,
-        //         quantity: this.selectedNumber,
-        //     });
 
-        //     this.$store.commit('setItemAmount', {
-        //         productId: this.getCartItem.productId,
-        //         itemAmount: itemAmount,
-        //     });
-        //     this.$store.dispatch('recalculateTotals');
-        // },
-
-        removeFromCart(productId) {
-            this.$store.commit('removeFromCart', productId);
-            this.$store.dispatch('recalculateTotals');
-            alert (`The product code ${productId} was successfully removed from the cart`)
+        removeFromCart() {
+            this.$emit('removeFromCart', this.getCartItem.productId);
+            // this.$store.dispatch('recalculateTotals');
+            // alert (`The product code ${productId} was successfully removed from the cart`)
         },
         recalculateTotals() {
             this.$store.dispatch('recalculateTotals');
@@ -207,15 +204,18 @@ console.log(`discountPercent: ${this.productDiscount.discountPercent}`);
         },
         closeLargeImage() {
             this.isLargeImageVisible = false;
-        }
+        },
+        // openWindow() {
+        //     this.isWindowVisible = true;
+        //  },
+        //  closeWindow() {
+        //     this.isWindowVisible = false;
+        //  },
     }
 }
 </script>
 
 <style scoped>
-    h1{
-        margin: 40px 25px;
-    }
     .card-item {
         width:95%;
         display: flex;
@@ -223,7 +223,7 @@ console.log(`discountPercent: ${this.productDiscount.discountPercent}`);
         justify-content: space-between;        
         margin: auto;
         margin-top: 20px;
-        padding: 10px;
+        padding: 5px;
         background-color: white;
     }
     .card-img-block{
@@ -235,40 +235,46 @@ console.log(`discountPercent: ${this.productDiscount.discountPercent}`);
     }
     .card-img {
         margin: auto;
-        max-height: 200px;
+        max-height: 175px;
         width: auto;
     }
     .card-body{
         max-width: 40%;
         padding: 10px;
-        margin-left: 10px;
     }
     h5 {
         text-align: center;
         font-size: 20px;
         font-weight: 600;
+        margin-top: 3px;
         margin-bottom: 15px; 
     }
     p {
         font-size: 18px;
+        margin-bottom: 8px;
     }
     .item-count-block{
-        padding: 10px;
+        padding: 5px;
+        margin-right: 38px;
     }
     .count{
         display: flex;
         justify-content: end;
         font-size: 18px;
-        padding: 5px;
+        padding: 4px;
     }
-    .item-calculation, .input-calculation{
-        width: 80px;
+
+    .item-calculation {
+        width: 105px;
         margin-left: 12px;
         font-weight: 500;
         text-align: end;
     }
     .input-calculation{
         text-align: center;
+        width: 80px;
+        margin-left: 37px;
+        font-weight: 500;
     }
     .button-block {
         display: flex;
@@ -278,35 +284,73 @@ console.log(`discountPercent: ${this.productDiscount.discountPercent}`);
     .button-block *{
         padding: 4px 12px;
     }
-    .cansel{
-        background-color: red;
-    }
 
-    @media only screen and (max-width: 768px) {
+    @media only screen and (max-width: 960px) {
+        .card-item {
+            flex-wrap: wrap;
+            justify-content: center;
+            width:90%;
+            margin-top: 10px;
+        }
         .card-img-block{
-            width: 100%;
+            width: 40%;
+            text-align: left;
         }
-        .card-img-top {
-            padding: 20px;
+        .item-count-block{
+            margin-right: 0;
         }
+    }
+    @media only screen and (max-width: 768px) {
         .card-body{
-            width: 100%;
+            max-width: 60%;
+            padding: 10px;
         }
+
     }
     @media only screen and (max-width: 576px) {
+        .card-item {
+            width:100%;
+            margin-top: 10px;
+        }
+        .card-img-block{
+            /* width: 20%; */
+            /* height: 100%; */
+            padding: 5px;
+        }
+        .card-img {
+            max-height: 125px;
+        }
+        .card-body{
+            padding: 5px;
+        }
         h5 {
-            font-size: 20px;
-            margin-bottom: 16px; 
+            font-size: 14px;
+            margin-bottom: 10px; 
         }
         p {
-            font-size: 16px;
-        }
-        .last {
-            margin-bottom: 5px;            
-        }
-        span {
             font-size: 12px;
-        }        
+            margin-bottom: 6px;
+        }
+        .item-count-block{
+            font-weight: 600;
+        }
+        .count{
+            font-size: 12px;
+            padding: 2px;
+        }
+        .item-calculation {
+            width: 80px;
+            margin-left: 0;
+            font-weight: 700;
+        }
+        .input-calculation{
+            width: 60px;
+            margin-left: 20px;
+        }
+        .button-block *{
+            font-size: 10px;
+            padding: 3px 10px;
+        }
     }
 
     .large-image{
@@ -324,4 +368,21 @@ console.log(`discountPercent: ${this.productDiscount.discountPercent}`);
         max-width: 90%;
         max-height: 90%;
     }
+    .dialog-window{
+      position: fixed;
+      display: flex;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      left: 0;
+      background: rgba(0, 0, 0, 0.7);
+   }
+   .window__content {
+      margin: 100px auto auto;
+      background: white;
+      border-radius: 12px;
+      min-height: 200px;
+      min-width: 350px;
+      padding: 20px;
+   }
 </style>

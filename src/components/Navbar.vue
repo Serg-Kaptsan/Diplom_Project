@@ -32,11 +32,6 @@
 <script>
   export default {
     props: {},
-    // data() {
-    //   return {
-    //     accessToken: localStorage.getItem('token')
-    //   };
-    // },
 
     methods: {
       logout() {
@@ -57,8 +52,7 @@
       goCart() {
         if (this.isAuthorization) {
         if (this.$route.path !== '/cart') {
-          this.$router.push('/cart');
-          // this.$store.dispatch('recalculateTotals');          
+          this.$router.push('/cart');      
         } else {
           location.reload();
         }

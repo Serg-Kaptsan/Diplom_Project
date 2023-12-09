@@ -25,6 +25,5 @@
   }
   .close-form:hover{
     color: red;
-    /* font-weight: 00; */
   }
 </style>

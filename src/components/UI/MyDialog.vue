@@ -1,9 +1,10 @@
 <template>
   <div class="dialog" v-if="show" @click.stop="hideDialog">
     <div @click.stop class="dialog__content">
-      <div class="close-form">
-          <span class="close-simbol" @click="hideDialog"> &#x1F7AA; </span>             
-      </div>
+
+    <close-form title="back to product list"
+      @click="hideDialog">
+    </close-form>
       <slot></slot>
     </div>
   </div>
@@ -37,20 +38,5 @@ export default {
     min-height: 200px;
     min-width: 350px;
     padding: 20px;
-  }
-  .close-form{
-    position: absolute;
-    top: 0;
-    right: 0;        
-    font-size: 24px;
-    height: 50px;
-    width: 50px;
-    cursor: pointer;
-    }
-    .close-simbol{
-      margin-left: 12px;
-    }
-  .close-form:hover{
-    color: red;
   }
 </style>

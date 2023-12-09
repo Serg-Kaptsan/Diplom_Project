@@ -1,5 +1,7 @@
 <template>
-        <div class="card-item" v-if="product" >
+        <div class="card-item" 
+            v-if="product"
+        >
             <close-form title="back to product list"
                 @click="$router.push('/')">
             </close-form>
@@ -55,11 +57,10 @@
 import axios from 'axios';
 import { mapActions, mapGetters } from 'vuex';
 import MyDialog from '@/components/UI/MyDialog';
-// import showMixin from "@/mixins/showMixin";
 
 export default {
     components: {
-        // MyDialog
+        MyDialog
     },
     data() {
         return {
@@ -70,6 +71,7 @@ export default {
             productCategory: null,
             productDiscount: null,
             itemAmount: 0,
+            isLoading: false,
         }
     },
 
@@ -113,9 +115,13 @@ console.log(`categoryId: ${categoryId}`);
         addToCart() {
             if (!this.isAuthorization) {
                 alert('To add an item to your cart, you must log in.');
-                this.showDialog();
             } else {
-                this.createSession();
+                if (!this.isLoading) {
+                    this.isLoading = true;
+                    this.createSession();                    
+                } else {
+                    alert('Adding to cart is in progress. Please wait.');
+                }
             }
         },
 
@@ -136,6 +142,13 @@ console.log(`categoryId: ${categoryId}`);
                     this.createUserProductCart();                                       
                 }
                 } else {
+                    const existingProduct = this.$store.getters.getCartItems.find(item => item.productId === this.product.id);
+
+                    if (existingProduct) {
+                        alert(`Product with code ${this.product.id} is already in the cart`);
+                        return;
+                    }
+                    
                     this.createUserProductCart();
                     console.log(`sessionId: ${sessionId}`);
                     console.log(`userId: ${userId}`);
@@ -153,7 +166,8 @@ console.log(`categoryId: ${categoryId}`);
                     quantity: 1,
                     shoppingSessionId: sessionId,
                     productId: this.product.id
-                }, {headers: {
+                }, {
+                    headers: {
                         'Authorization': `Bearer ${this.token}`,
                     }
                 });
@@ -168,6 +182,7 @@ console.log('Response for cart:', response.data);
                     )};
                     console.log('CartItem created succeccfully');
                     alert('Product successfully added to cart');
+                    this.isLoading = false;
 
                     this.$store.dispatch('addProductToCart', cartItem);
                     this.$store.dispatch('recalculateItemAmount', {
@@ -178,11 +193,10 @@ console.log('Response for cart:', response.data);
                     this.$store.dispatch('recalculateTotals');
                     this.$router.push('/cart');
                     console.log('cartItem:', cartItem);
-                    // console.log('discountPrice in createUserProductCart:', `${cartItem.discountPrice}`);
-                    // console.log('itemAmount in createUserProductCart:', `${itemAmount}`);
                 }
             } catch (error) {
                 console.error('Error creating user product cart:', error);
+                this.isLoading = false;
             }
         },
         calculateDiscountPrice(price, discountPercent) {
@@ -200,7 +214,7 @@ console.log('Response for cart:', response.data);
         },
         closeLargeImage() {
             this.isLargeImageVisible = false;
-        }
+        },
     },
     computed: {
         isAuthorization() {
@@ -211,7 +225,6 @@ console.log('Response for cart:', response.data);
             return this.$store.getters.getSelectedNumber;
         },
     },
-    // mixins: [showMixin]
 }
 </script>
 
@@ -242,7 +255,7 @@ console.log('Response for cart:', response.data);
     .card-img-top {
         width: 100%;
         padding: 10px;
-        max-height: 550px;
+        max-height: 500px;
         object-fit: contain;      
         vertical-align: middle;
     }

@@ -306,12 +306,31 @@ export default {
         }
     }
     @media only screen and (max-width: 768px) {
+        h2{
+            font-size: 20px;            
+        }
+        .btn_container {
+            padding: 7px 10px;
+        }
+        .menu-button, .add-button{
+            font-size: 12px;
+            padding: 3px 6px;
+        }
         .serch_block {
-            min-width: 350px;
+            font-size: 12px;
+            min-width: 225px;
             left: 5px;          
         }
+        .serch_block img{
+            top: 9px;
+        }
         .sort_btn{
-           margin-right: 15px; 
+           margin-right: 0;
+           padding: 5px 7px;
+           font-size: 12px;
+        }
+        .sort_btn:last-child{
+           margin-right: 5px;
         }
     }
     @media only screen and (max-width: 576px) {
@@ -319,30 +338,32 @@ export default {
             font-size: 24px;
         }
         h2{
-            font-size: 20px;            
+            font-size: 12px;            
         }
         .btn_container {
-            padding: 0 0 10px 0;
+            padding: 0;
         }
         *.btn_container {
-            font-size: 12px;
+            font-size: 10px;
         }        
         .serch_block {
-            min-width: 260px;
-            left: 0;          
+            min-width: 162px;
+            left: 0;
+            font-size: 10px;
+            line-height: 12px;        
         }
         .serch_block button {
-            padding: 7px 5px;
+            padding: 2px;
         }
-        .serch_block button img {
-            width: 12px;
-            height: 12px;
-            margin-right: 3px;
+        .serch_block img {
+            display: none;
         }
         .sort_btn{
-            margin-right: 0;
-            padding: 5px 5px;
-            font-size: 12px;
+            padding: 5px 2px;
+            font-size: 10px;
+        }
+        .sort_btn:last-child {
+            width: 70px;
         }
     }
     .empty-list {

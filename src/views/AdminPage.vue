@@ -379,14 +379,11 @@ export default {
       .serch_block img {
         display: none;
       }
-      /* .serch_block button {
-        padding: 7px 5px;
-      } */
       .sort_btn{
         padding: 5px 2px;
         font-size: 10px;
       }
-      .sort_btn:last-child{
+      .sort_btn:last-child {
         width: 70px;
       }
     }

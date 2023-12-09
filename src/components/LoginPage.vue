@@ -92,6 +92,7 @@ export default{
                         this.$router.push('/');
                         this.$emit('close-dialog');
                     } else if (user.roles.includes('ROLE_ADMIN')) {
+                        alert('Successful authorization. Welcome to our store.');   
                        this.$router.push('/admin');
                        this.$emit('close-dialog');
                     }

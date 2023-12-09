@@ -9,16 +9,16 @@
   
   <script>
     export default {
-        data() {
-            return {
-                product: null,
-            };
-        },
-        created() {
-            this.product = {
-                imageData: this.$route.params.imageData
-            };
-        },
+      data() {
+        return {
+          product: null,
+        };
+      },
+      created() {
+        this.product = {
+          imageData: this.$route.params.imageData
+        };
+      },
     }
   </script>
   
@@ -29,7 +29,6 @@
     left: 0;
     width: 100%;
     height: 100%;
-    /* background: rgba(0, 0, 0, 0.2); */
     display: flex;
     justify-content: center;
     align-items: center;
