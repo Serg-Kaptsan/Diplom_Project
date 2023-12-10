@@ -4,6 +4,7 @@ import MyDialog from "@/components/UI/MyDialog";
 import AdminMenu from "@/components/UI/AdminMenu";
 import CloseForm from "@/components/UI/CloseForm";
 import MySelect from "@/components/UI/MySelect";
+import MySpinner from "@/components/UI/MySpinner.vue";
 import TextareaDescription from "@/components/UI/TextareaDescription";
 
 export default [
@@ -13,5 +14,6 @@ export default [
     AdminMenu,
     CloseForm,
     MySelect,
+    MySpinner,
     TextareaDescription,
 ];

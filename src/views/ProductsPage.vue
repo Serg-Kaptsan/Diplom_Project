@@ -276,7 +276,7 @@ export default {
     .serch_block input {
         width: 100%;
         padding: 5px;
-        border: 2px solid #ccc;
+        border: 2px solid #a0a0a0;
         border-radius: 5px;
         outline: none;
     }
@@ -290,7 +290,7 @@ export default {
     .sort_btn{
         padding: 5px 25px;
         margin-right: 100px;
-        border: 2px solid #ccc;
+        border: 2px solid #a0a0a0;
     }
     .flip-list-move {
        transition: transform 0.5s ease;

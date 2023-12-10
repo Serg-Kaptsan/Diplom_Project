@@ -30,11 +30,11 @@
                 <p class="card-text ">
                     <strong> discount name: </strong> {{ productDiscount.name }}
                 </p>                
-                <img 
+                <!-- <img 
                     @click="$router.push('discount')"
                     title="Open discount card"
                     src="https://cdn-icons-png.flaticon.com/512/483/483356.png"
-                    alt="Search">                   
+                    alt="Search">                    -->
             </div>
             <p class="card-text"> <strong> photoId: </strong> {{ product.photoId }} </p> 
             <p class="empty-line"></p>                                   
@@ -140,12 +140,12 @@ export default {
         justify-content: space-between;
         align-items: center;
     }
-    .special img{
+    /* .special img{
         margin: auto;
         width: 14px;
         height: 14px;
         cursor: pointer;
-    }
+    } */
     .empty-line{
         height: 10px;
     }

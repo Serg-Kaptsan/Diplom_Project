@@ -3,10 +3,10 @@
     <div class="second-line">
         <h2>USERS LIST</h2>
         <div class="add-button-block">
-            <div class="btn btn-secondary add-button" 
-                @click="$router.push('/add-user')">
+            <!-- <div class="btn btn-secondary add-button" 
+                @click="this.$emit('show-dialog')">
                 Add user
-            </div>             
+            </div>              -->
         </div>
     </div>
 
