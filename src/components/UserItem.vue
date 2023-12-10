@@ -11,10 +11,10 @@
             <p class="card-text"> <strong> Email: </strong> {{ user.email }} </p>
         </div>
         <div class="button-block">
-            <button class="btn btn-secondary inside-button"
+            <!-- <button class="btn btn-secondary inside-button"
                 @click="viewOrders"> 
                 To orders
-            </button>
+            </button> -->
             <button class="btn btn-secondary inside-button"
                 @click="viewEdit"> 
                 Edit data 
@@ -42,9 +42,9 @@ export default {
     },
 
     methods: {
-        viewOrders() {
-            this.$router.push({name: 'order', params: {id: this.order.id} });
-        },
+        // viewOrders() {
+        //     this.$router.push({name: 'cart', params: {id: this.order.id} });
+        // },
         viewEdit() {
             this.$router.push({name: 'edit-user', params: {id: this.user.id} });
         },

@@ -8,7 +8,7 @@
             <div class="form-group">
                 <label for="input_name">name:</label>
                 <input
-                    v-model.trim="name"
+                    v-model.trim="user.name"
                     v-focus
                     type="text" class="form-control" 
                     id="input_name" 
@@ -17,14 +17,14 @@
                     required>
                 <label for="input_surname">surname:</label>
                 <input
-                    v-model.trim="surname"
+                    v-model.trim="user.surname"
                     type="text" 
                     class="form-control" 
                     id="input_surname"
                     placeholder="Enter your surname">
                 <label for="input_phone">phone:</label>
                 <input
-                    v-model.trim="phone"
+                    v-model.trim="user.phone"
                     type="text" 
                     class="form-control" 
                     id="input_phone"  
@@ -37,28 +37,18 @@
                 </div>
                 <label for="email">email:</label>
                 <input
-                    v-model.trim="email"
+                    v-model.trim="user.email"
                     type="email" 
                     class="form-control" 
                     id="regEmail" 
                     placeholder="Enter your email address"
                     @blur="validateEmail"
                     required>
-                <!-- <label for="password">password:</label>
-                <input
-                    v-model.trim="password"
-                    type="password" 
-                    class="form-control" 
-                    id="regPassword" 
-                    placeholder="Create a password"
-                    @blur = "validatePassword"
-                    autocomplete="off"
-                    required> -->
             </div>
             <div class="button_group">
                 <button class="main_button cancel"
                     type="button" 
-                    @click="viewDiscount"
+                    @click="viewUsers"
                     v-if="buttonVisible">
                     Cancel changes
                 </button>
@@ -71,8 +61,9 @@
                 <div class="create_Success"
                     id="editSuccess"
                     v-if="editSuccess"
-                    @click="viewDiscount">
+                    @click="this.$router.go(-1)">
                     Data edited successfully.
+                    <br> Click to escape.
                 </div>
             </div>
         </div>
@@ -89,166 +80,73 @@ export default {
     data() {
         return {
             accessToken: localStorage.getItem('token'),
-            product: {
-                name: '',
-                description: '',
-                sku: '',
-                price: null,
-                quantity: null,                
-                discount: '',
-                discountId: null,
-                discountIdMap: {},
-                category: '',
-                categoryId: null,
-                categoryIdMap: {}
+            user: {
+                name: String,
+                surname: String,
+                phone: String,
+                email: String,
             },
-            createSuccess: false,
+            editSuccess: false,
             buttonVisible: true,
             maxLength: 255,
-            imagePreview: null,
-            discounts: [],
-            selectedDiscountName: '',
-            selectedDiscountId: null,
-            discountIdMap: {},
-            categories: [],
-            selectedCategoryName: '',
-            selectedCategoryId: null,
-            categoryIdMap: {},
         }
     },
     computed: {
-        remainingCharacters() {
-            if (this.product.description){
-              return this.maxLength - this.product.description.length;  
-            } else{
-                return this.maxLength;
-            }
-        }
     },
     methods: {
-        viewProduct() {
-            this.$router.push({ name: 'product', params: { id: this.product.id } });
-        },
-        checkDescriptionLength() {
-          if (this.product.description.length > this.maxLength) {
-            this.product.description = this.product.description.slice(0, this.maxLength);
-          }
-        },
-        async loadDiscounts() {
-            try {
-                const response = await axios.get('http://localhost:8081/discount', {
-                    headers: {
-                        'Authorization': `Bearer ${this.accessToken}`
-                    },
-                });
-                if (response.status === 200) {
-                    this.discounts = response.data.map(discount => {
-                this.discountIdMap[discount.name] = discount.id;
-                return discount.name;
-            });
-                }
-            } catch (error) {
-                console.error('Error fetching discounts:', error);
-            }
-        },
-        handleDiscountChange() {
-            this.selectedDiscountId = this.discountIdMap[this.selectedDiscountName];
-            console.log('Selected discount id:', this.selectedDiscountId);
-        },
-        async loadCategory() {
-            try {
-                const response = await axios.get('http://localhost:8081/product-categories', {
-                    headers: {
-                        'Authorization': `Bearer ${this.accessToken}`
-                    },
-                });
-                
-                if (response.status === 200) {
-                    this.categories = response.data.map(category => category.name);
-                    response.data.forEach(category => {
-                    this.categoryIdMap[category.name] = category.id;
-                    });
-                }
-            } catch (error) {
-                console.error('Error fetching categories:', error);
-            }
-        },
-        handleCategoryChange() {
-            this.selectedCategoryId = this.categoryIdMap[this.selectedCategoryName];
-            console.log('Selected category id:', this.selectedCategoryId);
-        },
+
         async fetchData() {
-            const productId = this.$route.params.id;
             try {
-                await this.loadDiscounts();
-                await this.loadCategory();
-                const response = await axios.get(`http://localhost:8081/product/${productId}`);
-                this.product = response.data;
+                const userId = this.$route.params.id;                
+                const response = await axios.get(`http://localhost:8081/users/${userId}`, {
+                    headers: {
+                        'Authorization': `Bearer ${this.accessToken}`,
+                        'Content-Type': 'application/json'
+                    }
+                }); 
+                this.user = response.data;
 
-                console.log('product.discountId:', this.product.discountId);
-                console.log('product.categoryId:', this.product.categoryId);
-
-                if (this.product.discountId) {
-                this.selectedDiscountName = Object.keys(this.discountIdMap).find(key => this.discountIdMap[key] === this.product.discountId);
-                }
-                console.log('product.discount.name:', this.selectedDiscountName);
-
-                if (this.product.categoryId) {
-                this.selectedCategoryName = Object.keys(this.categoryIdMap).find(key => this.categoryIdMap[key] === this.product.categoryId);
-                }
-                console.log('product.category.name:', this.selectedCategoryName);
-
+                console.log('userId:', userId);
             } catch (error) {
-                console.error('Error fetching product data:', error);
-            }
+                console.error('Error fetching user data:', error);
+            }                                    
         },
 
         async saveChanges() {
-            if (!this.product.name) {
-                alert("Product name is required.");
+            if (!this.user.name) {
+                alert("User name is required.");
                 return;
             }
-            this.product.price = parseFloat(this.product.price);
-            if (!isNaN(this.product.price)) {
-                this.product.price = this.product.price.toString().replace(',', '.');
+            const userPhone = this.user.phone;
+            if (!userPhone) {
+                alert("Phone nomber is required.");
+                return;
             }
-            if (this.selectedDiscountName) {
-                this.product.discountId = this.selectedDiscountId;
-            } else {
-                this.product.discountId = null;
+            const userEmail = this.user.email;
+            if (!userEmail) {
+                alert("Email is required.");
+                return;
             }
-            if (this.selectedCategoryName) {
-                this.product.categoryId = this.selectedCategoryId;
-            } else {
-                this.product.categoryId = null;
-            }
-            
             try {
-                const productId = this.$route.params.id;
+                const userId = this.$route.params.id;
 
-                const productData = {
-                    id: this.product.id,
-                    name: this.product.name,
-                    description: this.product.description,
-                    sku: this.product.sku,
-                    price: this.product.price,
-                    modifiedAt: new Date().toISOString(),
-                    deletedAt: null,
-                    // discountId: null,
-                    // categoryId: null,
-                    quantity: this.product.quantity,
-                    // photoId: photoId,
+                const userData = {
+                    id: this.user.id,
+                    name: this.user.name,
+                    surname: this.user.surname,
+                    phone: this.user.phone,
+                    email: this.user.email,
                 };
-                console.log('Sending request with productId:', productId);
-                const changeResponse = await axios.post(`http://localhost:8081/product/${productId}`, productData, {
+                console.log('Sending data:', userData);
+
+                const changeResponse = await axios.put(`http://localhost:8081/users/${userId}`, userData, {
                     headers: {
                         'Authorization': `Bearer ${this.accessToken}`,
                         'Content-Type': 'application/json',
                     },
-                    data: productData,
                 });
 
-                if (changeResponse.status === 200) {
+                if (changeResponse.status >= 200 && changeResponse.status < 300) {
                     this.editSuccess = true;
                     this.buttonVisible = false;
                     console.log('Data sent successfully.');
@@ -256,14 +154,36 @@ export default {
                     console.error('Error sending data.');
                 }
             } catch (error) {
-                console.error('Error sending data to /product/', error);
+                console.error('Error sending data to /discount/', error);
             }
-        }
+        },
+        validateName() {
+            if (this.user.name.length > 0) {
+                const nameRegex = /^(?!script$)(?![^.]*\.\.)[a-zа-яіїІЇєЄґҐ0-9.-]{2,}$/i;
+                if (!nameRegex.test(this.user.name)) {
+                    alert('The name can only contain numbers, letters of the Latin, Cyrillic or Ukrainian alphabet, and must consist of at least 2 characters.')
+                }                    
+            }
+        },
+        validatePhone() {
+            if (this.user.phone.length >0) {
+                const phoneRegex = /^\+380\d{9}$/;
+                if (!phoneRegex.test(this.user.phone)) {
+                    alert('Incorrect phone nomber format.')
+                }
+            }                
+        },
+        validateEmail() {
+            if (this.user.email.length >0) {
+                const emailRegex = /^(?!(script|.*[<>]|.*\.\.))[a-z0-9._-]+@[a-z0-9._-]+\.[a-z]{2,}$/i;
+                if (!emailRegex.test(this.user.email)) {
+                    alert('Incorrect email address format.')
+                }   
+            }
+        },
     },
     mounted() {
         this.fetchData();
-        this.loadDiscounts();
-        this.loadCategory();
     },
 }
 </script>
@@ -290,12 +210,10 @@ export default {
     }
     label{
         font-weight: 500;
-    }
-    label + label{
-        margin-top: 10px;        
+        margin-top: 15px;
+        margin-bottom: 3px;             
     }
     .submit{
-        /* display: none; */
         color: white;
         background-color: #00a046;
         transition: background-color 0.3s;
@@ -309,7 +227,7 @@ export default {
     .button_group{
        display: flex;
        justify-content: space-between;
-       margin-top: 10px;
+       margin-top: 25px;
     }
     .main_button {
         padding: 8px 12px;

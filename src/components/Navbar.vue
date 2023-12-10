@@ -14,11 +14,11 @@
       <button @click="showDialog"> 
         LOG IN
       </button>
-      <button 
+      <!-- <button 
         @click="$router.push('/admin')"
         > 
         ADMIN 
-      </button>
+      </button> -->
       <button @click="goAccaunt"> 
         ACCAUNT
       </button>
@@ -64,10 +64,17 @@
 
       goAccaunt() {
         if (this.isAuthorization) {
-          this.$router.push('/accaunt');
+          const userId = localStorage.getItem('userId');
+
+        if (userId) {
+          this.$router.push({ name: 'edit-user', params: { id: parseInt(userId) } });
         } else {
-            alert('To open your account, you must be logged in.'),
-            this.showDialog();          
+          alert('Unable to determine user. Please log in again.');
+          this.showDialog();
+        }
+        } else {
+        alert('To open your account, you must be logged in.');
+        this.showDialog();
         }
       },
 
@@ -113,7 +120,7 @@
   }
   @media only screen and (max-width: 576px) {
     .navbar{
-      font-size: 13px;
+      font-size: 12px;
       height: 27px;  
     }
     button {      

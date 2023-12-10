@@ -61,4 +61,7 @@
         justify-content: space-around;
         margin-top: 20px;
     }
+    button {
+        padding: 4px 12px;
+    }
 </style>
