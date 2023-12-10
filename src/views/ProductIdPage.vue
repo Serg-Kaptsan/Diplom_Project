@@ -191,7 +191,6 @@ console.log('Response for cart:', response.data);
                         selectedNumber: cartItem.selectedNumber,
                     });
                     this.$store.dispatch('recalculateTotals');
-                    this.$router.push('/cart');
                     console.log('cartItem:', cartItem);
                 }
             } catch (error) {

@@ -48,7 +48,7 @@
             <div class="button_group">
                 <button class="main_button cancel"
                     type="button" 
-                    @click="viewUsers"
+                    @click="this.$router.go(-1)"
                     v-if="buttonVisible">
                     Cancel changes
                 </button>
@@ -226,7 +226,7 @@ export default {
     }
     .button_group{
        display: flex;
-       justify-content: space-between;
+       justify-content: space-around;
        margin-top: 25px;
     }
     .main_button {
@@ -236,9 +236,6 @@ export default {
         border: none;
         border-radius: 5px;
         margin: auto 15px;
-    }
-    .button_group button{
-        margin: auto 0;
     }
     .cancel {
         background-color: red;
@@ -253,6 +250,13 @@ export default {
         background-color: #f0f8f0;
         margin-top: 10px;
         cursor: pointer;
+    }
+    @media only screen and (max-width: 576px) { 
+        .main_button {
+            padding: 4px 8px;
+            font-size: 14px;
+            width: auto;
+        }
     }
 
 </style>

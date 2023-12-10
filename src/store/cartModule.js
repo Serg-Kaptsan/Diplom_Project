@@ -68,7 +68,7 @@ export default {
       },
 
       removeFromCart({commit, dispatch}, productId) {
-        this.commit ('removeFromCart', productId);
+        commit ('removeFromCart', productId);
         dispatch ('recalculateTotals');
       },
 
