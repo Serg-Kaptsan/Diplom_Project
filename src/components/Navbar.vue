@@ -14,7 +14,7 @@
       <button @click="showDialog"> 
         LOG IN
       </button>
-      <!-- <button 
+      <!-- <button v-is="userRole:ADMIN" 
         @click="$router.push('/admin')"
         > 
         ADMIN 
@@ -26,19 +26,49 @@
         GO OUT
       </button>
     </div>
+    <my-notification ref="noteMessage"></my-notification>
   </div>
 </template>
 
 <script>
-  export default {
+import MyNotification from '@/components/UI/MyNotification';
+
+export default {
+  components: {
+    MyNotification,
+  },
+    data() {
+      return {
+        accessToken: localStorage.getItem('token'),        
+      }
+    },
     props: {},
 
     methods: {
-      logout() {
-        localStorage.removeItem('token');
-          alert('You have successfully logged out of your account. \nWould you like to log in under a different name?');
-          this.showDialog();
-          this.$router.push('/');
+      async logout () {
+        const sessionId = localStorage.getItem('sessionId');
+        try {
+          if (sessionId) {
+            await axios.delete(`http://localhost:8081/product/${sessionId}`, {
+              headers:{
+                'Authorization': `Bearer ${this.accessToken}`
+              },
+            });
+              localStorage.removeItem('sessionId');
+            } else {
+              console.warn('No sessionId found in localStorage.');
+            }
+        } catch (e) {
+            console.error('Error deleting session:', e);
+            console.warn('Session not found on the server.');
+
+        } finally {
+          localStorage.removeItem('sessionId');
+          localStorage.removeItem('token');
+          localStorage.removeItem('userId');
+          this.$refs.noteMessage.showNotification('You have successfully logged out of your account');
+          this.$router.push('/');               
+        }
       },
 
       goHome() {
@@ -56,27 +86,21 @@
         } else {
           location.reload();
         }
-      } else {
-        alert('To add an item to your cart, you must be logged in.');
-        this.showDialog();
-      }
+        } else {
+          alert('To add an item to your cart, you must be logged in.');
+          this.showDialog();
+        }
       },
 
       goAccaunt() {
         if (this.isAuthorization) {
           const userId = localStorage.getItem('userId');
-
-        if (userId) {
           this.$router.push({ name: 'edit-user', params: { id: parseInt(userId) } });
         } else {
-          alert('Unable to determine user. Please log in again.');
+          alert('To open your account, you must be logged in.');
           this.showDialog();
         }
-        } else {
-        alert('To open your account, you must be logged in.');
-        this.showDialog();
-        }
-      },
+     },
 
       showDialog() {
         this.$emit('show-dialog');

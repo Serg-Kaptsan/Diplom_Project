@@ -62,6 +62,7 @@
             v-if="!isProductsLoading && filteredAndSortedProducts.length === 0">
             Nothing was found for your search query
         </div>
+        <my-notification ref="noteMessage"> </my-notification>
     </div>
     <div v-intersection="() => loadMorePages(selectedCategoryId)" class="observer"> </div>
 </template>
@@ -69,10 +70,12 @@
 <script>
 import axios from 'axios';
 import AdminProductItem from "@/components/AdminProductItem";
+import MyNotification from '@/components/UI/MyNotification';
 
 export default {
     components: {
         AdminProductItem,
+        MyNotification,
     },
 
     data(){
@@ -187,7 +190,7 @@ export default {
                         'Authorization': `Bearer ${this.accessToken}`
                     },
                 });
-                    alert(`The element code ${productToDelete.id} was deleted successfully`);
+                    this.$refs.noteMessage.showNotification(`The element code ${productToDelete.id} was deleted successfully`);
                     this.products = this.products.filter(product => product.id !== productToDelete.id);
             } catch (e) {
                 console.error('Error deleting product:', e);
@@ -243,7 +246,7 @@ export default {
 
     mounted() {
         this.fetchProducts();
-        console.log(this.$refs.observer);
+        console.log('observer poin:', this.$refs.observer);
     },
 }
 </script>

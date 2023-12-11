@@ -78,18 +78,21 @@
          >
          </dialogue-payment>      
       </div>
+      <!-- <my-notification ref="noteMessage"></my-notification> -->
    </div>   
 </template>
 
 <script>
    import CartItem from '@/components/CartItem';
    import DialoguePayment from '@/components/DialoguePayment';
+   import MyNotification from '@/components/UI/MyNotification';
    import { mapGetters } from 'vuex';
 
    export default {
       components: {
          CartItem,
          DialoguePayment,
+         MyNotification,
       },
 
       data() {
@@ -120,8 +123,8 @@
             this.isWindowVisible = false;
          },
          removeAllFromCart() {
-            alert("All products will be removed from the cart. \nAre you sure you want this?");
             this.$store.dispatch('removeAllFromCart');
+            // this.$refs.noteMessage.showNotification("All products will be removed from the cart");
          }
       },
       

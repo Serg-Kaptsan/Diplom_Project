@@ -50,6 +50,7 @@
                     @click="addToCart"
                 />   
             </div>
+            <my-notification ref="noteMessage"></my-notification>
         </div>
 </template>
 
@@ -57,10 +58,12 @@
 import axios from 'axios';
 import { mapActions, mapGetters } from 'vuex';
 import MyDialog from '@/components/UI/MyDialog';
+import MyNotification from '@/components/UI/MyNotification';
 
 export default {
     components: {
-        MyDialog
+        MyDialog,
+        MyNotification,
     },
     data() {
         return {
@@ -120,7 +123,7 @@ console.log(`categoryId: ${categoryId}`);
                     this.isLoading = true;
                     this.createSession();                    
                 } else {
-                    alert('Adding to cart is in progress. Please wait.');
+                    this.$refs.noteMessage.showNotification('Adding to cart is in progress. Please wait.');
                 }
             }
         },
@@ -145,7 +148,7 @@ console.log(`categoryId: ${categoryId}`);
                     const existingProduct = this.$store.getters.getCartItems.find(item => item.productId === this.product.id);
 
                     if (existingProduct) {
-                        alert(`Product with code ${this.product.id} is already in the cart`);
+                        this.$refs.noteMessage.showNotification(`Product with code ${this.product.id} is already in the cart`);
                         return;
                     }
                     
@@ -181,7 +184,7 @@ console.log('Response for cart:', response.data);
                         discountPrice: this.calculateDiscountPrice(this.product.price, this.productDiscount.discountPercent,
                     )};
                     console.log('CartItem created succeccfully');
-                    alert('Product successfully added to cart');
+                    this.$refs.noteMessage.showNotification('Product successfully added to cart');
                     this.isLoading = false;
 
                     this.$store.dispatch('addProductToCart', cartItem);

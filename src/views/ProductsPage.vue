@@ -71,15 +71,18 @@
             {{ pageNumber }}
         </div>
     </div>          -->
+    <Spinner :size="50" :thickness="150" color="#3498db" />
 </template>
 
 <script>
 import axios from 'axios';
 import ProductItem from "@/components/ProductItem";
+// import Spinner from 'vue-simple-spinner.js';
 
 export default {
     components: {
         ProductItem,
+        // Spinner,
     },
 
     data() {
@@ -380,6 +383,10 @@ export default {
         height: 2px;
     }
     .temporary{
+        width: 100%;
+        margin: 50px auto;
+        text-align: center;
+        font-size: 24px;
         font-weight: 500;
         color: red;
         }

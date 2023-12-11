@@ -6,6 +6,7 @@ import CloseForm from "@/components/UI/CloseForm";
 import MySelect from "@/components/UI/MySelect";
 import MySpinner from "@/components/UI/MySpinner.vue";
 import TextareaDescription from "@/components/UI/TextareaDescription";
+import MyNotification from "@/components/UI/MyNotification";
 
 export default [
     MyButton,
@@ -16,4 +17,5 @@ export default [
     MySelect,
     MySpinner,
     TextareaDescription,
+    MyNotification
 ];

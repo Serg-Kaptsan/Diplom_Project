@@ -48,16 +48,19 @@
              && filteredAndSortedDiscounts.length === 0">
             Nothing was found for your search query
         </div>
+        <my-notification ref="noteMessage"></my-notification>
     </div>
   </template>
   
   <script>
   import axios from 'axios';
   import DiscountItem from "@/components/DiscountItem";
+  import MyNotification from '@/components/UI/MyNotification';
   
   export default {
     components: {
       DiscountItem,
+      MyNotification,
     },
   
     data(){
@@ -106,7 +109,7 @@
                 'Authorization': `Bearer ${this.accessToken}`
             },
           });
-            alert(`The element code ${discountToDelete.id} was deleted successfully`);
+            this.$refs.noteMessage.showNotification(`The element code ${discountToDelete.id} was deleted successfully`);
             this.discounts = this.discounts.filter(element => element.id !== discountToDelete.id);
         } catch (e) {
           console.error('Error deleting discount:', e);

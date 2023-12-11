@@ -1,15 +1,48 @@
 <template>
-  <div>
-    <h1>
-      Тут буде інформація про розробників
-    </h1>
+  <div class="container">
+    <h2>
+      This thesis project was created by the developers:
+    </h2>
+    
+    <div class="block">
+      <h4>
+        <strong> Front-end: </strong>
+      </h4>
+      <h5>
+        <strong> Serhii </strong> (aka <strong>Serginio</strong>) <strong>Kaptsan</strong> Ukraine, Dnipro.
+        <br>phone (Viber, WhatsApp): <strong> +380990488231 </strong> 
+        <br>email address: <strong> s.kaptsan@ukr.net </strong>
+      </h5>
+    </div>
+
+    <div class="block">
+      <h4>
+        <strong> Back-end: </strong>
+      </h4>
+      <h5>
+        <strong> </strong> Ukraine, Kyiv.
+        <br>phone (Viber, WhatsApp): <strong>  </strong> 
+        <br>email address: <strong>  </strong>
+      </h5>         
+    </div>
+
   </div>
 </template>
 
 <style scoped>
-  h1{
-    margin-top: 50px;
-    margin-left: 20px;
+  .container {
+    margin: 50px;
+    padding:10px;
   }
-
+  h2{
+    text-align: center;
+  }
+  .block{
+    margin: 25px;
+    margin-left: 50px;
+    padding: 10px;
+  }
+  h5{
+    line-height: 30px;
+  }
 </style>

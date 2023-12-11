@@ -1,5 +1,5 @@
 <template>
-    <admin-menu> </admin-menu>
+    <!-- <admin-menu> </admin-menu> -->
     <div class="container">
         <div class="header">
             <h2>Edit Users Data</h2>
@@ -190,6 +190,7 @@ export default {
 
 <style scoped>
     .container {
+        margin-top: 50px;        
         display: flex;
         flex-direction: column;
         justify-content: center;

@@ -33,7 +33,7 @@
         <div class="redirect" @click="isOpenRegistr">
             <strong>Sign up</strong>
         </div>
-    </div> 
+    </div>
 </template>
 
 <script>
@@ -93,8 +93,8 @@ export default{
                         this.$emit('close-dialog');
                     } else if (user.roles.includes('ROLE_ADMIN')) {
                         alert('Successful authorization. Welcome to our store.');   
-                       this.$router.push('/admin');
-                       this.$emit('close-dialog');
+                        this.$router.push('/admin');
+                        this.$emit('close-dialog');
                     }
                 } else {
                     throw new Error('Failed to get user data');

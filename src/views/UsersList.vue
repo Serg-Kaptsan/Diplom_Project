@@ -46,25 +46,24 @@
             v-if="!isUsersLoading && filteredAndSortedUsers.length === 0">
             Nothing was found for your search query
         </div>
+        <my-notification ref="noteMessage"></my-notification>
     </div>
-    <!-- <div v-intersection="loadMorePages" class="observer"> </div> -->
 </template>
 
 <script>
   import axios from 'axios';
   import UserItem from "@/components/UserItem";
+  import MyNotification from '@/components/UI/MyNotification';
 
   export default {
     components: {
       UserItem,
+      MyNotification,
     },
 
-    data(){
+    data() {
       return {
         accessToken: localStorage.getItem('token'),
-        // currentPage: 0,
-        // itemsPerPage: 10,
-        // totalPages: 0,
         isUsersLoading: false,
         selectedSort: '',            
         users:[],
@@ -103,29 +102,6 @@ console.error('Error Fetching:', e);
         }
       },
 
-//       async loadMorePages() {
-//         try {
-//           if (!this.isUsersLoading) {
-//             this.currentPage += 1;
-//             let response= await axios.get('http://localhost:8081/users', {
-//               headers:{
-//                 'Authorization': `Bearer ${this.accessToken}`
-//               },  
-//               params: {
-//                   page: this.currentPage,
-//                   pageSize: this.itemsPerPage
-//               }
-//             });                 
-//             this.totalPages = Math.ceil(response.data.totalElements / this.itemsPerPage)
-//             this.users.push(...response.data);
-// console.log('Updated users:', this.users); 
-//           }
-//         } catch (e) {
-// console.error('Error Fetching:', e);
-//           this.hasErrorFetching = true;
-//         }
-//       },
-
       async deleteUser(userToDelete) {
         try {
           await axios.delete(`http://localhost:8081/users/${userToDelete.id}`, {
@@ -133,7 +109,7 @@ console.error('Error Fetching:', e);
                 'Authorization': `Bearer ${this.accessToken}`
             },
           });
-            alert(`The element code ${userToDelete.id} was deleted successfully`);
+            this.$refs.noteMessage.showNotification(`The element code ${userToDelete.id} was deleted successfully`);
             this.users = this.users.filter(element => element.id !== userToDelete.id);
         } catch (e) {
           console.error('Error deleting user:', e);

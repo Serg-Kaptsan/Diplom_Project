@@ -48,16 +48,21 @@
            && filteredAndSortedCategories.length === 0">
           Nothing was found for your search query
       </div>
+      <my-notification
+        ref="noteMessage">
+      </my-notification>
   </div>
 </template>
 
 <script>
 import axios from 'axios';
 import CategoryItem from "@/components/CategoryItem";
+import MyNotification from '@/components/UI/MyNotification';
 
 export default {
   components: {
     CategoryItem,
+    MyNotification,
   },
 
   data(){
@@ -105,7 +110,7 @@ console.error('Error Fetching:', e);
               'Authorization': `Bearer ${this.accessToken}`
           },
         });
-          alert(`The element code ${categoryToDelete.id} was deleted successfully`);
+          this.$refs.noteMessage.showNotification(`The element code ${categoryToDelete.id} was deleted successfully`);
           this.categories = this.categories.filter(element => element.id !== categoryToDelete.id);
       } catch (e) {
         console.error('Error deleting category:', e);

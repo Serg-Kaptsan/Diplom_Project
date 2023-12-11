@@ -1,5 +1,6 @@
 import "bootstrap/dist/css/bootstrap.min.css"
 import { createApp } from 'vue'
+import { Spinner } from 'vue-simple-spinner';
 import App from '@/App.vue'
 import router from '@/router/router'
 import store from '@/store'
@@ -17,6 +18,7 @@ components.forEach(component => {
 directives.forEach(directive => {
     app.directive(directive.name, directive)
 })
+app.component('Spinner', Spinner);
 
 app
     .use(store)
