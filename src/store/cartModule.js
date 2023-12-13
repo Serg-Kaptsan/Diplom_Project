@@ -86,6 +86,10 @@ export default {
           const token = localStorage.getItem('token');
           const sessionId = localStorage.getItem('sessionId');
 
+          if (!sessionId || state.cartItems.length === 0) {
+            console.log('No sessionId or no items in the cart. Skipping delete request.');
+            return;
+          }
           const response = await axios.delete(`http://localhost:8081/cart/${sessionId}/items`, {
             headers: {
               'Authorization': `Bearer ${token}`,

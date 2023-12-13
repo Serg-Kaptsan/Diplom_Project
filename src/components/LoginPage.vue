@@ -40,6 +40,7 @@
 import RegistrPage from '@/components/RegistrPage';
 import MyDialog from '@/components/UI/MyDialog';
 import showMixin from '@/mixins/showMixin';
+import { mapMutations } from 'vuex';
 import axios from 'axios';
 
 export default{
@@ -57,6 +58,8 @@ export default{
         show: Boolean,
     },
     methods: {
+        ...mapMutations(['setAdminButtonVisible']),
+
         async login() {
             const formData = new URLSearchParams();
             formData.append('username', this.email);
@@ -88,11 +91,15 @@ export default{
                     localStorage.setItem('userId', user.id);
 
                     if (user.roles.includes('ROLE_USER')) {
-                        alert('Successful authorization. Welcome to our store.');                        
+                        alert('Successful authorization. Welcome to our store.');
+                        localStorage.setItem('userRole', 'ROLE_USER');
+                        this.setAdminButtonVisible(false);
                         this.$router.push('/');
                         this.$emit('close-dialog');
                     } else if (user.roles.includes('ROLE_ADMIN')) {
-                        alert('Successful authorization. Welcome to our store.');   
+                        alert('Successful authorization. Welcome to our store.');
+                        localStorage.setItem('userRole', 'ROLE_ADMIN');
+                        this.setAdminButtonVisible(true);
                         this.$router.push('/admin');
                         this.$emit('close-dialog');
                     }

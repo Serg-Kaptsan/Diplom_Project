@@ -41,7 +41,7 @@ import { mapActions } from 'vuex';
         mounted() {
         },
         methods: {
-            ...mapActions('yourModuleName', ['deleteProductsFromServer']),
+            ...mapActions('cart', ['deleteProductsFromServer']),
 
             async toPayTotal() {
                 try {

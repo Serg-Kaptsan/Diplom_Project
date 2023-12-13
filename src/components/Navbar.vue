@@ -14,12 +14,12 @@
       <button @click="showDialog"> 
         LOG IN
       </button>
-      <!-- <button v-is="userRole:ADMIN" 
-        @click="$router.push('/admin')"
-        > 
-        ADMIN 
-      </button> -->
-      <button @click="goAccaunt"> 
+      <button v-show="isAdminButton"
+        @click="goAdmin"
+      > 
+        <strong> ADMIN </strong>  
+      </button>
+      <button @click="goAccaunt">
         ACCAUNT
       </button>
       <button @click="logout"> 
@@ -40,9 +40,11 @@ export default {
     MyNotification,
   },
   data() {
-    // return {
-    //   accessToken: localStorage.getItem('token'),        
-    // }
+  },
+  computed: {
+    isAdminButton() {
+      return this.$store.state.isAdminButton;
+    },
   },
   props: {},
 
@@ -82,8 +84,18 @@ export default {
       } finally {
         localStorage.removeItem('token');
         localStorage.removeItem('userId');
+        localStorage.removeItem('userRole');
+        this.$store.commit('setAdminButtonVisible', false);
         this.$refs.noteMessage.showNotification('You have successfully logged out of your account');
         this.$router.push('/');
+      }
+    },
+    goAdmin() {
+      if (this.isAuthorization()) {
+        this.navigate('/admin');
+      } else {
+        alert('To open Admin page, you must be logged in.');
+        this.showDialog();
       }
     },
 

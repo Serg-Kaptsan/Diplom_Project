@@ -81,10 +81,10 @@ export default {
         return {
             accessToken: localStorage.getItem('token'),
             user: {
-                name: String,
-                surname: String,
-                phone: String,
-                email: String,
+                name: null,
+                surname: null,
+                phone: null,
+                email: null,
             },
             editSuccess: false,
             buttonVisible: true,
