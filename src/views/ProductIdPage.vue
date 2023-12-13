@@ -179,6 +179,7 @@ console.log('Request for cart:', response.config);
 console.log('Response for cart:', response.data);
 
                 if (response.status >= 200 && response.status < 300) {
+                    localStorage.setItem('cartId', response.data.id);
                     const cartItem = {
                         ...response.data, 
                         discountPrice: this.calculateDiscountPrice(this.product.price, this.productDiscount.discountPercent,

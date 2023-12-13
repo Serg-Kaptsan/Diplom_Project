@@ -65,6 +65,7 @@
          </div>
          </div>
       </div>
+      <my-notification ref="noteMessage"></my-notification>      
    </div>
    <div class="dialog-window"
       v-if="isWindowVisible"
@@ -75,10 +76,10 @@
             @click.stop 
             :stateTotalNumber="stateTotalNumber"
             :stateTotalAmount="stateTotalAmount"
+            @notificFromWindow="notificFromWindow"
          >
          </dialogue-payment>      
       </div>
-      <!-- <my-notification ref="noteMessage"></my-notification> -->
    </div>   
 </template>
 
@@ -115,17 +116,22 @@
       methods: {
          handleRemove(productId) {
             this.$store.dispatch('removeFromCart', productId);
+            this.$refs.noteMessage.showNotification(`The product code ${productId} was successfully removed from the cart`);            
          },
          openWindow() {
             this.isWindowVisible = true;
          },
+         notificFromWindow() {
+            this.$refs.noteMessage.showNotification("The payment was successful. \nWait for the goods to be delivered");
+         },
          closeWindow() {
             this.isWindowVisible = false;
          },
-         removeAllFromCart() {
-            this.$store.dispatch('removeAllFromCart');
-            // this.$refs.noteMessage.showNotification("All products will be removed from the cart");
-         }
+
+         async removeAllFromCart() {
+            await this.$store.dispatch('deleteProductsFromServer');
+            this.$refs.noteMessage.showNotification("All products were successfully removed from the cart.");           
+         },
       },
       
       created () {

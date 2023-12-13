@@ -28,6 +28,8 @@
 
 <script>
     export default {
+        components: {
+        },
         props: {
             stateTotalNumber: Number,
             stateTotalAmount: Number,
@@ -40,7 +42,7 @@
         },
         methods: {
             toPayTotal() {
-                alert("The payment was successful. \nWait for the goods to be delivered");
+                this.$emit('notificFromWindow');
                 this.$store.dispatch('removeAllFromCart');
                 this.$emit('closeWindow');
             }

@@ -404,6 +404,10 @@ export default {
         height: 2px;
     }
     .temporary{
+        width: 100%;
+        margin: 50px auto;
+        text-align: center;
+        font-size: 24px;
         font-weight: 500;
         color: red;
         }

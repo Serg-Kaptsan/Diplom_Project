@@ -18,7 +18,7 @@ export default {
       this.isVisible = true;
       setTimeout(() => {
         this.isVisible = false;
-      }, 3500);
+      }, 2500);
     },
   },
 };

@@ -31,88 +31,96 @@
 </template>
 
 <script>
+import axios from 'axios';
 import MyNotification from '@/components/UI/MyNotification';
+import { mapActions } from 'vuex';
 
 export default {
   components: {
     MyNotification,
   },
-    data() {
-      return {
-        accessToken: localStorage.getItem('token'),        
+  data() {
+    // return {
+    //   accessToken: localStorage.getItem('token'),        
+    // }
+  },
+  props: {},
+
+  methods: {
+    ...mapActions('cart', ['deleteProductsFromServer']),
+
+    goHome() {
+      if (this.$route.path !== '/') {
+        this.$router.push('/');
+      } else {
+        location.reload();
       }
     },
-    props: {},
 
-    methods: {
-      async logout () {
+    showDialog() {
+      this.$emit('show-dialog');
+    },
+
+    logout() {
+      try {
+        // Выполните необходимые действия при выходе
         const sessionId = localStorage.getItem('sessionId');
-        try {
-          if (sessionId) {
-            await axios.delete(`http://localhost:8081/product/${sessionId}`, {
-              headers:{
-                'Authorization': `Bearer ${this.accessToken}`
-              },
-            });
-              localStorage.removeItem('sessionId');
-            } else {
-              console.warn('No sessionId found in localStorage.');
-            }
-        } catch (e) {
-            console.error('Error deleting session:', e);
-            console.warn('Session not found on the server.');
+        const accessToken = localStorage.getItem('token');
 
-        } finally {
+        if (sessionId && accessToken) {
+          axios.delete(`http://localhost:8081/product/${sessionId}`, {
+            headers: {
+              'Authorization': `Bearer ${accessToken}`
+            },
+          });
           localStorage.removeItem('sessionId');
-          localStorage.removeItem('token');
-          localStorage.removeItem('userId');
-          this.$refs.noteMessage.showNotification('You have successfully logged out of your account');
-          this.$router.push('/');               
-        }
-      },
-
-      goHome() {
-        if (this.$route.path !== '/') {
-          this.$router.push('/');
         } else {
-          location.reload();
+          console.warn('No sessionId or accessToken found in localStorage.');
         }
-      },
-
-      goCart() {
-        if (this.isAuthorization) {
-        if (this.$route.path !== '/cart') {
-          this.$router.push('/cart');      
-        } else {
-          location.reload();
-        }
-        } else {
-          alert('To add an item to your cart, you must be logged in.');
-          this.showDialog();
-        }
-      },
-
-      goAccaunt() {
-        if (this.isAuthorization) {
-          const userId = localStorage.getItem('userId');
-          this.$router.push({ name: 'edit-user', params: { id: parseInt(userId) } });
-        } else {
-          alert('To open your account, you must be logged in.');
-          this.showDialog();
-        }
-     },
-
-      showDialog() {
-        this.$emit('show-dialog');
+      } catch (error) {
+        console.error('Error during logout:', error);
+      } finally {
+        localStorage.removeItem('token');
+        localStorage.removeItem('userId');
+        this.$refs.noteMessage.showNotification('You have successfully logged out of your account');
+        this.$router.push('/');
       }
     },
 
-    computed: {
-      isAuthorization() {
-        return !!localStorage.getItem('token');
+    goCart() {
+      if (this.isAuthorization()) {
+        this.navigate('/cart');
+      } else {
+        alert('To open your cart, you must be logged in.');
+        this.showDialog();
       }
-    }
+    },
+
+    goAccaunt() {
+      if (this.isAuthorization()) {
+        const userId = localStorage.getItem('userId');
+        this.navigate({ name: 'edit-user', params: { id: parseInt(userId) } });
+      } else {
+        alert('To open your account, you must be logged in.');
+        this.showDialog();
+      }
+    },
+
+    isAuthorization() {
+      const token = localStorage.getItem('token');
+      return !!token && token.trim() !== '';
+    },
+
+    navigate(route) {
+      if (this.$route.path !== route) {
+        this.$router.push(route);
+      } else {
+        location.reload();
+      }
+
+    },
   }
+}
 </script>
   
 <style scoped>

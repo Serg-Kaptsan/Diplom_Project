@@ -57,41 +57,22 @@
                <div class="item-calculation"> {{ itemAmount }} $</div>
             </div>
             <div class="button-block">
-                <!-- <button class="btn btn-primary"
-                    @click="openWindow"> Buy the product 
-                </button> -->
                 <button class="btn btn-danger"
                     @click="removeFromCart(getCartItem.productId)"> Remove
                 </button>
             </div>
         </div>
-        <!-- <my-notification ref="noteMessage"></my-notification> -->
     </div>
-    <!-- <div class="dialog-window"
-      v-if="isWindowVisible"
-      @click.stop="closeWindow"
-   >
-    <div class="window__content">
-         <dialogue-payment
-            @click.stop 
-            :stateTotalNumber="stateTotalNumber"
-            :stateTotalAmount="stateTotalAmount"
-         >
-         </dialogue-payment>      
-      </div>
-    </div>   -->
 </template>
 
 <script>
 import axios from 'axios';
 import DialoguePayment from '@/components/DialoguePayment';
-// import MyNotification from '@/components/UI/MyNotification';
 import { mapGetters } from 'vuex';
 
 export default {
     components: {
         DialoguePayment,
-        // MyNotification,
     },
     props: {
         getCartItem: {
@@ -108,7 +89,6 @@ export default {
             productCategory: Object,
             productDiscount: Object,
             selectedNumber: 1,
-            // isWindowVisible: false,
         }
     },
     created() {
@@ -195,7 +175,6 @@ console.log(`discountPercent: ${this.productDiscount.discountPercent}`);
 
         removeFromCart() {
             this.$emit('removeFromCart', this.getCartItem.productId);
-            // this.$refs.noteMessage.showNotification(`The product code ${productId} was successfully removed from the cart`);
         },
         recalculateTotals() {
             this.$store.dispatch('recalculateTotals');
@@ -207,12 +186,6 @@ console.log(`discountPercent: ${this.productDiscount.discountPercent}`);
         closeLargeImage() {
             this.isLargeImageVisible = false;
         },
-        // openWindow() {
-        //     this.isWindowVisible = true;
-        //  },
-        //  closeWindow() {
-        //     this.isWindowVisible = false;
-        //  },
     }
 }
 </script>

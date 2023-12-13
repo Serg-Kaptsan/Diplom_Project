@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 export default {
     state: () => ({
       cartItems: [],
@@ -18,7 +20,6 @@ export default {
         console.log('Removing product with id:', productId);
         const index = state.cartItems.findIndex(item => item.productId === productId);
         if (index !== -1) {
-          alert (`The product code ${productId} was successfully removed from the cart`);
           state.cartItems.splice(index, 1);
           this.commit('recalculateTotals');
         }
@@ -75,8 +76,35 @@ export default {
       recalculateTotals({ commit }) {
         commit('recalculateTotals');
       },
+
       removeAllFromCart({commit}) {
         commit('removeAllFromCart');
+      },
+      
+      async deleteProductsFromServer({ commit, state }) {
+        try {
+          const token = localStorage.getItem('token');
+          const sessionId = localStorage.getItem('sessionId');
+
+          const response = await axios.delete(`http://localhost:8081/cart/${sessionId}/items`, {
+            headers: {
+              'Authorization': `Bearer ${token}`,
+            },
+          });
+      
+          if (response.status >= 200 && response.status < 300) {
+            commit('removeAllFromCart');
+            console.log('Cart successfully deleted from the server.');
+          } else {
+            console.error(`Failed to delete cart from the server. Status: ${response.status}`);
+            throw new Error('Failed to delete cart from the server.');
+          }
+      
+          commit('recalculateTotals');
+        } catch (error) {
+          console.error('Error during the request:', error.message);
+          throw new Error('Error during the request.');
+        }
       }
     },
 
