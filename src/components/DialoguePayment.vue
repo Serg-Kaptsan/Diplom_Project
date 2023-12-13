@@ -27,6 +27,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
     export default {
         components: {
         },
@@ -38,15 +39,20 @@
         },
 
         mounted() {
-
         },
         methods: {
-            toPayTotal() {
-                this.$emit('notificFromWindow');
-                this.$store.dispatch('removeAllFromCart');
-                this.$emit('closeWindow');
-            }
-        },
+            ...mapActions('yourModuleName', ['deleteProductsFromServer']),
+
+            async toPayTotal() {
+                try {
+                    await this.$store.dispatch('deleteProductsFromServer');
+                    this.$emit('notificFromWindow');
+                    this.$emit('closeWindow');                    
+                } catch (error) {
+        console.error('Error during deleteProductsFromServer:', error);
+                }
+            },
+        }
     }
 </script>
 

@@ -61,14 +61,14 @@ export default {
       this.$emit('show-dialog');
     },
 
-    logout() {
+    async logout() {
       try {
-        // Выполните необходимые действия при выходе
         const sessionId = localStorage.getItem('sessionId');
         const accessToken = localStorage.getItem('token');
+        await this.$store.dispatch('deleteProductsFromServer');
 
         if (sessionId && accessToken) {
-          axios.delete(`http://localhost:8081/product/${sessionId}`, {
+          await axios.delete(`http://localhost:8081/${sessionId}`, {
             headers: {
               'Authorization': `Bearer ${accessToken}`
             },
