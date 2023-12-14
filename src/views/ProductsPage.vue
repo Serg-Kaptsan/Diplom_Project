@@ -48,7 +48,10 @@
 
         </div>
       </div>
-      <div v-else class="temporary">Loading</div>
+
+      <div v-else class="temporary">  
+        <puls-element> </puls-element>
+      </div>
 
         <div class="empty-list" 
             v-if="!isProductsLoading && filteredAndSortedProducts.length === 0">
@@ -71,17 +74,19 @@
             {{ pageNumber }}
         </div>
     </div>          -->
-    <Spinner :size="50" :thickness="150" color="#3498db" />
+    <!-- <Spinner :size="50" :thickness="150" color="#3498db" /> -->
 </template>
 
 <script>
 import axios from 'axios';
 import ProductItem from "@/components/ProductItem";
+import PulsElement from "@/components/UI/PulsElement";
 // import Spinner from 'vue-simple-spinner.js';
 
 export default {
     components: {
         ProductItem,
+        PulsElement,
         // Spinner,
     },
 
@@ -383,11 +388,8 @@ export default {
         height: 2px;
     }
     .temporary{
-        width: 100%;
+        width: 90%;
         margin: 50px auto;
         text-align: center;
-        font-size: 24px;
-        font-weight: 500;
-        color: red;
         }
 </style>

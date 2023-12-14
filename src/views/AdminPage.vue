@@ -56,7 +56,9 @@
             </transition-group>
         </div>
       </div>
-      <div v-else class="temporary">Loading</div>
+      <div v-else class="temporary">
+        <puls-element></puls-element>
+      </div>
 
         <div class="empty-list" 
             v-if="!isProductsLoading && filteredAndSortedProducts.length === 0">
@@ -69,13 +71,15 @@
 
 <script>
 import axios from 'axios';
-import AdminProductItem from "@/components/AdminProductItem";
+import AdminProductItem from '@/components/AdminProductItem';
 import MyNotification from '@/components/UI/MyNotification';
+import PulsElement from '@/components/UI/PulsElement';
 
 export default {
     components: {
         AdminProductItem,
         MyNotification,
+        PulsElement,
     },
 
     data(){
@@ -98,9 +102,7 @@ export default {
             {value: 'sku', name: 'SKU'},
             {value: 'name', name: 'name'},
             {value: 'id', name: 'code'},
-            {value: 'price', name: 'price'},            
-            // {value: 'category', name: 'category'},
-            // {value: 'discount', name: 'discount'},
+            {value: 'price', name: 'price'},
             {value: 'createdAt', name: 'creation date'},
             {value: 'modifiedAt', name: 'modification date'},
           ],
@@ -407,8 +409,5 @@ export default {
         width: 100%;
         margin: 50px auto;
         text-align: center;
-        font-size: 24px;
-        font-weight: 500;
-        color: red;
         }
 </style>

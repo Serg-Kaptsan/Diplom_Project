@@ -7,6 +7,7 @@ import MySelect from "@/components/UI/MySelect";
 import MySpinner from "@/components/UI/MySpinner.vue";
 import TextareaDescription from "@/components/UI/TextareaDescription";
 import MyNotification from "@/components/UI/MyNotification";
+import PulsElement from "@/components/UI/PulsElement";
 
 export default [
     MyButton,
@@ -17,5 +18,6 @@ export default [
     MySelect,
     MySpinner,
     TextareaDescription,
-    MyNotification
+    MyNotification,
+    PulsElement,
 ];

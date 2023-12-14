@@ -9,9 +9,12 @@
         <strong> Front-end: </strong>
       </h4>
       <h5>
-        <strong> Serhii </strong> (aka <strong>Serginio</strong>) <strong>Kaptsan</strong> Ukraine, Dnipro.
-        <br>phone (Viber, WhatsApp): <strong> +380990488231 </strong> 
-        <br>email address: <strong> s.kaptsan@ukr.net </strong>
+        <strong> Serhii Kaptsan</strong> Java-script Developer
+        <br> <strong>City:</strong> Dnipro, Ukraine
+        <br> Phone (Viber, WhatsApp): <strong> +380990488231 </strong> 
+        <br> Email: <strong> s.kaptsan@ukr.net </strong>
+        <br> Linkedin: https://www.linkedin.com/in/serg-kaptsan-4aa2b8243/
+        <br> Github: https://github.com/Serg-Kaptsan/
       </h5>
     </div>
 
@@ -20,25 +23,32 @@
         <strong> Back-end: </strong>
       </h4>
       <h5>
-        <strong> </strong> Ukraine, Kyiv.
-        <br>phone (Viber, WhatsApp): <strong>  </strong> 
-        <br>email address: <strong>  </strong>
+        <strong> Maksym Petliuk </strong> Java Software Engineer
+        <br> <strong>City:</strong> Kyiv, Ukraine
+        <br> Phone (Viber, WhatsApp): <strong> +380977031241 </strong>
+        <br> Email: <strong> maksym.petliuk@gmail.com </strong>
+        <br> Linkedin: https://www.linkedin.com/in/maksym-petliuk-5587b328b/
+        <br> Github: https://github.com/Petliuk
+        <br> LeetCode: https://leetcode.com/Petliuk/        
       </h5>         
     </div>
-
   </div>
 </template>
 
 <style scoped>
   .container {
-    margin: 50px;
+    margin:20px;
     padding:10px;
   }
   h2{
     text-align: center;
+    margin: 25px;
+  }
+  h4 {
+    margin-left: 25px;
   }
   .block{
-    margin: 25px;
+    margin: 10px;
     margin-left: 50px;
     padding: 10px;
   }
