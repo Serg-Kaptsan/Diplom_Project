@@ -391,5 +391,6 @@ export default {
         width: 90%;
         margin: 50px auto;
         text-align: center;
+        overflow: hidden;
         }
 </style>

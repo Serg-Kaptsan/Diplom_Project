@@ -409,5 +409,6 @@ export default {
         width: 100%;
         margin: 50px auto;
         text-align: center;
-        }
+        overflow: hidden;
+    }
 </style>
