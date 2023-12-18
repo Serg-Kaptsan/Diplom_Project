@@ -98,7 +98,7 @@ export default {
         async fetchData() {
             try {
                 const userId = this.$route.params.id;                
-                const response = await axios.get(`http://localhost:8081/users/${userId}`, {
+                const response = await axios.get(`${process.env.VUE_APP_API_URL}/users/${userId}`, {
                     headers: {
                         'Authorization': `Bearer ${this.accessToken}`,
                         'Content-Type': 'application/json'
@@ -139,7 +139,7 @@ export default {
                 };
                 console.log('Sending data:', userData);
 
-                const changeResponse = await axios.put(`http://localhost:8081/users/${userId}`, userData, {
+                const changeResponse = await axios.put(`${process.env.VUE_APP_API_URL}/users/${userId}`, userData, {
                     headers: {
                         'Authorization': `Bearer ${this.accessToken}`,
                         'Content-Type': 'application/json',

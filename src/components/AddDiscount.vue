@@ -119,7 +119,7 @@ export default {
                     modifiedAt: new Date().toISOString(),
                     deletedAt: null,
                 };
-                const createResponse = await axios.post('http://localhost:8081/discount/', discountData, {
+                const createResponse = await axios.post(`${process.env.VUE_APP_API_URL}/discount/`, discountData, {
                     headers: {
                         'Authorization': `Bearer ${this.accessToken}`,
                         'Content-Type': 'application/json',

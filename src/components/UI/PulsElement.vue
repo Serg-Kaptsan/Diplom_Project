@@ -25,7 +25,7 @@
     @keyframes pulseAnimation {
         0% {
             transform: scale(1);
-            opacity: 0.8;
+            opacity: 1;
         }
         25% {
             transform: scale(1.2);
@@ -33,7 +33,7 @@
         }
         50% {
             transform: scale(1.4);
-            opacity: 1;
+            opacity: 0.8;
         }
         75% {
             transform: scale(1.2);
@@ -41,7 +41,7 @@
         }
         100% {
             transform: scale(1);
-            opacity: 0.8;
+            opacity: 1;
         }
     }
 </style>

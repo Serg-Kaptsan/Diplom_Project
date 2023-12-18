@@ -87,7 +87,7 @@ export default {
       try {
         this.isCategoriesLoading
          = true;
-        const response = await axios.get('http://localhost:8081/product-categories', {
+        const response = await axios.get(`${process.env.VUE_APP_API_URL}/product-categories`, {
           headers:{
               'Authorization': `Bearer ${this.accessToken}`
           },             
@@ -105,7 +105,7 @@ console.error('Error Fetching:', e);
 
     async deleteCategory(categoryToDelete) {
       try {
-        await axios.delete(`http://localhost:8081/product-categories/${categoryToDelete.id}`, {
+        await axios.delete(`${process.env.VUE_APP_API_URL}/product-categories/${categoryToDelete.id}`, {
           headers:{
               'Authorization': `Bearer ${this.accessToken}`
           },

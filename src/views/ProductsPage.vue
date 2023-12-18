@@ -122,7 +122,7 @@ export default {
         async fetchProducts() {
             try {
                 this.isProductsLoading = true;
-                const response = await axios.get('http://localhost:8081/products', {
+                const response = await axios.get(`${process.env.VUE_APP_API_URL}/products`, {
                     params: {
                         page: this.currentPage,
                         pageSize: this.itemsPerPage
@@ -132,8 +132,8 @@ export default {
                 this.products = response.data.content;
                 console.log(response);
 
-                this.discount = (await axios.get('http://localhost:8081/discount')).data;
-                this.categories = (await axios.get('http://localhost:8081/product-categories')).data;
+                this.discount = (await axios.get(`${process.env.VUE_APP_API_URL}/discount`)).data;
+                this.categories = (await axios.get(`${process.env.VUE_APP_API_URL}/product-categories`)).data;
 
                 this.categories.forEach(category => {
                     this.categoryIdMap[category.name] = category.id;
@@ -152,13 +152,13 @@ export default {
                     this.currentPage += 1;
 
                     const response = selectedCategoryId
-                       ? response = await axios.get(`http://localhost:8081/products/category/${selectedCategoryId}`, {
+                       ? response = await axios.get(`${process.env.VUE_APP_API_URL}/products/category/${selectedCategoryId}`, {
                             params: {
                                 page: this.currentPage,
                                 pageSize: this.itemsPerPage
                             }
                         })
-                        : await axios.get('http://localhost:8081/products', {
+                        : await axios.get(`${process.env.VUE_APP_API_URL}/products`, {
                                 params: {
                                     page: this.currentPage,
                                     pageSize: this.itemsPerPage
@@ -186,7 +186,7 @@ export default {
         async filterByCategory() {
             if (this.selectedCategoryId) {
                 try {
-                    const response = await axios.get(`http://localhost:8081/products/category/${this.selectedCategoryId}`);
+                    const response = await axios.get(`${process.env.VUE_APP_API_URL}/products/category/${this.selectedCategoryId}`);
                     this.products = response.data;
                 } catch (error) {
                     console.error('Error filtering by category:', error);

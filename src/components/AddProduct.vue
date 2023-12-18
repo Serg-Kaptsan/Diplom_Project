@@ -195,7 +195,7 @@ export default {
 
         async loadDiscounts() {
             try {
-                const response = await axios.get('http://localhost:8081/discount', {
+                const response = await axios.get(`${process.env.VUE_APP_API_URL}/discount`, {
                     headers: {
                         'Authorization': `Bearer ${this.accessToken}`
                     },
@@ -217,7 +217,7 @@ export default {
 
         async loadCategory() {
             try {
-                const response = await axios.get('http://localhost:8081/product-categories', {
+                const response = await axios.get(`${process.env.VUE_APP_API_URL}/product-categories`, {
                     headers: {
                         'Authorization': `Bearer ${this.accessToken}`
                     },
@@ -270,7 +270,7 @@ export default {
                     const formData = new FormData();
                     formData.append('image', fileInput);
 
-                    const uploadResponse = await axios.post('http://localhost:8081/photos/upload', formData, {
+                    const uploadResponse = await axios.post(`${process.env.VUE_APP_API_URL}/photos/upload`, formData, {
                         headers: {
                             'Authorization': `Bearer ${this.accessToken}`,
                             'Content-Type': 'multipart/form-data',
@@ -297,7 +297,7 @@ export default {
                     photoId: photoId,
                 };
 
-                const createResponse = await axios.post('http://localhost:8081/product/', productData, {
+                const createResponse = await axios.post(`${process.env.VUE_APP_API_URL}/product/`, productData, {
                     headers: {
                         'Authorization': `Bearer ${this.accessToken}`,
                         'Content-Type': 'application/json',

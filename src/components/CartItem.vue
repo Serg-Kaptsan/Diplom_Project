@@ -98,7 +98,7 @@ export default {
     mounted() {
         const productId = this.getCartItem.productId;
 console.log(`productId: ${productId}`)
-        axios.get(`http://localhost:8081/product/${productId}`)
+        axios.get(`${process.env.VUE_APP_API_URL}/product/${productId}`)
         .then(response => {
             this.product = response.data;
             const discountId = this.product.discountId;            
@@ -107,7 +107,7 @@ console.log(`productId: ${productId}`)
     console.log(`discountId: ${discountId}`);
     console.log(`categoryId: ${categoryId}`);
 
-            axios.get(`http://localhost:8081/discount/${discountId}`, {
+            axios.get(`${process.env.VUE_APP_API_URL}/discount/${discountId}`, {
                 headers:{
                     'Authorization': `Bearer ${this.accessToken}`,
                     'Content-Type': 'application/json'
@@ -122,7 +122,7 @@ console.log(`discountPercent: ${this.productDiscount.discountPercent}`);
                 console.error('Error fetching discount:', error);
             });
 
-            axios.get(`http://localhost:8081/product-categories/${categoryId}`, {
+            axios.get(`${process.env.VUE_APP_API_URL}/product-categories/${categoryId}`, {
                 headers:{
                     'Authorization': `Bearer ${this.accessToken}`,
                     'Content-Type': 'application/json'

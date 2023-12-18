@@ -90,7 +90,7 @@ export default {
             console.log('No sessionId or no items in the cart. Skipping delete request.');
             return;
           }
-          const response = await axios.delete(`http://localhost:8081/cart/${sessionId}/items`, {
+          const response = await axios.delete(`${process.env.VUE_APP_API_URL}/cart/${sessionId}/items`, {
             headers: {
               'Authorization': `Bearer ${token}`,
             },

@@ -99,7 +99,7 @@
                     password: this.password,
                 };
                 axios
-                    .post('http://localhost:8081/users', user)
+                    .post(`${process.env.VUE_APP_API_URL}/users`, user)
                     .then((response) => {
             console.log('Registration successful:', response.data);
                     this.registrationSuccess = true;

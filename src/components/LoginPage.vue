@@ -66,7 +66,7 @@ export default{
             formData.append('password', this.password);
 
             try {
-                const response = await axios.post('http://localhost:8081/login', formData, {
+                const response = await axios.post(`${process.env.VUE_APP_API_URL}/login`, formData, {
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded'
                     },
@@ -81,7 +81,7 @@ export default{
     console.log('Access token:', accessToken);
                 localStorage.setItem('token', accessToken);
 
-                const userResponse = await axios.get('http://localhost:8081/users/principal', {
+                const userResponse = await axios.get(`${process.env.VUE_APP_API_URL}/users/principal`, {
                     headers: {
                         Authorization: `Bearer ${accessToken}`
                     }

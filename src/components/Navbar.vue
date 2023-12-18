@@ -70,7 +70,7 @@ export default {
         await this.$store.dispatch('deleteProductsFromServer');
 
         if (sessionId && accessToken) {
-          await axios.delete(`http://localhost:8081/${sessionId}`, {
+          await axios.delete(`${process.env.VUE_APP_API_URL}/${sessionId}`, {
             headers: {
               'Authorization': `Bearer ${accessToken}`
             },

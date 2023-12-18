@@ -82,7 +82,7 @@
       async fetchUsers() {
         try {
           this.isUsersLoading = true;
-          const response = await axios.get('http://localhost:8081/users', {
+          const response = await axios.get(`${process.env.VUE_APP_API_URL}/users`, {
             headers:{
                 'Authorization': `Bearer ${this.accessToken}`
             },             
@@ -104,7 +104,7 @@ console.error('Error Fetching:', e);
 
       async deleteUser(userToDelete) {
         try {
-          await axios.delete(`http://localhost:8081/users/${userToDelete.id}`, {
+          await axios.delete(`${process.env.VUE_APP_API_URL}/users/${userToDelete.id}`, {
             headers:{
                 'Authorization': `Bearer ${this.accessToken}`
             },

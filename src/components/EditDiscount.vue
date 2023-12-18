@@ -105,7 +105,7 @@ export default {
         async fetchData() {
             try {
                 const discountId = this.$route.params.id;                
-                const response = await axios.get(`http://localhost:8081/discount/${discountId}`, {
+                const response = await axios.get(`${process.env.VUE_APP_API_URL}/discount/${discountId}`, {
                     headers: {
                         'Authorization': `Bearer ${this.accessToken}`,
                         'Content-Type': 'application/json'
@@ -143,7 +143,7 @@ export default {
                 };
                 console.log('Sending data:', discountData);
 
-                const changeResponse = await axios.put(`http://localhost:8081/discount/${discountId}`, discountData, {
+                const changeResponse = await axios.put(`${process.env.VUE_APP_API_URL}/discount/${discountId}`, discountData, {
                     headers: {
                         'Authorization': `Bearer ${this.accessToken}`,
                         'Content-Type': 'application/json',

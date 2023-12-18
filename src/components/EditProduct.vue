@@ -177,7 +177,7 @@ export default {
         },
         async loadDiscounts() {
             try {
-                const response = await axios.get('http://localhost:8081/discount', {
+                const response = await axios.get(`${process.env.VUE_APP_API_URL}/discount`, {
                     headers: {
                         'Authorization': `Bearer ${this.accessToken}`
                     },
@@ -198,7 +198,7 @@ export default {
         },
         async loadCategory() {
             try {
-                const response = await axios.get('http://localhost:8081/product-categories', {
+                const response = await axios.get(`${process.env.VUE_APP_API_URL}/product-categories`, {
                     headers: {
                         'Authorization': `Bearer ${this.accessToken}`
                     },
@@ -223,7 +223,7 @@ export default {
             try {
                 await this.loadDiscounts();
                 await this.loadCategory();
-                const response = await axios.get(`http://localhost:8081/product/${productId}`);
+                const response = await axios.get(`${process.env.VUE_APP_API_URL}/product/${productId}`);
                 this.product = response.data;
 
                 console.log('product.discountId:', this.product.discountId);
@@ -281,7 +281,7 @@ export default {
               photoId: this.product.photoId
             };
               
-              const changeResponse = await axios.post(`http://localhost:8081/product/${productId}`, productData, {
+              const changeResponse = await axios.post(`${process.env.VUE_APP_API_URL}/product/${productId}`, productData, {
                   headers: {
                     'Authorization': `Bearer ${this.accessToken}`,
                     'Content-Type': 'application/json',

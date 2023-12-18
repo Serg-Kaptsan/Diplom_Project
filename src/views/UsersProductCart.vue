@@ -122,7 +122,7 @@
             this.isWindowVisible = true;
          },
          notificFromWindow() {
-            this.$refs.noteMessage.showNotification("The payment was successful. \nWait for the goods to be delivered");
+            alert("The payment was successful. \nWait for the goods to be delivered");
          },
          closeWindow() {
             this.isWindowVisible = false;

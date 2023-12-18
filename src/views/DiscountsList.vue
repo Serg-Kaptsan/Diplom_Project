@@ -86,7 +86,7 @@
         try {
           this.isDiscountsLoading
            = true;
-          const response = await axios.get('http://localhost:8081/discount', {
+          const response = await axios.get(`${process.env.VUE_APP_API_URL}/discount`, {
             headers:{
                 'Authorization': `Bearer ${this.accessToken}`
             },             
@@ -104,7 +104,7 @@
   
       async deleteDiscount(discountToDelete) {
         try {
-          await axios.delete(`http://localhost:8081/discount/${discountToDelete.id}`, {
+          await axios.delete(`${process.env.VUE_APP_API_URL}/discount/${discountToDelete.id}`, {
             headers:{
                 'Authorization': `Bearer ${this.accessToken}`
             },

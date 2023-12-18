@@ -81,7 +81,7 @@ export default {
     mounted() {
         const productId = this.$route.params.id;
 
-        axios.get(`http://localhost:8081/product/${productId}`)
+        axios.get(`${process.env.VUE_APP_API_URL}/product/${productId}`)
         .then(response => {
             this.product = response.data;
             const discountId = this.product.discountId;
@@ -90,7 +90,7 @@ console.log(`productId: ${productId}`);
 console.log(`discountId: ${discountId}`);
 console.log(`categoryId: ${categoryId}`);
 
-            axios.get(`http://localhost:8081/discount/${discountId}`)
+            axios.get(`${process.env.VUE_APP_API_URL}/discount/${discountId}`)
             .then(response => {
                 this.productDiscount = response.data;
                 const discountPercent = this.productDiscount.discountPercent;
@@ -100,7 +100,7 @@ console.log(`categoryId: ${categoryId}`);
                 console.error('Error fetching discount:', error);
             });
 
-            axios.get(`http://localhost:8081/product-categories/${categoryId}`)
+            axios.get(`${process.env.VUE_APP_API_URL}/product-categories/${categoryId}`)
             .then(response => {
                 this.productCategory = response.data;
             })
@@ -134,7 +134,7 @@ console.log(`categoryId: ${categoryId}`);
                 const sessionId = localStorage.getItem('sessionId');
 
                 if (!sessionId) {
-                    const shoppingSession = await axios.post('http://localhost:8081/create', {
+                    const shoppingSession = await axios.post(`${process.env.VUE_APP_API_URL}/create`, {
                         userId: userId,
                         createdAt: new Date().toISOString(),
                     });
@@ -165,7 +165,7 @@ console.log(`categoryId: ${categoryId}`);
             try {
                 const sessionId = localStorage.getItem('sessionId');
 
-                const response = await axios.post(`http://localhost:8081/cart/${sessionId}/items`, { 
+                const response = await axios.post(`${process.env.VUE_APP_API_URL}/cart/${sessionId}/items`, { 
                     quantity: 1,
                     shoppingSessionId: sessionId,
                     productId: this.product.id
