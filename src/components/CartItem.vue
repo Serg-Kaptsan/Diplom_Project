@@ -234,7 +234,7 @@ console.log(`discountPercent: ${this.productDiscount.discountPercent}`);
     }
     .count{
         display: flex;
-        justify-content: end;
+        justify-content: flex-end;
         font-size: 18px;
         padding: 4px;
     }

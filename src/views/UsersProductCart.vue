@@ -207,7 +207,7 @@
    }
    .count{
       display: flex;
-      justify-content: end;
+      justify-content: flex-end;
       font-size: 24px;
       padding: 5px;
    }
