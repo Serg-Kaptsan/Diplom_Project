@@ -19,8 +19,8 @@
       > 
         <strong> ADMIN </strong>  
       </button>
-      <button @click="goAccaunt">
-        ACCAUNT
+      <button @click="goAccount">
+        ACCOUNT
       </button>
       <button @click="logout"> 
         GO OUT
@@ -108,7 +108,7 @@ export default {
       }
     },
 
-    goAccaunt() {
+    goAccount() {
       if (this.isAuthorization()) {
         const userId = localStorage.getItem('userId');
         this.navigate({ name: 'edit-user', params: { id: parseInt(userId) } });
