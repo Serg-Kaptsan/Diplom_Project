@@ -249,15 +249,17 @@ export default {
                 this.product.price = this.product.price.toString().replace(',', '.');
             }
 
-            if (this.selectedDiscountName) {
+            if (!this.selectedDiscountName) {
+                alert('You cannot create a product without Discount name. \nIf the product does not have a discount, then select "no discount".');
+                return;
+            } else {
                 this.product.discountId = this.selectedDiscountId;
-            } else {
-                this.product.discountId = null;
             }
-            if (this.selectedCategoryName) {
-                this.product.categoryId = this.selectedCategoryId;
+            if (!this.selectedCategoryName) {
+                alert('You cannot create a product without Category.');
+                return;
             } else {
-                this.product.categoryId = null;
+                this.product.categoryId = this.selectedCategoryId;
             }
 
             try {
@@ -266,6 +268,7 @@ export default {
 
                 if (!fileInput) {
                     alert ('You cannot create a product without a photo.');
+                    return;
                     } else {
                     const formData = new FormData();
                     formData.append('image', fileInput);

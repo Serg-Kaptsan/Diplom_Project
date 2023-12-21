@@ -104,12 +104,12 @@ const routes = [
     props: true,
     component: () => import('@/views/UsersProductCart.vue')
   },
-    {
-      path: '/order/:id',
-      name: 'order',
-      props: true,
-      component: () => import('@/components/OrderIdCard.vue')
-    },
+    // {
+    //   path: '/order/:id',
+    //   name: 'order',
+    //   props: true,
+    //   component: () => import('@/components/OrderIdCard.vue')
+    // },
 ]
 
 const router = createRouter({
