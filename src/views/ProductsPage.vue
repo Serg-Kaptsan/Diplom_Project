@@ -1,5 +1,6 @@
 <template>
-    <h1 >DEVICE SHOP</h1>
+    <up-arrow class="arrow"></up-arrow>
+    <h1> DEVICE SHOP </h1>
     <h2 id="listHeader">CHOOSE YOUR DEVICE</h2>   
     <div class="btn_container">
         <div for="searchInput" class="serch_block">
@@ -300,6 +301,13 @@ export default {
         margin-right: 100px;
         border: 2px solid #a0a0a0;
     }
+    /* .arrow{
+        position: fixed;
+        bottom: 25px;
+        right: 36px;
+        cursor: pointer;
+        z-index: 2;
+    } */
     .flip-list-move {
        transition: transform 0.5s ease;
     }

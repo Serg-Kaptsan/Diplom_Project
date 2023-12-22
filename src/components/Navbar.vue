@@ -48,6 +48,13 @@ export default {
   },
   props: {},
 
+  mounted() {
+    window.addEventListener('beforeunload', this.handleBeforeUnload);
+  },
+  beforeDestroy() {
+    window.removeEventListener('beforeunload', this.handleBeforeUnload);
+  },
+
   methods: {
     ...mapActions('cart', ['deleteProductsFromServer']),
 
@@ -85,6 +92,7 @@ export default {
         localStorage.removeItem('token');
         localStorage.removeItem('userId');
         localStorage.removeItem('userRole');
+        localStorage.removeItem('sessionId');
         this.$store.commit('setAdminButtonVisible', false);
         this.$refs.noteMessage.showNotification('You have successfully logged out of your account');
         this.$router.push('/');
@@ -131,6 +139,9 @@ export default {
       }
 
     },
+    // handleBeforeUnload(event) {
+    //   this.logout();
+    // },
   }
 }
 </script>

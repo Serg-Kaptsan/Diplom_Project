@@ -1,5 +1,6 @@
 <template>
     <admin-menu> </admin-menu>
+    <up-arrow class="arrow"></up-arrow>
     <div class="second-line">
         <h2>USERS LIST</h2>
         <div class="add-button-block">

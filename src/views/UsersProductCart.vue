@@ -1,4 +1,5 @@
 <template>
+   <up-arrow class="arrow"></up-arrow>
    <h1> 
       Your shopping cart
    </h1>
